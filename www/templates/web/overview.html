@@ -1,0 +1,35 @@
+<div>
+    <h1>Overview</h1>
+    
+    <div><span><b>Init:</b></span> 
+        <ul class="unstyled">
+            <li ng-repeat="m in overviewMessages track by $index">
+                <span>{{m}}</span> 
+            </li>
+        </ul>{{overviewString}}
+    <div>
+    
+    <div ng-hide="authToken!=''">    
+        <a href="https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d" target="_blank">
+                    Get Yandex Auth code</a> 
+        <input type="text" ng-model="authCode" size="10" placeholder="Enter your Yandex Auth code">
+        <a href="" ng-click="getAuthToken()">Get User token</a>
+        <br/>
+        <input type="text" ng-model="authToken" size="30" placeholder="Yandex Auth token">
+        <!--a href="" ng-click="saveToken()">Save token</a-->
+        <br/>
+    </div>
+    
+    <!--a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a><br/><br/><br/-->
+    <a href="" ng-click="downloadDB()">Download db from Yandex.Disk</a><br/><!--<input type="text" ng-model="stringdb" /-->
+    <a href="" ng-click="commitdbfromeditbox()">commit</a><br/>
+    <!--a href="" ng-click="createIncomeTable()">createIncomeTable</a><br/>
+    <a href="" ng-click="importIncome()">importIncome</a><br/-->
+    <!--a href="" ng-click="createBalanceTable()">createBalanceTable</a><br/-->
+    <!--a href="" ng-click="fixExpenseIds()">fixExpenseIds</a><br/>
+    <a href="" ng-click="fixImported()">fixImported</a><br/-- >
+    <a href="" ng-click="createChangesTable()">createChangesTable</a><br/-->
+    <br/><br/>
+    
+    
+</div>

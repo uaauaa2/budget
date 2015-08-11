@@ -1,0 +1,40 @@
+<div>
+    <h1>Balance</h1>
+    
+    
+    <div>
+        <span>Date: </spa><input type="date" ng-model="balanceDate" > <br/>
+        <span>Total available to date: </span><input type="text" ng-model="totalAvailableToDate" ><br/>
+        <span>Total income to date: {{getTotalIncomeToDate()}} </span><br/>
+        <span>Total spent to date: {{getTotalSpentToDate()}} </span><br/>
+        <span>Diff: {{getDiff()}} </span><br/>
+        <input type="button" value="add" ng-click="add()">
+        
+    <div>
+    
+    <br/>
+    <h2>Previous</h2>
+    <a href="" ng-click="init()">Init</a>
+    <table width="100%" class="responstable">
+        <tr>
+           <th>date</th>
+           <th>total available</th>
+           <th>total income</th>
+           <th>total spent</th>
+           <th>diff</th>
+           <th>del</th>
+        </tr>
+        <tr ng-repeat="b in allBalances">
+           <td>{{b.date}}</td>
+           <td>{{b.totalAvailableToDate}}</td>
+           <td>{{b.totalIncomeToDate}}</td>
+           <td>{{b.totalSpentToDate}}</td>
+           <td>{{b.diff}}</td>
+           <td><input type="button" value="-" ng-click="del(b)"></td>
+        </tr>
+    </table>
+    
+    
+    
+    
+</div>

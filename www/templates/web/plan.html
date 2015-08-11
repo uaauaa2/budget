@@ -1,0 +1,26 @@
+<div>
+        <h1> Plan</h1>
+        <div>
+            <input class="btn-primary" type="button" value="Recalculate" ng-click="recalculate()" >
+            <table class="responstable">  
+                <tr>
+                   <th>month</th>
+                   <th>actual</th>
+                   <th>income</th>
+                   <th>expenses</th>
+                   <th>remaining</th>
+                </tr> 
+                <tr ng-repeat="m in months">
+                    <td>{{planTable[m].month}}</td>
+                    <td><input type="checkbox" ng-model="planTable[m].isActual"></td>
+                    <td>{{planTable[m].totalIncome}}</td>
+                    <td>{{planTable[m].totalExpenses}}</td>
+                    <td>{{planTable[m].remaining}}</td>
+                </tr>
+            </table>
+            
+            <br/>
+            
+        </div>
+</div>
+
