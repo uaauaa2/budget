@@ -158,8 +158,11 @@
 
 		// insert a new row
 		function insert(table_name, data) {
-			var guid = newGuid(); 
-			data.ID = guid; 
+			var guid = data.ID; 
+			if (guid == null){ 
+				guid = newGuid(); 
+				data.ID = guid;
+			} 
 			db.data[table_name][guid] = data;
 			db.tables[table_name].auto_increment++;
 			return data.ID;

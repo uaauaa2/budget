@@ -1,3 +1,10 @@
+Date.prototype.yyyy_mm_dd = function() {
+   var yyyy = this.getFullYear().toString();
+   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+};
+  
 angular.module('budget.controllers').controller("ExpensesCtrl", function($scope, $http, dataService, $filter) {
     $scope.debugText = "";
 
@@ -115,7 +122,6 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.init(); 
     
     $scope.addAllExpenses = function() {
-        //$scope.debugText = $scope.expenses[0].date.toISOString().substr(0, 10); //JSON.stringify($scope.expenses);
         if ($scope.queryFn != null){
             var list = dataService.db.queryAll("expenses", { query: $scope.queryFn });
             for (var key in list)
@@ -128,7 +134,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         for (var key in $scope.expenses){
             dataService.db.insert("expenses", {
                 isPlan: false, 
-                date: $scope.expenses[key].date.toISOString().substr(0, 10),
+                date: $scope.expenses[key].date.yyyy_mm_dd(),
                 expenseItemId: $scope.expenses[key].expenseItemId, 
                 amount: parseInt($scope.expenses[key].amount), 
                 comment: $scope.expenses[key].comment 

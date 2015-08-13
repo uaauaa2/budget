@@ -25,7 +25,7 @@ angular.module('budget.controllers').controller('IncomeCtrl', function($scope, d
         );  
         dataService.db.insert("income", {
                 isPlan: $scope.incomeIsPlan,
-                date: $scope.incomeDate.toISOString().substr(0, 10), 
+                date: $scope.incomeDate.yyyy_mm_dd(), 
                 agent: $scope.incomeAgent,
                 amount: parseInt($scope.incomeAmount),
                 comment: $scope.incomeComment

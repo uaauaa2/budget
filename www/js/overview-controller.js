@@ -46,6 +46,9 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
             var tokenRes = db.queryAll("authToken"); 
             res += "[authToken]: " + tokenRes.length + "; ";
             
+            var tokenRes = db.queryAll("localChanges"); 
+            res += "[localChanges]: " + tokenRes.length + "; ";
+            
             /*if (tokenRes.length > 0){
                 res += "authToken: " + tokenRes[0].token + "; ";
             }*/    
@@ -90,7 +93,9 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         
         if (newRows.length > 0){
             for (index = 0; index < newRows.length; ++index){
-                resDB.insert(tableName, newRows[index]);
+                //$scope.overviewMessages.push("prepared id: " + newRows[index].ID);
+                var newId = resDB.insert(tableName, newRows[index]);
+                //$scope.overviewMessages.push("inserted id: " + newId);
             }
             $scope.overviewMessages.push("table [" + tableName + "] has been synced, rows added: " + index);
         }
@@ -99,12 +104,19 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         }
         
         // delete from server db rows, which were deleted from local db previously
-        // there is no need to delete rows from [localChanges] table as resulting db will be based on server db and this table is empty there 
-        var deletedRows = dataService.db.queryAll("localChanges", { query: {tableName: tableName, action: "delete"}});
+        var deletedRows = resDB.queryAll("localChanges", { query: {tableName: tableName, action: "delete"}});
+        var d = 0; 
+        var d1 = 0; 
+        $scope.overviewMessages.push("localChanges[" + tableName + "] count: " + deletedRows.length);
         for (index = 0; index < deletedRows.length; ++index){
-            resDB.deleteRows(tableName, {ID: deletedRows[index].rowId}); 
+            d1 = resDB.deleteRows(tableName, {ID: deletedRows[index].rowId});
+            /*if (d1 != 0)
+                $scope.overviewMessages.push("deleted id: " + deletedRows[index].rowId + " d1: " + d1);
+            else 
+                $scope.overviewMessages.push("not found id: " + deletedRows[index].rowId);*/
+            d += d1; 
         } 
-        $scope.overviewMessages.push("table [" + tableName + "] rows removed: " + index);
+        $scope.overviewMessages.push("table [" + tableName + "] rows removed: " + d);
         
         return resDB;    
     } 
@@ -122,6 +134,7 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
                 
                 if ($scope.hashCode(webDB.serialize()) != $scope.hashCode(dataService.db.serialize())){
                     var newDB = webDB;
+                    newDB = $scope.syncTable("localChanges", newDB, dataService.db);
                     newDB = $scope.syncTable("expenseItems", newDB, dataService.db);
                     newDB = $scope.syncTable("expenses", newDB, dataService.db);
                     newDB = $scope.syncTable("income", newDB, dataService.db);

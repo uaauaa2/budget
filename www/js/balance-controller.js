@@ -1,5 +1,5 @@
 angular.module('budget.controllers').controller('BalanceCtrl', function($scope, dataService) {
-    $scope.balanceDate = new Date();//.toISOString().substr(0, 10); 
+    $scope.balanceDate = new Date(); 
     $scope.totalAvailableToDate = 0; 
     //$scope.totalIncomeToDate = 1000000; 
     //$scope.totalSpentToDate = 900000;
@@ -64,7 +64,7 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
         var e = $scope.getTotalToDate("expenses", $scope.balanceDate); 
         var d = i - a - e; 
         $scope.allBalances.push(
-            { date: $scope.balanceDate.toISOString().substr(0, 10),
+            { date: $scope.balanceDate.yyyy_mm_dd(),
               totalAvailableToDate: a,
               totalIncomeToDate: i, 
               totalSpentToDate: e,  
@@ -73,7 +73,7 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
         );  
                 
         dataService.db.insert("balance", {
-                date: $scope.balanceDate.toISOString().substr(0, 10),
+                date: $scope.balanceDate.yyyy_mm_dd(),
                 totalAvailableToDate: a
             }
         );
