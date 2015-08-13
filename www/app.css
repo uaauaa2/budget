@@ -81,3 +81,49 @@ td {
      -moz-box-sizing: border-box; / * For legacy (Firefox <29) Gecko based browsers * /
           box-sizing: border-box;
 }*/
+
+/*table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 2px solid black;
+}
+
+thead, tbody, tr, td, th { display: block; }
+
+tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+thead th { 
+    height: 30px;
+    line-height: 30px;
+    /*text-align: left;* /
+}
+
+tbody {
+    height: 100px;
+    overflow-y: auto;
+}
+
+thead {
+    /* fallback * /
+    width: 97%;
+    /* minus scroll bar width * /
+    width: calc(100% - 17px);
+}
+
+tbody { border-top: 2px solid black; }
+
+tbody td, thead th {
+    width: 19.2%;
+    float: left;
+    border-right: 1px solid black;
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none;
+}*/
