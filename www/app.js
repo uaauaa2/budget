@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('budget', ['ionic', 'budget.controllers'])
+angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -28,14 +28,19 @@ angular.module('budget', ['ionic', 'budget.controllers'])
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
   $stateProvider
 
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/mobile/tabs.html'
+    templateUrl: 'templates/mobile/tabs.html' 
+    /*views: {
+      'tab-overview': {
+        templateUrl: 'templates/mobile/tabs.html',
+        controller: 'selectExpenseItemCtrl'
+      }
+    }*/
   })
 
   // Each tab has its own nav history stack:
@@ -46,6 +51,16 @@ angular.module('budget', ['ionic', 'budget.controllers'])
       'tab-overview': {
         templateUrl: 'templates/mobile/overview.html',
         controller: 'OverviewCtrl'
+      }
+    }
+  })
+  
+  .state('tab.selectExpenseItem', {
+    url: '/selectExpenseItem',
+    views: {
+      'tab-selectExpenseItem': {
+        templateUrl: 'templates/mobile/selectExpenseItem.html',
+        controller: 'SelectExpenseItemCtrl'
       }
     }
   })
@@ -74,7 +89,7 @@ angular.module('budget', ['ionic', 'budget.controllers'])
   ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/overview');
+  $urlRouterProvider.otherwise('/tab/selectExpenseItem');
 
 })
 
@@ -90,11 +105,15 @@ angular.module('budget', ['ionic', 'budget.controllers'])
         };
 })
 
-.service('dataService', function () {
-        this.dbName = "budget2015";
-        this.db = null;
-})
+
 
 ;
 
 angular.module('budget.controllers', []);
+angular.module('budget.services', []);
+
+  
+     
+
+
+

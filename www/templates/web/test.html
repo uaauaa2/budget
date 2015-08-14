@@ -16,6 +16,14 @@
                </tr>
             </table-->
             
+            <h2>{{ syncStatus.statusText() }} </h2>
+        
+        <ul class="unstyled">
+            <li ng-repeat="m in overviewMessages track by $index">
+                <span>{{m}}</span> 
+            </li>
+        </ul>
+        
 <table cellspacing="0" cellpadding="0" border="0" width="325">
   <tr>
     <td>

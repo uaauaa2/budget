@@ -1,4 +1,4 @@
-angular.module('budget', ['ngRoute', 'budget.controllers'])
+angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
 
     .config(['$routeProvider', '$locationProvider', 
         function($routeProvider, $locationProvider) {
@@ -51,20 +51,15 @@ angular.module('budget', ['ngRoute', 'budget.controllers'])
             }
         };
     })
-    .service('dataService', function () {
-        this.dbName = "budget2015";
-        this.db = null;
-    });
+    .run(function (dataService) {
+        dataService.init(); 
+    })
+    
+    ;
 
 
 
     
 angular.module('budget.controllers', []);
+angular.module('budget.services', []);
 
-angular.module('budget.controllers').controller('aboutController', function($scope) {
-    $scope.message = 'Look! I am an about page.';
-});
-
-angular.module('budget.controllers').controller('contactController', function($scope) {
-    $scope.message = 'Contact us! JK. This is just a demo.';
-}); 
