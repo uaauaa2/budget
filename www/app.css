@@ -22,6 +22,14 @@
 	 
 }
 
+.notInSync {
+    border: 1px solid red; 
+}
+
+.inSync {
+    border: 1px solid green;
+}
+
 .td1 {
     padding-left: 0px;
 } 

@@ -3,12 +3,13 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
     $scope.totalAvailableToDate = 0; 
     //$scope.totalIncomeToDate = 1000000; 
     //$scope.totalSpentToDate = 900000;
-    $scope.allBalances = []; //[{ date: "2015-07-01", totalAvailableToDate: 80000 }]; 
+    $scope.allBalances = []; //[{ date: "2015-07-01", totalAvailableToDate: 80000 }];
+    $scope.db = dataService.getDB();  
     
     $scope.getTotalToDate = function(tableName, date){
         var balanceDate = new Date(date); 
              
-        var result = dataService.db.queryAll(tableName, { 
+        var result = $scope.db.queryAll(tableName, { 
             query: function(row) {
                 var rowDate = new Date(row.date); 
                 if (rowDate <= balanceDate && row.isPlan == false) {
@@ -29,7 +30,7 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
     }
     
     $scope.init = function(){
-        $scope.allBalances = dataService.db.queryAll("balance");
+        $scope.allBalances = $scope.db.queryAll("balance");
         //alert($scope.allBalances.length);
         var i = 0; 
         for (i = 0; i < $scope.allBalances.length; i++){
@@ -72,20 +73,20 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
             }
         );  
                 
-        dataService.db.insert("balance", {
+        $scope.db.insert("balance", {
                 date: $scope.balanceDate.yyyy_mm_dd(),
                 totalAvailableToDate: a
             }
         );
-        dataService.db.commit();
+        $scope.db.commit();
     };
     
     $scope.del = function(b) {
         var i = $scope.allBalances.indexOf(b);
         $scope.allBalances.splice(i, 1);
-        dataService.db.deleteRows("balance", { ID: b.ID } );
-        dataService.db.insert("localChanges", { tableName: "balance", action: "delete", rowId: b.ID });
-        dataService.db.commit(); 
+        $scope.db.deleteRows("balance", { ID: b.ID } );
+        $scope.db.insert("localChanges", { tableName: "balance", action: "delete", rowId: b.ID });
+        $scope.db.commit(); 
     };
     
     

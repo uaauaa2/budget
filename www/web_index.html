@@ -8,6 +8,7 @@
       <script src="js/localstoragedb.js"></script>
       <script src="web_app.js"></script>
       <script src="js/dataService-service.js"></script>
+      <script src="js/header-controller.js"></script>
       <script src="js/overview-controller.js"></script>
       <script src="js/expenses-controller.js"></script>
       <script src="js/expensesPlan-controller.js"></script>
@@ -18,11 +19,17 @@
     </head>
      <body> 
 
-        <header>
+        <header ng-controller="HeaderCtrl">
             <nav class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Budget tracker v0.1</a>
+                    <a class="navbar-brand" href="/">Budget tracker v0.1</a> 
+                    
+                    
+                    
+                     
+                    <!--input type="button" value="stop" ng-click="clearSyncTimeout()">
+                    <input type="button" value="test" ng-click="test()"-->
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
@@ -32,7 +39,13 @@
                     <li><a href="expensesPlan"><i class="fa fa-shield"></i> Expenses Plan</a></li>
                     <li><a href="balance"><i class="fa fa-comment"></i> Balance</a></li>
                     <li><a href="plan"><i class="fa fa-comment"></i> Plan</a></li>
+                    <li><a href="" ng-click="sync()" 
+                        
+                        class="notInSync"
+                        ng-class="{inSync: syncStatus.status}">
+                             {{ syncStatus.statusText() }}</a></li>
                 </ul>
+                
                 
             </div>
             </nav>

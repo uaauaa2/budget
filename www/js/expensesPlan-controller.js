@@ -6,9 +6,10 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
     $scope.expensesPlanTable = {"8":{"3":{"actual":15345,"forecast":40000}}}; 
     
     $scope.allExpenseItems = {};
+    $scope.db = dataService.getDB(); 
 
     $scope.getTotalExpenses = function(expenseItem, month, isPlan){
-        var result = dataService.db.queryAll("expenses", { 
+        var result = $scope.db.queryAll("expenses", { 
                             query: function(row) {
                                 var d = new Date(row.date); 
                                 if (row.isPlan == isPlan 
@@ -47,28 +48,18 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
     };
 
     $scope.init = function() {
-        $scope.allExpenseItems = dataService.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
-        /*$scope.expenseItems = dataService.db.queryAll("expenseItems", { 
-            query: function(row) {
-                var res = false;
-                if (row.name != null){
-                    res = true;
-                }
-                return res; 
-            }
-        });*/
-
+        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
         $scope.updateExpensesPlanTable(); 
     };
     
     $scope.init(); 
     
     $scope.saveExpensesPlanTable = function(){
-        var list = dataService.db.queryAll("expenses", { query: {isPlan: true }});
+        var list = $scope.db.queryAll("expenses", { query: {isPlan: true }});
         for (var key in list)
-            dataService.db.insert("localChanges", { tableName: "expenses", action: "delete", rowId: list[key].ID });
+            $scope.db.insert("localChanges", { tableName: "expenses", action: "delete", rowId: list[key].ID });
                 
-        var l = dataService.db.deleteRows("expenses", { isPlan: true } );
+        var l = $scope.db.deleteRows("expenses", { isPlan: true } );
         
                 
         console.log("expensesPlan: deleted rows: " + l);  
@@ -84,11 +75,11 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
             for (var expenseItemId in monthObj){ //monthObj.forEach(function(expenseItemObj)
                 var a = parseInt(monthObj[expenseItemId].forecast);
                 if (a != 0){
-                    var r = dataService.db.queryAll("expenseItems", { query: {ID: expenseItemId }}); 
+                    var r = $scope.db.queryAll("expenseItems", { query: {ID: expenseItemId }}); 
                     var nm = r[0].name;
                     // insert to db
                     if (nm){ // it means that the expenseItem is not for summarizing only 
-                        dataService.db.insert("expenses", {
+                        $scope.db.insert("expenses", {
                             isPlan: true, 
                             date: dateString,
                             expenseItemId: expenseItemId, 
@@ -102,7 +93,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
             
         };
         console.log("expensesPlan: inserted rows: " + l);
-        dataService.db.commit();
+        $scope.db.commit();
     };
     
     
@@ -116,54 +107,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
         return sum; 
     }  
     
-    $scope.uploadDB = function(){
-        var revision = "0";  
-        var tokenRes = dataService.db.queryAll("authToken"); 
-        var authToken = "";    
-        if (tokenRes.length > 0){
-                authToken = tokenRes[0].token;
-        }
-        if (authToken != ""){   
-            $http({
-                method: 'PUT',
-                url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dataService.dbName + "/",
-                headers: { "Authorization": authToken }  
-            }).success(function(response) {
-            	//$scope.overviewMessages.push("success: " + JSON.stringify(response));
-                revision = response.revision;
-                var delta = {
-                        "delta_id": "db update",
-                        "changes": [{
-                                "change_type": "set", 
-                                "collection_id": "budget", 
-                                "record_id": "2015",  
-                                "changes": [{
-                                        "change_type": "set", 
-                                        "field_id": "data", 
-                                        "value": {
-                                            "type": "string",
-                                            "string": dataService.db.serialize(),
-                                        }
-                                }]
-                        }] 
-                };
-                //alert($scope.db.serialize());
-                //alert(JSON.stringify(delta)); 
-                $http({
-                    method: "POST",
-                    url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dataService.dbName + "/deltas/",
-                    data: delta,  
-                    headers: { "Authorization": authToken, "If-Match": revision }
-                }).success(function(response) {
-                    alert("uploaded")
-                }).error($scope.errorHandler);
-                 
-            }).error($scope.errorHandler);
-        }
-        else 
-            alert("authToken missing"); 
-        
-    } 
+     
 
   
   

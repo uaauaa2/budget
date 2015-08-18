@@ -6,6 +6,7 @@ angular.module('budget.services').service('dataService', function ($http) {
     
     function hashCode(s){
         var h = s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);  
+        //console.log("length: " + s.length + "; hash: " + h); 
         return h;              
     }
     
@@ -90,14 +91,14 @@ angular.module('budget.services').service('dataService', function ($http) {
             if (r.length == 0)
                 newRows.push(localRows[index]);
         }
-        overviewMessages.push("new local rows for table [" + tableName + "]: " + JSON.stringify(newRows));
+        //overviewMessages.push("new local rows for table [" + tableName + "]: " + JSON.stringify(newRows));
         
         return newRows;
     }
     
     function saveToken(){
         db.deleteRows("authToken");
-        db.insert("authToken", { token: this.auth.token });
+        db.insert("authToken", { token: auth.token });
         db.commit();
     }
 
@@ -174,6 +175,7 @@ angular.module('budget.services').service('dataService', function ($http) {
             }).success(function(response) {
             	overviewMessages.push("uploaded");
                 syncStatus.status = 2; 
+                webDBhash = hashCode(db.serialize());
             }).error(errorHandler);
              
         }).error(errorHandler);
@@ -192,8 +194,8 @@ angular.module('budget.services').service('dataService', function ($http) {
                 var webDB = new localStorageDB("web_" + dbName, localStorage);
                 webDB.initFromObj(JSON.parse(sWebDB));
                 overviewMessages.push("webDB: " + dumpDB(webDB));
-                
-                if (hashCode(webDB.serialize()) != hashCode(db.serialize())){
+                webDBhash = hashCode(webDB.serialize()); 
+                if (webDBhash != hashCode(db.serialize())){
                     syncStatus.status = 1; 
                     var newDB = webDB;
                     newDB = syncTable("localChanges", newDB, db);
@@ -223,8 +225,8 @@ angular.module('budget.services').service('dataService', function ($http) {
     function downloadDB(){
         $http({
             method: "GET",
-            url: "https://cloud-api.yandex.net/v1/data/app/databases/" + this.dbName + "/snapshot/",  
-            headers: { "Authorization": this.auth.token }
+            url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName + "/snapshot/",  
+            headers: { "Authorization": auth.token }
         }).success(function(response) {
             var stringdb = response.records.items[0].fields[0].value.string;
             overviewMessages.push("downloaded");
@@ -235,8 +237,10 @@ angular.module('budget.services').service('dataService', function ($http) {
         }).error(errorHandler);
     }
     
+    var db = {test: "ok"};
+    
     var init = function() {
-        db = new localStorageDB(this.dbName, localStorage);
+        db = new localStorageDB(dbName, localStorage);
              
         if(db.isNew()) {
             createDatabase();
@@ -254,10 +258,20 @@ angular.module('budget.services').service('dataService', function ($http) {
         syncFromWeb();
     }
     
+    function getSyncStatus(){
+        if (webDBhash != hashCode(db.serialize()))
+            syncStatus.status = 0; 
+        else 
+            syncStatus.status = 2; 
+            
+        return syncStatus; 
+    }
+    
     var dbName = "budget2015";
     var auth = { code: "", token: "" }; 
-    var db = null; 
+     
     var overviewMessages = [];
+    var webDBhash = null; 
     var syncStatus = {
         status: 0, 
         statusText: function(){
@@ -272,13 +286,15 @@ angular.module('budget.services').service('dataService', function ($http) {
     } 
     
     return {
-        dbName: dbName,
-        db: db,
+        getDB: function() { return db; }, 
         auth: auth, 
         overviewMessages: overviewMessages,
-        syncStatus: syncStatus, 
         
-        init: init 
+        init: init, 
+        sync: syncFromWeb, 
+        getSyncStatus: getSyncStatus
+        
+        
     } 
      
         

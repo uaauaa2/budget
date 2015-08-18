@@ -1,11 +1,12 @@
-angular.module('budget.controllers').controller("PlanCtrl", function($scope, $http, dataService, $filter) {
+angular.module('budget.controllers').controller("PlanCtrl", function($scope, dataService) {
     $scope.debugText = "";
 
     $scope.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     $scope.planTable = {}; 
+    $scope.db = dataService.getDB();
 
     $scope.getTotal = function(tableName, month, isPlan){
-        var result = dataService.db.queryAll(tableName, { 
+        var result = $scope.db.queryAll(tableName, { 
                             query: function(row) {
                                 var d = new Date(row.date); 
                                 if (row.isPlan == isPlan 

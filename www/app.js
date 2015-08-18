@@ -105,6 +105,9 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
         };
 })
 
+.run(function (dataService) {
+        dataService.init(); 
+})
 
 
 ;

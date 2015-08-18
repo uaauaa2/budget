@@ -16,8 +16,12 @@
                </tr>
             </table-->
             
-            <h2>{{ syncStatus.statusText() }} </h2>
+            <!--h2>{{ syncStatus.statusText() }} </h2-->
         
+    <h3>{{debug.message}}</h3>                    
+    <a href="" ng-click="test()">Test</a><br/><br/><br/>
+    
+                        
         <ul class="unstyled">
             <li ng-repeat="m in overviewMessages track by $index">
                 <span>{{m}}</span> 
