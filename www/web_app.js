@@ -10,36 +10,36 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
             })
             
             .when('/budget/', {
-                templateUrl : 'www/templates/web/test.html',
+                templateUrl : 'budget/www/templates/web/test.html',
                 controller  : 'TestCtrl'
             })
             
             .when('/budget/overview', {
-                templateUrl : 'www/templates/web/overview.html',
+                templateUrl : 'budget/www/templates/web/overview.html',
                 controller  : 'OverviewCtrl'
             })
 
             .when('/budget/expenses', {
-                templateUrl : 'www/templates/web/expenses.html',
+                templateUrl : 'budget/www/templates/web/expenses.html',
                 controller  : 'ExpensesCtrl'
             })
             
             .when('/budget/expensesPlan', {
-                templateUrl : 'www/templates/web/expensesPlan.html',
+                templateUrl : 'budget/www/templates/web/expensesPlan.html',
                 controller  : 'ExpensesPlanCtrl'
             })
             
             .when('/budget/income', {
-                templateUrl : 'www/templates/web/income.html',
+                templateUrl : 'budget/www/templates/web/income.html',
                 controller  : 'IncomeCtrl'
             })
             .when('/budget/balance', {
-                templateUrl : 'www/templates/web/balance.html',
+                templateUrl : 'budget/www/templates/web/balance.html',
                 controller  : 'BalanceCtrl'
             })
 
             .when('/budget/plan', {
-                templateUrl : 'www/templates/web/plan.html',
+                templateUrl : 'budget/www/templates/web/plan.html',
                 controller  : 'PlanCtrl'
             });
             
