@@ -1,0 +1,38 @@
+<div>
+        <h1>Expenses Plan</h1>
+        <div>
+            <!-- [ <a href="" ng-click="init()">Init</a> ] -->
+            [ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
+
+            <br/>
+            type month number to edit: <input type="text" ng-model="activeMonth" size="3">
+            <br/><br/>
+            <!--Debug: <span>{{debugText}}</span>
+            <br/-->
+            
+            <input class="btn-primary" type="button" value="Reload table" ng-click="updateExpensesPlanTable()" >
+            <input class="btn-primary" type="button" value="Save table to db" ng-click="saveExpensesPlanTable()" >
+           
+            <table class="responstable">  
+                <tr>
+                   <th>title</th>
+                   <th ng-repeat-start="m in months">F {{m}}</th>
+                   <th ng-repeat-end="">A {{m}}</th>
+                </tr> 
+                <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" ng-class="{trEditable: e.name}">
+                    <td class="td{{e.levelNum}}">{{e.title}}</td>
+                    
+                    <td align=right ng-repeat-start="m in months"> 
+                        <input ng-if="e.name && m == activeMonth" type="text" style="width: 4em; height: 1.4em; text-align:right; padding: 0px;"  ng-model="expensesPlanTable[m][e.ID].forecast" > 
+                        <span ng-if="!e.name || m != activeMonth" style="padding: 2px;"> {{ getTotalForChildren(e.idListForTotal, m) }} </span>
+                    </td>
+                    <td ng-repeat-end="" align=right>{{ expensesPlanTable[m][e.ID].actual }}</td>
+                    
+                </tr>
+            </table>
+            
+            <br/>
+            
+        </div>
+</div>
+

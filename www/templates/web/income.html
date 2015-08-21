@@ -1,0 +1,44 @@
+<div>
+        <h1>Income</h1>
+        <div > <!-- ng-controller="IncomeCtrl" -->
+        [ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
+            <div>
+                <span>Plan/Fact: </span> <!-- ng-options="o.v as o.n for o in [{ n: 'Actual', v: false }, { n: 'Planned', v: true }]"> -->
+                    <select ng-model="incomeIsPlan">
+                        <option value="false">Actual</option>
+                        <option value="true">Planned</option> 
+                    </select><br/>
+                <span>Date: </span><input type="date" ng-model="incomeDate" > <br/>
+                <span>Agent: </span><input type="text" ng-model="incomeAgent" ><br/>
+                <span>Amount: </span><input type="text" ng-model="incomeAmount" ><br/>
+                <span>Comment: </span><input type="text" ng-model="incomeComment" ><br/>
+                <input type="button" value="add" ng-click="add()">
+                
+            <div>
+           
+            <h2>Previous Income</h2>
+            <a href="" ng-click="init()">Init</a>
+            <table width="100%" class="responstable">
+                <tr>
+                   <th>isPlan</th>
+                   <th>date</th>
+                   <th>agent</th>
+                   <th>amount</th>
+                   <th>comment</th>
+                   <th>del</th>
+                </tr>
+                <tr ng-repeat="b in allIncome">
+                   <td>{{b.isPlan}}</td>
+                   <td>{{b.date}}</td>
+                   <td>{{b.agent}}</td>
+                   <td>{{b.amount}}</td>
+                   <td>{{b.comment}}</td>
+                   <td><input type="button" value="-" ng-click="del(b)"></td>
+                </tr>
+            </table>
+            
+            <br/>
+            
+        </div>
+</div>
+
