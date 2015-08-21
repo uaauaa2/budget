@@ -4,36 +4,36 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
         function($routeProvider, $locationProvider) {
         $routeProvider
 
-            .when('/', {
+            .when('/budget/', {
                 templateUrl : 'www/templates/web/test.html',
                 controller  : 'TestCtrl'
             })
             
-            .when('/overview', {
+            .when('/budget/overview', {
                 templateUrl : 'www/templates/web/overview.html',
                 controller  : 'OverviewCtrl'
             })
 
-            .when('/expenses', {
+            .when('/budget/expenses', {
                 templateUrl : 'www/templates/web/expenses.html',
                 controller  : 'ExpensesCtrl'
             })
             
-            .when('/expensesPlan', {
+            .when('/budget/expensesPlan', {
                 templateUrl : 'www/templates/web/expensesPlan.html',
                 controller  : 'ExpensesPlanCtrl'
             })
             
-            .when('/income', {
+            .when('/budget/income', {
                 templateUrl : 'www/templates/web/income.html',
                 controller  : 'IncomeCtrl'
             })
-            .when('/balance', {
+            .when('/budget/balance', {
                 templateUrl : 'www/templates/web/balance.html',
                 controller  : 'BalanceCtrl'
             })
 
-            .when('/plan', {
+            .when('/budget/plan', {
                 templateUrl : 'www/templates/web/plan.html',
                 controller  : 'PlanCtrl'
             });
