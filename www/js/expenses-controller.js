@@ -93,7 +93,6 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     };
     
     $scope.init = function() {
-        alert(dataService.getSyncStatus()) 
         $scope.db = dataService.getDB();
         $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
         $scope.expenseItems = $scope.db.queryAll("expenseItems", { 
