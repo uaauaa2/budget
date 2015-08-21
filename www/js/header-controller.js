@@ -4,7 +4,7 @@ angular.module('budget.controllers').controller("HeaderCtrl", function($scope, $
     //$scope.debug = { message: "test" }; 
     $scope.i = 0; 
     
-    $scope.syncTimer = $timeout(function tick(){
+    /*$scope.syncTimer = $timeout(function tick(){
         $scope.syncStatus = dataService.getSyncStatus();
         
         $scope.syncTimer = $timeout(tick, 3000); 
@@ -20,7 +20,7 @@ angular.module('budget.controllers').controller("HeaderCtrl", function($scope, $
     $scope.sync = function(){
         $scope.syncStatus.status = 1;
         dataService.sync();
-    }
+    }*/
 
 });
 

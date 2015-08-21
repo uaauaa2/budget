@@ -4,6 +4,11 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
         function($routeProvider, $locationProvider) {
         $routeProvider
 
+            .when('/', {
+                templateUrl : 'www/templates/web/test.html',
+                controller  : 'TestCtrl'
+            })
+            
             .when('/budget/', {
                 templateUrl : 'www/templates/web/test.html',
                 controller  : 'TestCtrl'

@@ -14,5 +14,9 @@ var server = require('http').createServer(app);
 app.get('/', function (request, response) {
     response.sendFile(__dirname + "/index.html");
 });
+
+app.get('/budget/', function (request, response) {
+    response.sendFile(__dirname + "/index.html");
+});
 app.use(express.static(__dirname + '/'));
 app.listen(8080);

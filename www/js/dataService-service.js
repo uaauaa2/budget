@@ -2,6 +2,7 @@ angular.module('budget.services').service('dataService', function ($http) {
     
     function errorHandler(data, status, headers, config) {
         overviewMessages.push("http error");
+        console.log("http error");
     }
     
     function hashCode(s){
@@ -11,14 +12,15 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
     
     function createDatabase() {
-        this.db.createTable("expenseItems", ["orderNum", "levelNum", "title", "name", "idListForTotal"]);
-        this.db.createTable("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment"]);
-        this.db.createTable("income", ["isPlan", "date", "agent", "amount", "comment"]);
-        this.db.createTable("balance", ["date", "totalAvailableToDate"]);
-        this.db.createTable("localChanges", ["tableName", "action", "rowId"]);
-        this.db.createTable("authToken", ["token"]);
+        db.createTable("expenseItems", ["orderNum", "levelNum", "title", "name", "idListForTotal"]);
+        db.createTable("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment"]);
+        db.createTable("income", ["isPlan", "date", "agent", "amount", "comment"]);
+        db.createTable("balance", ["date", "totalAvailableToDate"]);
+        db.createTable("localChanges", ["tableName", "action", "rowId"]);
+        db.createTable("authToken", ["token"]);
             
-        this.db.commit();
+        db.commit();
+        console.log("new empty tables have been created");
         overviewMessages.push("new empty tables have been created");
     }
     
