@@ -5,7 +5,7 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
         $routeProvider
 
             .when('/', {
-                templateUrl : 'www/templates/web/test.html',
+                templateUrl : 'budget/www/templates/web/test.html',
                 controller  : 'TestCtrl'
             })
             
