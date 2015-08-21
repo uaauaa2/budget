@@ -73,7 +73,7 @@ angular.module('budget.services').service('dataService', function ($http) {
             // success
             //$scope.auth.token = response.data.access_token; 
             overviewMessages.push("success: " + JSON.stringify(response));
-            saveToken(); 
+            saveToken(response.data.access_token); 
         }, 
         function(response) { // optional
             // failed
@@ -98,9 +98,9 @@ angular.module('budget.services').service('dataService', function ($http) {
         return newRows;
     }
     
-    function saveToken(){
+    function saveToken(newToken){
         db.deleteRows("authToken");
-        db.insert("authToken", { token: auth.token });
+        db.insert("authToken", { token: newToken });
         db.commit();
     }
 
@@ -294,6 +294,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         
         init: init, 
         sync: syncFromWeb, 
+        getAuthToken: getAuthToken,
         getSyncStatus: getSyncStatus
         
         
