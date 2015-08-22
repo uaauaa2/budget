@@ -102,6 +102,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         db.deleteRows("authToken");
         db.insert("authToken", { token: newToken });
         db.commit();
+        auth.token = newToken; 
     }
 
     
