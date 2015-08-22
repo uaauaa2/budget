@@ -99,10 +99,8 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
     
     function saveToken(newToken){
-        db.deleteRows("authToken");
-        db.insert("authToken", { token: newToken });
-        db.commit();
-        auth.token = newToken; 
+        auth.token = newToken;
+        localStorage["authToken"] = auth.token;  
     }
 
     
@@ -206,7 +204,7 @@ angular.module('budget.services').service('dataService', function ($http) {
                     newDB = syncTable("expenses", newDB, db);
                     newDB = syncTable("income", newDB, db);
                     newDB = syncTable("balance", newDB, db);
-                    newDB = syncTable("authToken", newDB, db);
+                    //newDB = syncTable("authToken", newDB, db);
                     
                     db.initFromObj(newDB.getDBObj());
                     overviewMessages.push("synced, result: " + dumpDB(db));
@@ -251,12 +249,8 @@ angular.module('budget.services').service('dataService', function ($http) {
         
         overviewMessages.push("localStorage: " + dumpDB(db)); 
         
-        var tokenRes = db.queryAll("authToken"); 
-            
-        if (tokenRes.length > 0){
-            auth.token = tokenRes[0].token;
-        }
-        
+        auth.token = localStorage["authToken"]; 
+                
         syncStatus.status = 0;
         syncFromWeb();
     }
