@@ -34,7 +34,8 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
   .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/mobile/tabs.html' 
+    templateUrl: 'templates/mobile/tabs.html',  
+    controller: 'HeaderCtrl'
     /*views: {
       'tab-overview': {
         templateUrl: 'templates/mobile/tabs.html',

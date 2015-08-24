@@ -9,24 +9,20 @@
         </ul>{{overviewString}}
     <div>
     
-    <div > <!-- ng-hide="authToken!=''" -->    
-        <a href="https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d" target="_blank">
-                    Get Yandex Auth code</a><br/>
-                    
-        <a href="#" onclick="window.open('https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d', 
-            '_system');">Get Yandex Auth code 2</a>
-             
-        <input type="text" ng-model="auth.code" size="10" placeholder="Enter your Yandex Auth code">
-        <a href="" ng-click="getAuthToken()">Get User token</a>
-        <br/>
-        <input type="text" ng-model="auth.token" style="width: 100%;" placeholder="Yandex Auth token">
-        <!--a href="" ng-click="saveToken()">Save token</a-->
-        <br/>
+    <div> <!-- ng-hide="authToken!=''" -->
+        <div class="row" style="border: 1px solid black">
+            <div class="col col-30">    
+                <a href="#" onclick="window.open('https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d', 
+                    '_system');">Get Auth code</a>
+            </div>
+            <div class="col col-50"><input style="width: 100%; border: 1px solid black; height: 1.7em" type="text" ng-model="auth.code" placeholder="Enter your Yandex Auth code"></div>
+            <div class="col col-20"><input style="width: 100%; border: 1px solid black" type="button" value="Get" ng-click="getAuthToken()"></div>
+        </div>
     </div>
     
     <!--a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a><br/><br/><br/-->
-    <a href="" ng-click="syncFromWeb()">sync from web</a><br/><!--<input type="text" ng-model="stringdb" /-->
-    <br/><br/>
+    <!--a href="" ng-click="syncFromWeb()">sync from web</a><br/><!--<input type="text" ng-model="stringdb" /-->
+    <!--br/><br/>
     <a href="" ng-click="downloadDB()">Download db from Yandex.Disk</a><br/><!--<input type="text" ng-model="stringdb" /-->
     <!--a href="" ng-click="commitdbfromeditbox()">commit</a><br/>
     <!--a href="" ng-click="createIncomeTable()">createIncomeTable</a><br/>
@@ -34,7 +30,7 @@
     <!--a href="" ng-click="createBalanceTable()">createBalanceTable</a><br/-->
     <!--a href="" ng-click="fixExpenseIds()">fixExpenseIds</a><br/>
     <a href="" ng-click="fixImported()">fixImported</a><br/-->
-    <br/><br/>
+    <!--br/><br/-->
     
     
     </ion-content>

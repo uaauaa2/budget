@@ -5,12 +5,13 @@ Date.prototype.yyyy_mm_dd = function() {
    return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 };
   
-angular.module('budget.controllers').controller("ExpensesCtrl", function($scope, $http, dataService, $filter) {
+angular.module('budget.controllers').controller("ExpensesCtrl", function($scope, $http, dataService, $filter, $timeout) {
     $scope.debugText = "";
 
     $scope.month = 8; 
     $scope.expensesTable = [];  
     $scope.queryFn = null;
+    $scope.newExpense = null; 
     
     $scope.db = null; //dataService.getDB(); 
     
@@ -106,7 +107,8 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
             sort: [["orderNum", "ASC"]]
         });
         $scope.defaultExpenseItemId = $scope.expenseItems[0].ID;   
-        $scope.expenses = [{ date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" }]; //, amount: 0, 
+        $scope.expenses = [{ date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" }]; //, amount: 0,
+        $scope.newExpense = $scope.expenses[0];  
     };
     
     $scope.init(); 
@@ -133,7 +135,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         
         $scope.db.commit(); 
         $scope.expenses = [{ date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" }]; //amount: 0, 
-         
+        $scope.newExpense = $scope.expenses[0]; 
     };
     
     $scope.addAnotherExpense = function() {
@@ -167,7 +169,10 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     
     $scope.deleteRow = function(e){
         var i = $scope.expenses.indexOf(e);
-        $scope.expenses.splice(i, 1);  
+        $scope.expenses.splice(i, 1);
+        var l = $scope.expenses.length;
+        if (l)
+            $scope.newExpense = $scope.expenses[l-1];   
     }; 
     
       
@@ -225,8 +230,31 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         return res; 
     };
   
-     
+    $scope.editItem = function(expense){
+        console.log(JSON.stringify(expense));
+        $scope.newExpense = expense; 
+    }
+    
+    $scope.getExpenseItemName = function(expenseItemId){
+        var a = $scope.db.queryAll("expenseItems", {query: {ID: expenseItemId } });
+        return a[0].name; 
+    }
 
+    $scope.addRow = function() {
+        var o = { date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" };   
+        var size = $scope.expenses.length; 
+        if (size > 0 ){
+            o = { date: $scope.expenses[size-1].date, expenseItemId: $scope.expenses[size-1].expenseItemId, comment: "" }; //amount: 0,   
+        }
+        $scope.expenses.push(o);
+        $scope.newExpense = o;
+        
+        $timeout(function(){
+                    document.getElementById("amountElement").focus();
+                }, 0);
+    }; 
+    
+    
   
   
     

@@ -4,16 +4,13 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     
     $scope.stringdb = "";
     $scope.overviewMessages = dataService.overviewMessages;
+    $scope.latestActions = []; 
     
 
     $scope.init = function() {
+        $scope.expenseItems = dataService.db.queryAll("expenseItems");
         
-            
-            $scope.expenseItems = dataService.db.queryAll("expenseItems");
-         
-         
-         
-        //$scope.overviewMessages.push("init completed");
+        
     };
     
     

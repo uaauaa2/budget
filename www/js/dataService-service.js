@@ -72,12 +72,12 @@ angular.module('budget.services').service('dataService', function ($http) {
         })*/.then(function(response) {
             // success
             //$scope.auth.token = response.data.access_token; 
-            overviewMessages.push("success: " + JSON.stringify(response));
+            overviewMessages.push("getAuthToken success"); // + JSON.stringify(response));
             saveToken(response.data.access_token); 
         }, 
         function(response) { // optional
             // failed
-            overviewMessages.push("fail: " + JSON.stringify(response));
+            overviewMessages.push("getAuthToken fail: " + JSON.stringify(response));
         });
     }
     
@@ -85,7 +85,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         var newRows = [];
         var serverRows = serverDB.queryAll(tableName);
         var localRows = localDB.queryAll(tableName);
-        overviewMessages.push("table [" + tableName + "]: " + serverRows.length + "/" + localRows.length + ";");
+        //overviewMessages.push("table [" + tableName + "]: " + serverRows.length + "/" + localRows.length + ";");
         
         var index;
         for (index = 0; index < localRows.length; ++index) {
@@ -105,7 +105,7 @@ angular.module('budget.services').service('dataService', function ($http) {
 
     
     function syncTable(tableName, serverDB, localDB){
-        overviewMessages.push("table [" + tableName + "] sync has started");
+        //overviewMessages.push("table [" + tableName + "] sync has started");
         var resDB = serverDB;
         var index = 0; 
         
@@ -118,7 +118,7 @@ angular.module('budget.services').service('dataService', function ($http) {
                 var newId = resDB.insert(tableName, newRows[index]);
                 //$scope.overviewMessages.push("inserted id: " + newId);
             }
-            //$scope.overviewMessages.push("table [" + tableName + "] has been synced, rows added: " + index);
+            overviewMessages.push("table [" + tableName + "] has been synced, rows added: " + index);
         }
         else {
             //$scope.overviewMessages.push("table [" + tableName + "] has no new rows");
@@ -136,8 +136,9 @@ angular.module('budget.services').service('dataService', function ($http) {
             else 
                 $scope.overviewMessages.push("not found id: " + deletedRows[index].rowId);*/
             d += d1; 
-        } 
-        //$scope.overviewMessages.push("table [" + tableName + "] rows removed: " + d);
+        }
+        if (d > 0) 
+            overviewMessages.push("table [" + tableName + "] rows removed: " + d);
         
         return resDB;    
     } 
@@ -194,7 +195,7 @@ angular.module('budget.services').service('dataService', function ($http) {
                 var sWebDB = response.records.items[0].fields[0].value.string;
                 var webDB = new localStorageDB("web_" + dbName, localStorage);
                 webDB.initFromObj(JSON.parse(sWebDB));
-                overviewMessages.push("webDB: " + dumpDB(webDB));
+                //overviewMessages.push("webDB: " + dumpDB(webDB));
                 webDBhash = hashCode(webDB.serialize()); 
                 if (webDBhash != hashCode(db.serialize())){
                     syncStatus.status = 1; 
@@ -207,7 +208,7 @@ angular.module('budget.services').service('dataService', function ($http) {
                     //newDB = syncTable("authToken", newDB, db);
                     
                     db.initFromObj(newDB.getDBObj());
-                    overviewMessages.push("synced, result: " + dumpDB(db));
+                    overviewMessages.push("synced"); //, result: " + dumpDB(db));
                     db.commit();
                     overviewMessages.push("resulting db committed to local storage"); 
                     uploadDB();
@@ -247,7 +248,7 @@ angular.module('budget.services').service('dataService', function ($http) {
             createDatabase();
         }
         
-        overviewMessages.push("localStorage: " + dumpDB(db)); 
+        //overviewMessages.push("localStorage: " + dumpDB(db)); 
         
         auth.token = localStorage["authToken"]; 
                 
@@ -256,10 +257,12 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
     
     function getSyncStatus(){
-        if (webDBhash != hashCode(db.serialize()))
-            syncStatus.status = 0; 
-        else 
-            syncStatus.status = 2; 
+        if (syncStatus.status != 1){
+            if (webDBhash != hashCode(db.serialize()))
+                syncStatus.status = 0; 
+            else 
+                syncStatus.status = 2;
+        } 
             
         return syncStatus; 
     }
