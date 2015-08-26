@@ -81,6 +81,15 @@ td {
     width: 4.2em;    
 }
 
+
+.bordered {
+    border: 1px solid #dddddd;
+}
+
+.selectable {
+    color: blue;
+}
+
 /*input, textarea, select, button {
   width : 150px;
   margin: 0;

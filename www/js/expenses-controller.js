@@ -13,13 +13,15 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.queryFn = null;
     $scope.newExpense = null; 
     
-    $scope.db = null; //dataService.getDB(); 
-    
+    $scope.db = null; 
+      
     
     $scope.expenseItems = {};
     $scope.allExpenseItems = {};
     $scope.defaultExpenseItemId = null;
     $scope.expenses = [];  
+    $scope.newExpenses = [];
+    $scope.activeExpenseItem = null; 
 
     
     $scope.getTotalByDay = function(expenseItem, month, day){
@@ -93,6 +95,10 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         }
     };
     
+    $scope.$watch('activeExpenseItem', function(newVal, oldVal){
+        $scope.newExpense.expenseItemId = $scope.activeExpenseItem.ID; 
+    }, true);
+    
     $scope.init = function() {
         $scope.db = dataService.getDB();
         $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
@@ -108,7 +114,9 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         });
         $scope.defaultExpenseItemId = $scope.expenseItems[0].ID;   
         $scope.expenses = [{ date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" }]; //, amount: 0,
-        $scope.newExpense = $scope.expenses[0];  
+        $scope.newExpenses = [];
+        $scope.newExpense = { date: new Date(), expenseItemId: dataService.getActiveExpenseItem().ID, comment: "" };
+        $scope.activeExpenseItem = dataService.getActiveExpenseItem();    
     };
     
     $scope.init(); 
@@ -241,20 +249,54 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     }
 
     $scope.addRow = function() {
-        var o = { date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" };   
-        var size = $scope.expenses.length; 
-        if (size > 0 ){
-            o = { date: $scope.expenses[size-1].date, expenseItemId: $scope.expenses[size-1].expenseItemId, comment: "" }; //amount: 0,   
+        if ($scope.newExpense.amount){
+            var o = { date: $scope.newExpense.date, expenseItemId: $scope.newExpense.expenseItemId, comment: "" };   
+            $scope.newExpenses.push($scope.newExpense);
+            $scope.newExpense = o;
+            
+            $timeout(function(){
+                        document.getElementById("amountElement").focus();
+                    }, 0);
         }
-        $scope.expenses.push(o);
-        $scope.newExpense = o;
+    };
+    
+    $scope.addNewExpenses = function() {
+        for (var key in $scope.newExpenses){
+            $scope.db.insert("expenses", {
+                isPlan: false, 
+                date: $scope.newExpenses[key].date.yyyy_mm_dd(),
+                expenseItemId: $scope.newExpenses[key].expenseItemId, 
+                amount: parseInt($scope.newExpenses[key].amount), 
+                comment: $scope.newExpenses[key].comment 
+            });
+        }
         
-        $timeout(function(){
-                    document.getElementById("amountElement").focus();
-                }, 0);
+        $scope.db.commit(); 
+        $scope.newExpenses = []; 
+        $scope.newExpense = { date: new Date(), expenseItemId: dataService.getActiveExpenseItem().ID, comment: "" };
+    };
+    
+    $scope.deleteNewRow = function(e){
+        var i = $scope.newExpenses.indexOf(e);
+        $scope.newExpenses.splice(i, 1);
     }; 
     
+    $scope.getTotalNewToSubmit = function(){
+        var sum = 0;
+        for (var key in $scope.newExpenses){
+            var v = parseInt($scope.newExpenses[key].amount);
+            if (!isNaN(v)) 
+                sum += v; 
+        };
+         
+        return sum; 
+    };
     
+    
+    
+    $scope.do1 = function(){
+        console.log("do1");
+    }
   
   
     

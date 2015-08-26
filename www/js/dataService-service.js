@@ -241,6 +241,14 @@ angular.module('budget.services').service('dataService', function ($http) {
     
     var db = {test: "ok"};
     
+    function setActiveExpenseItem(e) {
+        for(var key in e) {
+            if( e.hasOwnProperty(key) ) {
+                activeExpenseItem[key] = e[key];
+            }
+        }
+    }
+    
     var init = function() {
         db = new localStorageDB(dbName, localStorage);
              
@@ -254,6 +262,14 @@ angular.module('budget.services').service('dataService', function ($http) {
                 
         syncStatus.status = 0;
         syncFromWeb();
+        
+        expenseItems = db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
+        for (var i = 0; i < expenseItems.length; i++) {
+            if (expenseItems[i].name){
+                setActiveExpenseItem(expenseItems[i]);
+                break; 
+            }
+        };
     }
     
     function getSyncStatus(){
@@ -267,6 +283,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         return syncStatus; 
     }
     
+    var expenseItems = []; 
     var dbName = "budget2015";
     var auth = { code: "", token: "" }; 
      
@@ -285,17 +302,21 @@ angular.module('budget.services').service('dataService', function ($http) {
         }
     } 
     
+    var activeExpenseItem = { };
+    
     return {
-        getDB: function() { return db; }, 
+        getDB: function() { return db; },
+        getActiveExpenseItem: function() { return activeExpenseItem; },
+        setActiveExpenseItem: setActiveExpenseItem, 
         auth: auth, 
         overviewMessages: overviewMessages,
+         
+        getExpenseItems: function() { return expenseItems; },
         
         init: init, 
         sync: syncFromWeb, 
         getAuthToken: getAuthToken,
-        getSyncStatus: getSyncStatus
-        
-        
+        getSyncStatus: getSyncStatus 
     } 
      
         

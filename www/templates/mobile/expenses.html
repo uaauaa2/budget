@@ -2,78 +2,70 @@
     
         <ion-content>
             <ion-list>
-                <ion-item ng-repeat="e in expenses" class="item" style="padding: 0px; margin: 0px; font-size: 10pt" ng-click="editItem(e)">
-                    <div class="row">
-                        <div class="col col-90">
+                <ion-item ng-repeat="e in newExpenses" class="item" style="padding: 0px; margin: 0px; font-size: 10pt; line-height: 20px" ng-click="editItem(e)">
+                    <div class="row" style="padding: 0px 5px 0px 5px">
+                        <div class="col col-90" style="padding: 0px;">
                                 {{e.date.yyyy_mm_dd()}} 
                                 {{getExpenseItemName(e.expenseItemId)}}
                                 {{e.amount}}
                             <span style="display: block"> {{e.comment}}</span>
                         </div>
-                        <div class="col col-10">
-                            <button class="button button-small" ng-click="deleteRow(e)" style="min-height: 20px; line-height: 0px"> - </button> 
+                        <div class="col col-10" style="padding: 0px;">
+                            <button class="button button-small" ng-click="deleteNewRow(e)" style="min-height: 15px; line-height: 0px; padding: 2px 2px 2px 2px;"> - </button> 
                         </div>
                     </div>
-                    
-                    
-                    
                 </ion-item>
+                
                 <ion-item style="padding: 0px; margin: 0px; ">
                     <div class="row">
-                        <div class="col col-33" style="border: 1px solid #000000; ">
-                              <input type="date" ng-model="newExpense.date" placeholder="Date" style="width: 100%; border: 1px solid #000000; ">
+                        <div class="col col-33 bordered">
+                              <input class="bordered" type="date" ng-model="newExpense.date" placeholder="Date" 
+                                  style="width: 100%; border: 1px solid #dddddd; font-size: 10pt; padding: 0px 0px 0px; ">
                         </div>
-                        <div class="col col-33" style="border: 1px solid #000000; ">
-                            <select ng-model="newExpense.expenseItemId" 
-                                style="border: 1px solid #000000; height: 32px; width: 100%; margin: 0px; padding: 0px; white-space: nowrap;"> 
+                        <div class="col col-33 bordered">
+                            <!--select ng-model="newExpense.expenseItemId" 
+                                style="height: 32px; width: 100%; margin: 0px; padding: 0px; white-space: nowrap; border: 1px solid #dddddd;"> 
                                 <option data-ng-repeat="ei in expenseItems" value="{{ei.ID}}" ng-selected="ei.ID == newExpense.expenseItemId">
                                     {{ei.name}}
                                 </option>
-                            </select>
+                            </select-->
+                            <input type="button" class="button" ui-sref="tab.expenses.select" 
+                                style="min-height: 33px; line-height: 24px; width: 100%; border: 1px solid #dddddd; white-space: nowrap; font-size: 10pt;"
+                                value="{{getExpenseItemName(newExpense.expenseItemId)}}">
                         </div>
-                        <div class="col col-33" style="border: 1px solid">
-                            <input id="amountElement" type="number" ng-model="newExpense.amount" style="width: 100%; border: 1px solid #000000; ">
+                        <div class="col col-33 bordered">
+                            <input id="amountElement" type="number" ng-model="newExpense.amount" style="width: 100%; border: 1px solid #dddddd; ">
                         </div>
                     </div>
                     
                     <div class="row">
-                        <div class="col col-100" style="border: 1px solid #000000; ">
-                            <input type="text" ng-model="newExpense.comment" placeholder="comment" style="width: 100%; border: 1px solid #000000; "> 
+                        <div class="col col-80 bordered">
+                            <input type="text" ng-model="newExpense.comment" placeholder="comment" style="width: 100%; border: 1px solid #dddddd; "> 
                         </div>
-                        <!--div class="col col-20" style="border: 1px solid #000000; ">
-                            <button class="button" ng-click="addRow()" style="width: 100%; border: 1px solid #000000; "> + </button> 
-                        </div-->
+                        <div class="col col-20 bordered" >
+                            <input type="button" class="button" ng-click="addRow()"
+                                 style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; " 
+                                 value="+">
+                                
+                            
+                        </div>
                     </div>
                 </ion-item>    
-                
             </ion-list>
         </ion-content>
     
-     
-    
-            
-             
-                
-            
-                
-    
     <ion-footer-bar class="bar-positive">
-        <div class="col col-75" style="border: 0px; padding: 0px;">
-            <button class="button button-block" style="padding: 0px; margin: 0px" ng-click="addAllExpenses()">
-                Добавить, итого: {{ getTotalAmountToSubmit(); }}
+        <div class="col col-100" style="border: 0px; padding: 0px;">
+            <button class="button button-block" style="padding: 0px; margin: 0px" ng-click="addNewExpenses()">
+                Добавить, итого: {{ getTotalNewToSubmit(); }}
             </button>
         </div>
-        <div class="col col-25" style="border: 0px; padding: 0px;">
-            <button class="button button-block" ng-click="addRow()" style="padding: 0px; margin: 0px">
-                +1
+        
+        <!--div class="col col-25" style="border: 0px; padding: 0px;">
+            <button class="button button-block" ng-click="do1()" style="padding: 0px; margin: 0px">
+                test
             </button>
-        </div>
+        </div-->
     </ion-footer-bar>
-  
-    <!--div class="bar bar-footer bar-balanced"> 
-        <div class="row">
-            
-        </div>
-    </div-->
 </ion-view>
 
