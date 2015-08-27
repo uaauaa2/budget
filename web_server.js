@@ -12,7 +12,11 @@ var app = express();
 var server = require('http').createServer(app);
 
 app.get('/', function (request, response) {
-    response.sendFile(__dirname + "/www/web_index.html");
+    response.sendFile(__dirname + "/index.html");
 });
-app.use(express.static(__dirname + '/www'));
+
+app.get('/budget/', function (request, response) {
+    response.sendFile(__dirname + "/index.html");
+});
+app.use(express.static(__dirname + '/'));
 app.listen(8080);

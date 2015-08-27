@@ -3,17 +3,14 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     $scope.auth = {code: "", token: ""};  
     
     $scope.stringdb = "";
-    $scope.overviewMessages = dataService.overviewMessages; 
-
+    $scope.overviewMessages = dataService.overviewMessages;
+    $scope.latestActions = []; 
+    
 
     $scope.init = function() {
+        $scope.expenseItems = dataService.db.queryAll("expenseItems");
         
-            
-            $scope.expenseItems = dataService.db.queryAll("expenseItems");
-         
-         
-         
-        //$scope.overviewMessages.push("init completed");
+        
     };
     
     
@@ -51,7 +48,9 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         return sum; 
     }
   
-    
+    $scope.getAuthToken = function(){
+        dataService.getAuthToken($scope.auth.code); 
+    }
     
  
   

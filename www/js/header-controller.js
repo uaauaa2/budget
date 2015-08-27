@@ -21,6 +21,10 @@ angular.module('budget.controllers').controller("HeaderCtrl", function($scope, $
         $scope.syncStatus.status = 1;
         dataService.sync();
     }
+    
+    $scope.doSomething = function(){
+        alert("doSomething");
+    }
 
 });
 

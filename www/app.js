@@ -34,7 +34,8 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
   .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/mobile/tabs.html' 
+    templateUrl: 'templates/mobile/tabs.html',  
+    controller: 'HeaderCtrl'
     /*views: {
       'tab-overview': {
         templateUrl: 'templates/mobile/tabs.html',
@@ -55,26 +56,45 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
     }
   })
   
-  .state('tab.selectExpenseItem', {
-    url: '/selectExpenseItem',
+  .state('tab.expenses', {
+    abstract: true,
+    url: '/expenses',
+    views: {
+      'tab-expenses': {
+        template: '<ion-nav-view></ion-nav-view>'
+      }
+    }
+  })
+  
+  .state('tab.expenses.index', {
+    url: '',
+    templateUrl: 'templates/mobile/expenses.html',
+    controller: 'ExpensesCtrl'
+    /*,
+    onEnter: function(dataService) { // 
+        //if ($scope.newExpense)
+        {
+            console.log("tada");
+            //$scope.newExpense.expenseItemId = dataService.getActiveExpenseItem().ID;
+        }
+     }*/
+  })
+  
+  .state('tab.expenses.select', {
+    url: '/select',
+    templateUrl: 'templates/mobile/selectExpenseItem.html',
+    controller: 'SelectExpenseItemCtrl'
+  })
+  
+  /*.state('tab.expenses.selectExpenseItem', {
+    url: '/:selectExpenseItem',
     views: {
       'tab-selectExpenseItem': {
         templateUrl: 'templates/mobile/selectExpenseItem.html',
         controller: 'SelectExpenseItemCtrl'
       }
     }
-  })
-
-
-  .state('tab.expenses', {
-    url: '/expenses',
-    views: {
-      'tab-expenses': {
-        templateUrl: 'templates/mobile/expenses.html',
-        controller: 'ExpensesCtrl'
-      }
-    }
-  })
+  })*/
   
   .state('tab.plan', {
     url: '/plan',
@@ -89,20 +109,8 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
   ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/selectExpenseItem');
+  $urlRouterProvider.otherwise('/tab/overview');
 
-})
-
-.directive('autoFocus', function($timeout) {
-        return {
-            restrict: 'AC',
-            link: function(_scope, _element) {
-                $timeout(function(){
-                    _element[0].focus();
-                    _element[0].select();
-                }, 0);
-            }
-        };
 })
 
 .run(function (dataService) {
