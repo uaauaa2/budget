@@ -5,49 +5,49 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
         $routeProvider
 
             .when('/', {
-                templateUrl : 'budget/www/templates/web/test.html', // for github
-                //templateUrl : 'www/templates/web/test.html', // for localhost
+                //templateUrl : 'budget/www/templates/web/test.html', // for github
+                templateUrl : 'www/templates/web/test.html', // for localhost
                 controller  : 'TestCtrl'
             })
             
             .when('/budget/', {
-                templateUrl : 'budget/www/templates/web/test.html',
-                //templateUrl : 'www/templates/web/test.html',
+                //templateUrl : 'budget/www/templates/web/test.html',
+                templateUrl : 'www/templates/web/test.html',
                 controller  : 'TestCtrl'
             })
             
             .when('/budget/overview', {
-                templateUrl : 'budget/www/templates/web/overview.html',
-                //templateUrl : 'www/templates/web/overview.html',
+                //templateUrl : 'budget/www/templates/web/overview.html',
+                templateUrl : 'www/templates/web/overview.html',
                 controller  : 'OverviewCtrl'
             })
 
             .when('/budget/expenses', {
-                templateUrl : 'budget/www/templates/web/expenses.html',
-                //templateUrl : 'www/templates/web/expenses.html',
+                //templateUrl : 'budget/www/templates/web/expenses.html',
+                templateUrl : 'www/templates/web/expenses.html',
                 controller  : 'ExpensesCtrl'
             })
             
             .when('/budget/expensesPlan', {
-                templateUrl : 'budget/www/templates/web/expensesPlan.html',
-                //templateUrl : 'www/templates/web/expensesPlan.html',
+                //templateUrl : 'budget/www/templates/web/expensesPlan.html',
+                templateUrl : 'www/templates/web/expensesPlan.html',
                 controller  : 'ExpensesPlanCtrl'
             })
             
             .when('/budget/income', {
-                templateUrl : 'budget/www/templates/web/income.html',
-                //templateUrl : 'www/templates/web/income.html',
+                //templateUrl : 'budget/www/templates/web/income.html',
+                templateUrl : 'www/templates/web/income.html',
                 controller  : 'IncomeCtrl'
             })
             .when('/budget/balance', {
-                templateUrl : 'budget/www/templates/web/balance.html',
-                //templateUrl : 'www/templates/web/balance.html',
+                //templateUrl : 'budget/www/templates/web/balance.html',
+                templateUrl : 'www/templates/web/balance.html',
                 controller  : 'BalanceCtrl'
             })
 
             .when('/budget/plan', {
-                templateUrl : 'budget/www/templates/web/plan.html',
-                //templateUrl : 'www/templates/web/plan.html',
+                //templateUrl : 'budget/www/templates/web/plan.html',
+                templateUrl : 'www/templates/web/plan.html',
                 controller  : 'PlanCtrl'
             });
             
