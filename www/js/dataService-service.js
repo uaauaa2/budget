@@ -1,3 +1,5 @@
+/* global localStorageDB */
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 angular.module('budget.services').service('dataService', function ($http) {
     
     function errorHandler(data, status, headers, config) {
@@ -10,7 +12,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         //console.log("length: " + s.length + "; hash: " + h); 
         return h;              
     }
-    
+
     function createDatabase() {
         db.createTable("expenseItems", ["orderNum", "levelNum", "title", "name", "idListForTotal"]);
         db.createTable("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment"]);
@@ -83,7 +85,7 @@ angular.module('budget.services').service('dataService', function ($http) {
     
     function findNewRowsForTable(tableName, serverDB, localDB){
         var newRows = [];
-        var serverRows = serverDB.queryAll(tableName);
+        //var serverRows = serverDB.queryAll(tableName);
         var localRows = localDB.queryAll(tableName);
         //overviewMessages.push("table [" + tableName + "]: " + serverRows.length + "/" + localRows.length + ";");
         
@@ -115,7 +117,8 @@ angular.module('budget.services').service('dataService', function ($http) {
         if (newRows.length > 0){
             for (index = 0; index < newRows.length; ++index){
                 //$scope.overviewMessages.push("prepared id: " + newRows[index].ID);
-                var newId = resDB.insert(tableName, newRows[index]);
+                //var newId =
+                resDB.insert(tableName, newRows[index]);
                 //$scope.overviewMessages.push("inserted id: " + newId);
             }
             overviewMessages.push("table [" + tableName + "] has been synced, rows added: " + index);
