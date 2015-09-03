@@ -3,6 +3,7 @@
 angular.module('budget.services').service('dataService', function ($http) {
     
     function errorHandler(data, status, headers, config) {
+        //debugger;
         overviewMessages.push("http error");
         console.log("http error");
     }
@@ -30,8 +31,8 @@ angular.module('budget.services').service('dataService', function ($http) {
         var res = ""; 
         
         try {
-            var expenseItems = db.queryAll("expenseItems");
-            res += "[expenseItems]: " + expenseItems.length + "; "; 
+            var expItems = db.queryAll("expenseItems");
+            res += "[expenseItems]: " + expItems.length + "; "; 
             
             var exList = db.queryAll("expenses");
             res += "[expenses]: " + exList.length + "; ";
@@ -143,6 +144,21 @@ angular.module('budget.services').service('dataService', function ($http) {
         if (d > 0) 
             overviewMessages.push("table [" + tableName + "] rows removed: " + d);
         
+        
+        // update server db rows, which were updated 
+        var updatedRows = localDB.queryAll("localChanges", { query: {tableName: tableName, action: "update"}});
+        var u = 0; 
+        for (index = 0; index < updatedRows.length; ++index){
+            var updatedRow = localDB.queryAll(tableName, { query: {ID: updatedRows[index].rowId}})[0];
+            if (updatedRows[index].rowId){
+                resDB.insertOrUpdate(tableName, {ID: updatedRows[index].rowId}, updatedRow);
+                u++; 
+            }
+        }
+        if (u > 0) 
+            overviewMessages.push("table [" + tableName + "] rows updated: " + u);
+        
+            
         return resDB;    
     } 
     
@@ -223,7 +239,13 @@ angular.module('budget.services').service('dataService', function ($http) {
                 }
                 
             })
-            .error(errorHandler)
+            .error(function(data, status, headers, config) {
+                if (status == 404){
+                    uploadDB();
+                }
+                else 
+                    errorHandler(data, status, headers, config); 
+            }); 
         }
     }
     

@@ -8,7 +8,7 @@ Date.prototype.yyyy_mm_dd = function() {
 angular.module('budget.controllers').controller("ExpensesCtrl", function($scope, $http, dataService, $filter, $timeout) {
     $scope.debugText = "";
 
-    $scope.month = 8; 
+    $scope.month = 9; 
     $scope.expensesTable = [];  
     $scope.queryFn = null;
     $scope.newExpense = null; 

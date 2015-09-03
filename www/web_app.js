@@ -6,8 +6,10 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
 
             .when('/', {
                 //templateUrl : 'budget/www/templates/web/test.html', // for github
-                templateUrl : 'www/templates/web/test.html', // for localhost
-                controller  : 'TestCtrl'
+                /*templateUrl : 'www/templates/web/test.html', // for localhost
+                controller  : 'TestCtrl'*/
+                templateUrl : 'www/templates/web/editExpenseItems.html',
+                controller  : 'EditExpenseItemsCtrl'
             })
             
             .when('/budget/', {
@@ -43,6 +45,12 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
                 //templateUrl : 'budget/www/templates/web/balance.html',
                 templateUrl : 'www/templates/web/balance.html',
                 controller  : 'BalanceCtrl'
+            })
+            
+            .when('/budget/editExpenseItems', {
+                //templateUrl : 'budget/www/templates/web/editExpenseItems.html',
+                templateUrl : 'www/templates/web/editExpenseItems.html',
+                controller  : 'EditExpenseItemsCtrl'
             })
 
             .when('/budget/plan', {

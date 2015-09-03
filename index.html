@@ -15,6 +15,7 @@
       <script src="www/js/income-controller.js"></script>
       <script src="www/js/balance-controller.js"></script>
       <script src="www/js/plan-controller.js"></script>
+      <script src="www/js/editExpenseItems-controller.js"></script>
       <script src="www/js/test-controller.js"></script>
     </head>
      <body> 
@@ -34,6 +35,7 @@
                         <li><a href="budget/expensesPlan"><i class="fa fa-shield"></i> Expenses Plan</a></li>
                         <li><a href="budget/balance"><i class="fa fa-comment"></i> Balance</a></li>
                         <li><a href="budget/plan"><i class="fa fa-comment"></i> Plan</a></li>
+                        <li><a href="budget/editExpenseItems"><i class="fa fa-comment"></i> Edit Expense Items</a></li>
                         <li><a href="" ng-click="sync()" 
                                 class="notInSync" ng-class="{inSync: syncStatus.status}">
                                 {{ syncStatus.statusText() }}

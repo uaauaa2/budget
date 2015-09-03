@@ -18,7 +18,7 @@ angular.module('budget.controllers').controller('IncomeCtrl', function($scope, d
     $scope.add = function() {
         $scope.allIncome.push( {
               isPlan: $scope.incomeIsPlan,
-              date: $scope.incomeDate, 
+              date: $scope.incomeDate.yyyy_mm_dd(), 
               agent: $scope.incomeAgent,
               amount: parseInt($scope.incomeAmount),
               comment: $scope.incomeComment
