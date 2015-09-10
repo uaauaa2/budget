@@ -21,6 +21,26 @@
     <!--h3>{{debug.message}}</h3>                    
     <a href="" ng-click="test()">Test</a><br/><br/><br/-->
     
+    
+        <table class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Статья</th>
+                    <th>Сумма</th>
+                    <th>Комментарий</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="le in latestExpenses">
+                    <td>{{le.date}}</td>
+                    <td>{{le.expenseItemName}}</td>
+                    <td>{{le.amount}}</td>
+                    <td>{{le.comment}}</td> 
+                </tr>
+            </tbody>
+        </table>
+    
                         
         <ul class="unstyled">
             <li ng-repeat="m in overviewMessages track by $index">
