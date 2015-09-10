@@ -15,7 +15,7 @@ angular.module('budget.controllers').controller("TestCtrl", function($scope, $ht
     $scope.allExpenseItems = [];
     $scope.expItems = {};
     $scope.initLatestExpenses = function(){
-        var count = 11; 
+        var count = 10; 
         $scope.db = dataService.getDB();
         var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]] });
         $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
@@ -57,7 +57,7 @@ angular.module('budget.controllers').controller("TestCtrl", function($scope, $ht
         }
         
         var i = 0;  
-        while (result.length < 10){
+        while (result.length < count){
             add(expenses[i]);
             i++; 
         }
