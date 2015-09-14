@@ -15,52 +15,78 @@ angular.module('budget.controllers').controller("TestCtrl", function($scope, $ht
     $scope.allExpenseItems = [];
     $scope.expItems = {};
     $scope.initLatestExpenses = function(){
-        var count = 10; 
-        $scope.db = dataService.getDB();
-        var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]] });
-        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
         
-        $scope.allExpenseItems.forEach(function(element) {
-            $scope.expItems[element.ID] = element; 
-        }, this);
         
         /*var result = { 
-            "2015-09-10": { date: "2015-09-10", expenses: [{ "еда": { amount: 100, list: [] } }, { "хозяйство": { amount: 500, list: [] } }] }, 
-            "2015-09-09": { date: "2015-09-10", expenses: [{ "еда": { amount: 300, list: [] } }, { "хозяйство": { amount: 200, list: [] } }] }
+            "2015-09-10": { date: "2015-09-10", expenses: { "еда": { expenseItemName: "eda", amount: 100, comment: "moloko" }, 
+                                                            "хозяйство": { expenseItemName: "хозяйство", amount: 500, comment: "dkkdkd" }
+                                                          }
+                          }, 
+                                                           
+            "2015-09-09": { date: "2015-09-09", expenses: { "еда": { expenseItemName: "eda", amount: 200, comment: "xleb" }, 
+                                                            "хозяйство": { expenseItemName: "хозяйство", amount: 2500, comment: "eeeed" }
+                                                          }
+                          }
         };*/
         
         
         
-        var result = [];
+        var result = {};
         var add = function(expense) {
-            var elementTo = null; 
-            for (var i = 0; i < result.length; i++){
-                if (expense.date == result[i].date && expense.expenseItemId == result[i].expenseItemId){
-                    elementTo = result[i]; 
-                    break; 
-                }
-            };
-            if (elementTo){
-                elementTo.amount += expense.amount; 
-                if (expense.comment)
-                    elementTo.comment += expense.comment + "; "; 
-            } 
+            var dateElementTo = result[expense.date]; 
+            
+            if (!dateElementTo) {
+                dateElementTo = { date: expense.date, totalAmount: 0, expenses: {} }; 
+                result[expense.date] = dateElementTo;
+            }
+            dateElementTo.totalAmount += expense.amount;  
+            
+            var expenseItemElementTo = dateElementTo.expenses[expense.expenseItemId];
+            
+            if (!expenseItemElementTo){
+                expenseItemElementTo = { 
+                        expenseItemId: expense.expenseItemId,
+                        expenseItemName: $scope.expItems[expense.expenseItemId].name, 
+                        amount: expense.amount, 
+                        comment: expense.comment  
+                    }
+                dateElementTo.expenses[expense.expenseItemId] = expenseItemElementTo;
+            }
             else {
-                result.push({ 
-                    date: expense.date,
-                    expenseItemId: expense.expenseItemId, 
-                    expenseItemName: $scope.expItems[expense.expenseItemId].name, 
-                    amount: expense.amount, 
-                    comment: expense.comment 
-                });
+                expenseItemElementTo.amount += expense.amount; 
+                if (expenseItemElementTo.comment)
+                    expenseItemElementTo.comment += expense.comment + "; ";
             }
         }
         
-        var i = 0;  
-        while (result.length < count){
-            add(expenses[i]);
-            i++; 
-        }
+        
+        $scope.db = dataService.getDB();
+        
+        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
+        $scope.allExpenseItems.forEach(function(element) {
+            $scope.expItems[element.ID] = element; 
+        }, this);
+        
+        var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]], distinct : ["date"] });
+        var dateFrom = new Date(expenses[2].date);
+        
+        
+        //$scope.days = [dateFrom.yyyy_mm_dd(), ]
+         
+        expenses = $scope.db.queryAll("expenses", { query: function(row) {
+                var d = new Date(row.date); 
+                if (d >= dateFrom)
+                    return true; 
+                else 
+                    return false; 
+            } 
+        });
+        
+        
+        for (var k = 0; k < expenses.length; k++) {
+            add(expenses[k]);
+        }   
+        
         
         return result; 
     }

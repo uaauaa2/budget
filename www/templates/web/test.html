@@ -22,7 +22,7 @@
     <a href="" ng-click="test()">Test</a><br/><br/><br/-->
     
     
-        <table class="table table-bordered table-condensed">
+        <!--table class="table table-bordered table-condensed">
             <thead>
                 <tr>
                     <th>Дата</th>
@@ -39,7 +39,16 @@
                     <td>{{le.comment}}</td> 
                 </tr>
             </tbody>
-        </table>
+        </table-->
+        
+        <ul ng-repeat="le in latestExpenses"> 
+            <li>{{le.date}} (total: {{le.totalAmount}})
+                <ul ng-repeat="e in le.expenses"> 
+                    <li>{{e.expenseItemName}} {{e.amount}} {{e.comment}} </li>
+                </ul> 
+            </li>
+            
+        </ul>
     
                         
         <ul class="unstyled">
