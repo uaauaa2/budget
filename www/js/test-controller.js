@@ -70,9 +70,6 @@ angular.module('budget.controllers').controller("TestCtrl", function($scope, $ht
         var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]], distinct : ["date"] });
         var dateFrom = new Date(expenses[2].date);
         
-        
-        //$scope.days = [dateFrom.yyyy_mm_dd(), ]
-         
         expenses = $scope.db.queryAll("expenses", { query: function(row) {
                 var d = new Date(row.date); 
                 if (d >= dateFrom)
@@ -87,6 +84,9 @@ angular.module('budget.controllers').controller("TestCtrl", function($scope, $ht
             add(expenses[k]);
         }   
         
+        result.days = Object.keys(result);
+        result.days.sort();
+        result.days.reverse();
         
         return result; 
     }
