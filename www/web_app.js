@@ -5,8 +5,8 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
         $routeProvider
 
             .when('/', {
-                templateUrl : 'budget/www/templates/web/test.html', // for github
-                //templateUrl : 'www/templates/web/test.html', // for localhost
+                templateUrl : 'budget/www/templates/web/overview.html', // for github
+                //templateUrl : 'www/templates/web/overview.html', // for localhost
                 controller  : 'TestCtrl'
             })
             
