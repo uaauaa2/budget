@@ -11,9 +11,9 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
             })
             
             .when('/budget/', {
-                templateUrl : 'budget/www/templates/web/test.html',
-                //templateUrl : 'www/templates/web/test.html',
-                controller  : 'TestCtrl'
+                templateUrl : 'budget/www/templates/web/overview.html',
+                //templateUrl : 'www/templates/web/overview.html',
+                controller  : 'OverviewCtrl'
             })
             
             .when('/budget/overview', {
