@@ -3,10 +3,10 @@
       
     <div><span><b>Latest expenses:</b></span> 
         <ul ng-repeat="d in latestExpenses.days">
-            <li>
-                {{latestExpenses[d].date}} (total: {{latestExpenses[d].totalAmount}})
+            <li class="td2">
+                <b>{{latestExpenses[d].date}} (total: {{latestExpenses[d].totalAmount}})</b>
                 <ul ng-repeat="e in latestExpenses[d].expenses">
-                    <li>{{e.expenseItemName}} {{e.amount}} {{e.comment}} </li>
+                    <li  class="td3">{{e.expenseItemName}} {{e.amount}} {{e.comment}} </li>
                 </ul>
             </li>
         </ul>
