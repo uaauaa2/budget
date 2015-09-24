@@ -78,7 +78,7 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
             else {
                 expenseItemElementTo.amount += expense.amount;
                 if (expenseItemElementTo.comment)
-                    expenseItemElementTo.comment += expense.comment + "; ";
+                    expenseItemElementTo.comment += "; " + expense.comment;
             }
         }
 
@@ -91,7 +91,10 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         }, this);
 
         var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]], distinct: ["date"] });
-        var dateFrom = new Date(expenses[2].date);
+        
+        var dateFrom = new Date();
+        if (expenses[9])
+             dateFrom = new Date(expenses[9].date);
 
         expenses = $scope.db.queryAll("expenses", {
             query: function (row) {
