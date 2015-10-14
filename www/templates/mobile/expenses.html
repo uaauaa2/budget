@@ -1,22 +1,17 @@
 <ion-view view-title="Expenses">
     
-        <ion-content>
+        
             <ion-list>
-                <ion-item ng-repeat="e in newExpenses" class="item" style="padding: 0px; margin: 0px; font-size: 10pt; line-height: 20px" ng-click="editItem(e)">
-                    <div class="row" style="padding: 0px 5px 0px 5px">
-                        <div class="col col-90" style="padding: 0px;">
-                                {{e.date.yyyy_mm_dd()}} 
-                                {{getExpenseItemName(e.expenseItemId)}}
-                                {{e.amount}}
-                            <span style="display: block"> {{e.comment}}</span>
-                        </div>
-                        <div class="col col-10" style="padding: 0px;">
-                            <button class="button button-small" ng-click="deleteNewRow(e)" style="min-height: 15px; line-height: 0px; padding: 2px 2px 2px 2px;"> - </button> 
-                        </div>
+                <ion-item style="padding: 0px; margin: 0px; ">
+                    <div class="col col-100" style="border: 0px; padding: 0px;">
+                        <button class="button button-block" style="padding: 0px; margin: 0px" ng-click="addNewExpenses()">
+                            Добавить, итого: {{ getTotalNewToSubmit(); }}
+                        </button>
                     </div>
                 </ion-item>
-                
-                <ion-item style="padding: 0px; margin: 0px; ">
+        
+                    
+            <ion-item style="padding: 0px; margin: 0px; ">
                     <div class="row">
                         <div class="col col-33 bordered">
                               <input class="bordered" type="date" ng-model="newExpense.date" placeholder="Date" 
@@ -50,22 +45,30 @@
                             
                         </div>
                     </div>
-                </ion-item>    
+                </ion-item>
+             </ion-list>
+        
+        
+        <ion-content>
+            <ion-list>
+                <ion-item ng-repeat="e in newExpenses" class="item" style="padding: 0px; margin: 0px; font-size: 10pt; line-height: 20px" ng-click="editItem(e)">
+                    <div class="row" style="padding: 0px 5px 0px 5px">
+                        <div class="col col-90" style="padding: 0px;">
+                                {{e.date.yyyy_mm_dd()}} 
+                                {{getExpenseItemName(e.expenseItemId)}}
+                                {{e.amount}}
+                            <span style="display: block"> {{e.comment}}</span>
+                        </div>
+                        <div class="col col-10" style="padding: 0px;">
+                            <button class="button button-small" ng-click="deleteNewRow(e)" style="min-height: 15px; line-height: 0px; padding: 2px 2px 2px 2px;"> - </button> 
+                        </div>
+                    </div>
+                </ion-item>
+                
+                    
             </ion-list>
         </ion-content>
     
-    <ion-footer-bar class="bar-positive">
-        <div class="col col-100" style="border: 0px; padding: 0px;">
-            <button class="button button-block" style="padding: 0px; margin: 0px" ng-click="addNewExpenses()">
-                Добавить, итого: {{ getTotalNewToSubmit(); }}
-            </button>
-        </div>
-        
-        <!--div class="col col-25" style="border: 0px; padding: 0px;">
-            <button class="button button-block" ng-click="do1()" style="padding: 0px; margin: 0px">
-                test
-            </button>
-        </div-->
-    </ion-footer-bar>
+    
 </ion-view>
 

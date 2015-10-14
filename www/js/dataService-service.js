@@ -264,7 +264,8 @@ angular.module('budget.services').service('dataService', function ($http) {
         auth.token = localStorage["authToken"]; 
                 
         syncStatus.status = 0;
-        syncFromWeb();
+        //syncFromWeb();
+        setTimeout(syncFromWeb, 1000);
         
         expenseItems = db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
         for (var i = 0; i < expenseItems.length; i++) {
