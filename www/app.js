@@ -30,6 +30,24 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
   // Set up the various states which the app can be in.
   $stateProvider
 
+  /*.state('tab1', {
+    url: '/tab1',
+    abstract: true,
+    templateUrl: 'templates/mobile/expenses.html',  
+    controller: 'HeaderCtrl'
+  })*/
+    .state('index', {
+        url: '/',
+        templateUrl: 'templates/mobile/home.html'//,
+        //controller: 'ExpensesCtrl'
+    })
+    
+    .state('index.expenses', {
+        url: '',
+        templateUrl: 'templates/mobile/expenses.html',
+        controller: 'ExpensesCtrl'
+    })
+
   // setup an abstract state for the tabs directive
   .state('tab', {
     url: '/tab',
@@ -76,7 +94,7 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
  ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/expenses');
+  $urlRouterProvider.otherwise('/');
 
 })
 
