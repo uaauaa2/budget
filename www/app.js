@@ -36,17 +36,26 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
     templateUrl: 'templates/mobile/expenses.html',  
     controller: 'HeaderCtrl'
   })*/
-    .state('index', {
-        url: '/',
-        templateUrl: 'templates/mobile/home.html'//,
-        //controller: 'ExpensesCtrl'
-    })
     
-    .state('index.expenses', {
-        url: '',
-        templateUrl: 'templates/mobile/expenses.html',
+      
+      .state('home', {
+        url: '/home',
+        templateUrl: 'templates/mobile/home.html',
         controller: 'ExpensesCtrl'
-    })
+      })
+      
+      .state('select2', {
+        url: '/select2',
+        templateUrl: 'templates/mobile/selectExpenseItem.html',
+        controller: 'SelectExpenseItemCtrl'
+      })
+      .state('overview2', {
+        cache: false,
+        url: '/overview2',
+        templateUrl: 'templates/mobile/overview.html',
+        controller: 'OverviewCtrl'
+      })
+    
 
   // setup an abstract state for the tabs directive
   .state('tab', {
@@ -94,7 +103,7 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
  ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/home');
 
 })
 

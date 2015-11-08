@@ -1,56 +1,29 @@
 <ion-view view-title="Home">
     <!--div class="bar bar-header bar-stable">
-        <h1 class="title">bar-stable</h1>
+        <h1 class="title">bar-stable</h1>  
     </div-->
     
     <div style="position: absolute; top: 0px; height: 88px; width: 100%">
         <div class="row">
             
-            <div class="col col-10"><input type="button" value="<" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-50"><input type="button" value="Ср 2015-11-04" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-10"><input type="button" value=">" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-10"><input type="button" value="<" ng-click="keypad('<')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-50"><input type="button" value="{{newExpense.date.yyyy_mm_dd()}}" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-10"><input type="button" value=">" ng-click="keypad('>')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
             
-            <div class="col col-offset-10 col-10"><input type="button" value="!" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-10"><input type="button" value="E" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-offset-10 col-10"><input type="button" value="!" ng-click="sync()" class="button"
+                 ng-class="syncStatus.status == 2? 'balanced' : 'assertive'"
+                style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-10"><input type="button" value="E" ui-sref="overview2" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
         </div>
         <div class="row">
-            <div class="col col-100"><input type="button" value="добавить 23000" class="button positive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-100"><input type="button" ng-click="addNewExpenses()" value="добавить {{ getTotalNewToSubmit(); }}" class="button positive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
         </div>
     </div>
-    <!--ion-header-bar align-title="left"  style="height: 88px">
-        <div class="buttons">
-            <button class="button" ng-click="doSomething()">Left Button</button>
-        </div>
-        <h1 class="title">Title!</h1>
-        <div class="buttons">
-            <button class="button">Right Button</button>
-        </div>
-    </ion-header-bar-->
-
 
     
     <ion-content style="top: 88px; bottom: 220px">
-        <!--span>
-        The List is a common and simple way of displaying... that's right, a list. This is a widely used interface across most current mobile OS's, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
-        The list view is a very versatile and powerful component. List views support various interaction modes such as editing, swipe to edit, drag to reorder, and pull to refresh.
-        The List is a common and simple way of displaying... that's right, a list. This is a widely used interface across most current mobile OS's, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
-        The list view is a very versatile and powerful component. List views support various interaction modes such as editing, swipe to edit, drag to reorder, and pull to refresh.
-        The List is a common and simple way of displaying... that's right, a list. This is a widely used interface across most current mobile OS's, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
-        The list view is a very versatile and powerful component. List views support various interaction modes such as editing, swipe to edit, drag to reorder, and pull to refresh.
-        The List is a common and simple way of displaying... that's right, a list. This is a widely used interface across most current mobile OS's, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
-        The list view is a very versatile and powerful component. List views support various interaction modes such as editing, swipe to edit, drag to reorder, and pull to refresh.
-        The List is a common and simple way of displaying... that's right, a list. This is a widely used interface across most current mobile OS's, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
-        The list view is a very versatile and powerful component. List views support various interaction modes such as editing, swipe to edit, drag to reorder, and pull to refresh.
-        The List is a common and simple way of displaying... that's right, a list. This is a widely used interface across most current mobile OS's, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
-        The list view is a very versatile and powerful component. List views support various interaction modes such as editing, swipe to edit, drag to reorder, and pull to refresh.
-        The List is a common and simple way of displaying... that's right, a list. This is a widely used interface across most current mobile OS's, and can include content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
-        The list view is a very versatile and powerful component. List views support various interaction modes such as editing, swipe to edit, drag to reorder, and pull to refresh.
-        
-        ng-repeat="e in newExpenses"
-        
-        </span-->
         <ion-list style="padding: 0px; margin: 0px; ">
-                <ion-item  class="item" style="padding: 0px; margin: 0px; font-size: 10pt; line-height: 25px" ng-click="editItem(e)">
+                <ion-item ng-repeat="e in newExpenses" class="item" style="padding: 0px; margin: 0px; font-size: 10pt; line-height: 20px" ng-click="editItem(e)">
                     <div class="row" style="padding: 0px 5px 0px 5px">
                         <div class="col col-90" style="padding: 0px;">
                                 {{e.date.yyyy_mm_dd()}} 
@@ -59,55 +32,42 @@
                             <span style="display: block"> {{e.comment}}</span>
                         </div>
                         <div class="col col-10" style="padding: 0px;">
-                            <button class="button button-small" ng-click="deleteNewRow(e)" style="min-height: 20px; line-height: 0px; padding: 2px 2px 2px 2px;"> - </button> 
-                        </div>
-                    </div>
-                </ion-item>
-                <ion-item  class="item" style="padding: 0px; margin: 0px; font-size: 10pt; line-height: 25px" ng-click="editItem(e)">
-                    <div class="row" style="padding: 0px 5px 0px 5px">
-                        <div class="col col-90" style="padding: 0px;">
-                                {{e.date.yyyy_mm_dd()}} 
-                                {{getExpenseItemName(e.expenseItemId)}}
-                                {{e.amount}}
-                            <span style="display: block"> {{e.comment}}</span>
-                        </div>
-                        <div class="col col-10" style="padding: 0px;">
-                            <button class="button button-small" ng-click="deleteNewRow(e)" style="min-height: 20px; line-height: 0px; padding: 2px 2px 2px 2px;"> - </button> 
+                            <button class="button button-small" ng-click="deleteNewRow(e)" style="min-height: 15px; line-height: 0px; padding: 2px 2px 2px 2px;"> - </button> 
                         </div>
                     </div>
                 </ion-item>
    
         </ion-list>
-        
+        <ion-nav-view></ion-nav-view>
     </ion-content>
 
 
     <div style="position: absolute; bottom: 0px; height: 220px; width: 100%">
         <div class="row">
-            <div class="col col-50"><input type="button" value="еда" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div> 
-            <div class="col col-25"><input type="button" value="30000" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-25"><input type="button" value="add" class="button positive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-50"><input type="button" value="{{getExpenseItemName(newExpense.expenseItemId)}}" ui-sref="select2" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; white-space: nowrap; width: 100%; border: 1px solid #dddddd; "></div> 
+            <div class="col col-25"><input type="button" value="{{newExpense.amount}}" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; white-space: nowrap; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="add" ng-click="addRow()" class="button positive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
         </div>
         <div class="row">
             <div class="col col-75"><input type="text" ng-model="newExpense.comment" placeholder="comment" style="width: 100%; border: 1px solid #dddddd; "></div>
         </div>
         <div class="row">
-            <div class="col col-25"><input type="button" value="7" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div> 
-            <div class="col col-25"><input type="button" value="8" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-25"><input type="button" value="9" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-25"><input type="button" value="C" class="button assertive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="1" ng-click="keypad('1')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div> 
+            <div class="col col-25"><input type="button" value="2" ng-click="keypad('2')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="3" ng-click="keypad('3')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="C" ng-click="keypad('C')" class="button assertive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
         </div>
         <div class="row">
-            <div class="col col-25"><input type="button" value="4" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div> 
-            <div class="col col-25"><input type="button" value="5" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-25"><input type="button" value="6" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-25"><input type="button" value="<-" class="button assertive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="4" ng-click="keypad('4')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div> 
+            <div class="col col-25"><input type="button" value="5" ng-click="keypad('5')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="6" ng-click="keypad('6')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="<-" ng-click="keypad('<-')" class="button assertive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
         </div>
         <div class="row">
-            <div class="col col-25"><input type="button" value="1" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div> 
-            <div class="col col-25"><input type="button" value="2" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-25"><input type="button" value="3" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-25"><input type="button" value="0" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="7" ng-click="keypad('7')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div> 
+            <div class="col col-25"><input type="button" value="8" ng-click="keypad('8')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="9" ng-click="keypad('9')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="0" ng-click="keypad('0')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "></div>
         </div>
         
 
