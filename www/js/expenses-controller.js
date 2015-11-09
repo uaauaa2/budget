@@ -254,7 +254,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.addRow = function() {
         if ($scope.newExpense.amount){
             var o = { date: $scope.newExpense.date, expenseItemId: $scope.newExpense.expenseItemId, comment: "" };   
-            $scope.newExpenses.push($scope.newExpense);
+            $scope.newExpenses.unshift($scope.newExpense);
             $scope.newExpense = o;
             
             $timeout(function(){
