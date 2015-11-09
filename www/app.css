@@ -90,6 +90,10 @@ td {
     color: blue;
 }
 
+.keysbutton {
+    font-size: 24pt; 
+}
+
 /*input, textarea, select, button {
   width : 150px;
   margin: 0;
