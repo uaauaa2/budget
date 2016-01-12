@@ -3,13 +3,26 @@
 angular.module('budget.services').service('dataService', function ($http) {
     
     function errorHandler(data, status, headers, config) {
-        overviewMessages.push("http error");
-        console.log("http error");
+        var l = 200;
+        var msg = ""; 
+        if (data && data.message){
+             msg = data.message.substring(0, l);
+        }
+        var s = "http error! " + 
+            ("data: " + JSON.stringify(data)).substring(0, l) + 
+            "; message: " + msg +
+            ("; status: " + JSON.stringify(status)).substring(0, l) +
+            ("; headers: " + JSON.stringify(headers)).substring(0, l) +
+            ("; config: " + JSON.stringify(config)).substring(0, l);
+            
+        overviewMessages.push(s);
+        console.log(s);
     }
     
     function hashCode(s){
-        var h = s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);  
-        //console.log("length: " + s.length + "; hash: " + h); 
+        //var h = s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);  
+        //console.log("length: " + s.length + "; hash: " + h);
+        var h = s.length;  
         return h;              
     }
 
@@ -152,9 +165,11 @@ angular.module('budget.services').service('dataService', function ($http) {
         $http({
             method: 'PUT',
             url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName + "/",
+            cache: false, 
             headers: { "Authorization": auth.token }  
         }).success(function(response) {
             revision = response.revision;
+            overviewMessages.push(revision);
             var delta = {
                     "delta_id": "db update",
                     "changes": [{

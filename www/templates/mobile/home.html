@@ -6,15 +6,14 @@
     <div style="top: 0px; height: 130px; width: 100%">
         <div class="row">
             
-            <div class="col col-10"><input type="button" value="<" ng-click="keypad('<')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-50"><input type="button" value="{{newExpense.date.yyyy_mm_dd()}}" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-10"><input type="button" value=">" ng-click="keypad('>')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="<" ng-click="keypad('<')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-30"><input type="button" value="{{newExpense.date.yyyy_mm_dd()}} >" ng-click="keypad('>')" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
             
-            <div class="col col-offset-10 col-10"><input type="button" value="!" ng-click="sync()" class="button"
+            <div class="col col-20"><input type="button" value="sync" ng-click="sync()" class="button"
                  ng-class="syncStatus.status == 2? 'balanced' : 'assertive'"
                 style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
-            <div class="col col-10"><input type="button" value="E" ui-sref="overview2" class="button" 
-                style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-20"><input type="button" value="E" ui-sref="overview2" class="button"  
+                style="min-height: 48px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd;"></div>
         </div>
         <div class="row">
             <div class="col col-100"><input type="button" ng-click="addNewExpenses()" value="добавить {{ getTotalNewToSubmit(); }}" 
@@ -46,7 +45,7 @@
     <div style="position: absolute; bottom: 0px; height: 295px; width: 100%">
         <div class="row">
             <div class="col col-50"><input type="button" value="{{getExpenseItemName(newExpense.expenseItemId)}}" ui-sref="select2" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; white-space: nowrap; width: 100%; border: 1px solid #dddddd; "></div> 
-            <div class="col col-25"><input type="button" value="{{newExpense.amount}}" class="button" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; white-space: nowrap; width: 100%; border: 1px solid #dddddd; "></div>
+            <div class="col col-25"><input type="button" value="{{newExpense.amount}}" class="button" style="min-height: 48px; padding: 0px; min-width: 0px; line-height: 48px; white-space: nowrap; width: 100%; border: 1px solid #dddddd; "></div>
             <div class="col col-25"><input type="button" value="add" ng-click="addRow()" class="button keysbutton positive" style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 48px; width: 100%; border: 1px solid #dddddd; "></div>
         </div>
         <div class="row">
