@@ -4,16 +4,29 @@ Date.prototype.yyyy_mm_dd = function() {
    var dd  = this.getDate().toString();
    return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
 };
+
+Date.prototype.formatFull = function() {
+   var yyyy = this.getFullYear().toString();
+   var MM = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   var HH  = this.getHours().toString();
+   var mm  = this.getMinutes().toString();
+   
+   return yyyy + "-" + (MM[1]?MM:"0"+MM[0]) + "-" + (dd[1]?dd:"0"+dd[0])
+   		+ " " + (HH[1]?HH:"0"+HH[0]) + ":" + (mm[1]?mm:"0"+mm[0]); // padding
+};
   
+
 angular.module('budget.controllers').controller("ExpensesCtrl", function($scope, $http, dataService, $filter, $timeout) {
     $scope.debugText = "";
 
-    $scope.month = 9; 
+    $scope.month = 1; 
     $scope.expensesTable = [];  
     $scope.queryFn = null;
     $scope.newExpense = null; 
     
-    $scope.db = null; 
+    //$scope.db = null;
+    $scope.db = dataService.getDB(); 
       
     
     $scope.expenseItems = {};
@@ -22,6 +35,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.expenses = [];  
     $scope.newExpenses = [];
     $scope.activeExpenseItem = null; 
+    $scope.listToEdit = []; 
 
     
     $scope.getTotalByDay = function(expenseItem, month, day){
@@ -100,7 +114,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     }, true);
     
     $scope.init = function() {
-        $scope.db = dataService.getDB();
+        //$scope.db = dataService.getDB();
         $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
         $scope.expenseItems = $scope.db.queryAll("expenseItems", { 
             query: function(row) {
@@ -121,25 +135,126 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     
     $scope.init(); 
     
+    /*$scope.findDeleted = function(list1, list2){
+        var deletedItems = [];
+        if (list1) {
+            deletedItems = list1.filter(
+                function(list1Item){ 
+                    return !list2.some(
+                        function(list2Item){
+                            return list1Item.ID == list2Item.ID;  
+                        })
+                    }
+            );
+        }
+        return deletedItems; 
+    }*/
+    
+    $scope.findNewOrUpdated = function(list1, list2, isEqualFn){
+        var changedItems = list2.filter(
+            function(list2Item){ // должна вернуть true, если list2Item нет в list1
+                return !list1.some( // проверяем list1 на наличие
+                    function(list1Item){
+                        return isEqualFn(list1Item, list2Item); 
+                    }
+                )
+            }
+        );
+        return changedItems; 
+    }
+    
+    $scope.findDeleted = function(list1, list2){
+        return $scope.findNewOrUpdated(list2, list1, 
+            function(item1, item2){
+                return item1.ID == item2.ID;
+            }
+        );
+    }
+    
     $scope.addAllExpenses = function() {
-        if ($scope.queryFn != null){
+        /*if ($scope.queryFn != null){
             var list = $scope.db.queryAll("expenses", { query: $scope.queryFn });
             for (var key in list)
                 $scope.db.insert("localChanges", { tableName: "expenses", action: "delete", rowId: list[key].ID }); 
         
             $scope.db.deleteRows("expenses", $scope.queryFn );
             $scope.queryFn = null;
-        }
+        }*/
         
-        for (var key in $scope.expenses){
-            $scope.db.insert("expenses", {
-                isPlan: false, 
-                date: $scope.expenses[key].date.yyyy_mm_dd(),
-                expenseItemId: $scope.expenses[key].expenseItemId, 
-                amount: parseInt($scope.expenses[key].amount), 
-                comment: $scope.expenses[key].comment 
-            });
-        }
+        var operationDate = (new Date()).formatFull();
+        var deletedItems = $scope.findDeleted($scope.listToEdit, $scope.expenses);
+        //console.log(JSON.stringify(deletedItems));
+        //throw "test deleted"
+        deletedItems.forEach(
+            function(item){
+                $scope.db.update("expenses", {ID: item.ID}, 
+                    function(row) {
+                        row.isActive = false;
+                        row.changeDate = operationDate;
+                        console.log("to mark as deleted, amount: " + row.amount); 
+                        return row;
+                    }
+                );
+            }
+        ); 
+        
+        
+        var newOrUpdatedItems = $scope.findNewOrUpdated($scope.listToEdit, $scope.expenses, 
+            function(item1, item2) {
+                var res2 = 
+                    item1.ID == item2.ID && 
+                    item1.isPlan == item2.isPlan && 
+                    item1.date == item2.date.yyyy_mm_dd() && 
+                    item1.expenseItemId == item2.expenseItemId &&  
+                    item1.amount == item2.amount && 
+                    item1.comment == item2.comment && 
+                    item1.changeDate == item2.changeDate &&  
+                    item1.isActive == item2.isActive;  
+                return res2;
+            }
+        );
+        //console.log(JSON.stringify(newOrUpdatedItems));
+        
+        newOrUpdatedItems.forEach(
+            function(item){
+                //console.log("to insert or update: " + JSON.stringify(item));
+                if (item.hasOwnProperty('ID')){ 
+                        $scope.db.insertOrUpdate("expenses", {ID: item.ID}, 
+                            {
+                                isPlan: false, 
+                                date: item.date.yyyy_mm_dd(),  
+                                expenseItemId: item.expenseItemId,  
+                                amount: item.amount, 
+                                comment: item.comment, 
+                                changeDate: operationDate,  
+                                isActive: true
+                            }
+                        );
+                        console.log("to update, amount: " + item.amount);
+                    
+                }
+                else {
+                    if (item.amount !== undefined){
+                        $scope.db.insert("expenses",  
+                            {
+                                isPlan: false, 
+                                date: item.date.yyyy_mm_dd(),  
+                                expenseItemId: item.expenseItemId,  
+                                amount: item.amount, 
+                                comment: item.comment, 
+                                changeDate: operationDate,  
+                                isActive: true
+                            }
+                        );
+                        console.log("to insert, amount: " + item.amount);
+                    }
+                }
+                    
+                
+                
+            }
+        )
+        
         
         $scope.db.commit(); 
         $scope.expenses = [{ date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" }]; //amount: 0, 
@@ -186,35 +301,24 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
       
     
     $scope.listExpensesByDay = function(day){
-        var monthString = "" + $scope.month;
-        if (monthString.length == 1)
-            monthString = "0" + monthString; 
-        var dayString = "" + day;
-        if (dayString.length == 1)
-            dayString = "0" + dayString;
-        
-        
-        $scope.queryFn = function(row) {
-                if (row.isPlan == false 
-                    && row.date.indexOf("-" + monthString +  "-" + dayString) >= 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            };  
-        
-        
-        var list = $scope.db.queryAll("expenses", { query: $scope.queryFn });
+        $scope.listToEdit = $scope.db.queryAll("expenses", { query: { isActive: true } });
 
         $scope.expenses = []; 
-        for (var key in list){
-            $scope.expenses.push({ date: new Date(list[key].date), expenseItemId: list[key].expenseItemId, 
-                amount: list[key].amount, comment: list[key].comment });
+        
+        for (var key in $scope.listToEdit){
+            $scope.expenses.push(
+                { 
+                    ID: $scope.listToEdit[key].ID,
+                    isPlan: $scope.listToEdit[key].isPlan, 
+                    date: new Date($scope.listToEdit[key].date), 
+                    expenseItemId: $scope.listToEdit[key].expenseItemId, 
+                    amount: $scope.listToEdit[key].amount, 
+                    comment: $scope.listToEdit[key].comment,
+                    changeDate: $scope.listToEdit[key].changeDate, 
+                    isActive: $scope.listToEdit[key].isActive 
+                }
+            );
         };        
-        
-                   
-        
-        //$scope.updateDebugExpenses();   
     };
     
     

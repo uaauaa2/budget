@@ -15,12 +15,12 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
 
     function createDatabase() {
-        db.createTable("expenseItems", ["orderNum", "levelNum", "title", "name", "idListForTotal"]);
-        db.createTable("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment"]);
-        db.createTable("income", ["isPlan", "date", "agent", "amount", "comment"]);
-        db.createTable("balance", ["date", "totalAvailableToDate"]);
-        db.createTable("localChanges", ["tableName", "action", "rowId"]);
-        db.createTable("authToken", ["token"]);
+        db.createTable("expenseItems", ["orderNum", "levelNum", "title", "name", "idListForTotal", "changeDate", "isActive"]);
+        db.createTable("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment", "changeDate", "isActive"]);
+        db.createTable("income", ["isPlan", "date", "agent", "amount", "comment", "changeDate", "isActive"]);
+        db.createTable("balance", ["date", "totalAvailableToDate", "changeDate", "isActive"]);
+        //db.createTable("localChanges", ["tableName", "action", "rowId"]);
+        //db.createTable("authToken", ["token"]);
             
         db.commit();
         console.log("new empty tables have been created");
@@ -106,7 +106,30 @@ angular.module('budget.services').service('dataService', function ($http) {
         localStorage["authToken"] = auth.token;  
     }
 
-    
+    function syncTable2(tableName, serverDB, localDB){
+        //overviewMessages.push("table [" + tableName + "] sync has started");
+        var resDB = serverDB;
+        var index = 0; 
+        
+        var localRows = localDB.queryAll(tableName);
+        
+        for (index = 0; index < localRows.length; ++index) {
+            var r = serverDB.queryAll(tableName, { query: { ID: localRows[index].ID }});      
+            if (r.length == 0){
+                resDB.insert(tableName, localRows[index]);
+            }
+            else if (localRows[index].changeDate > r[0].changeDate){
+                resDB.insertOrUpdate(tableName, { ID: localRows[index].ID }, localRows[index] );
+            }
+                
+        }
+        
+        overviewMessages.push("table [" + tableName + "] synced");
+        
+            
+        return resDB;
+    }
+        
     function syncTable(tableName, serverDB, localDB){
         //overviewMessages.push("table [" + tableName + "] sync has started");
         var resDB = serverDB;
@@ -176,7 +199,7 @@ angular.module('budget.services').service('dataService', function ($http) {
                     "changes": [{
                             "change_type": "set", 
                             "collection_id": "budget", 
-                            "record_id": "2015",  
+                            "record_id": "jsondb",  
                             "changes": [{
                                     "change_type": "set", 
                                     "field_id": "data", 
@@ -212,6 +235,8 @@ angular.module('budget.services').service('dataService', function ($http) {
                 headers: { "Authorization": auth.token }
             }).success(function(response) {
                 var sWebDB = response.records.items[0].fields[0].value.string;
+                
+                //console.log("webdb: " + sWebDB);
                 var webDB = new localStorageDB("web_" + dbName, localStorage);
                 webDB.initFromObj(JSON.parse(sWebDB));
                 //overviewMessages.push("webDB: " + dumpDB(webDB));
@@ -219,11 +244,12 @@ angular.module('budget.services').service('dataService', function ($http) {
                 if (webDBhash != hashCode(db.serialize())){
                     syncStatus.status = 1; 
                     var newDB = webDB;
-                    newDB = syncTable("localChanges", newDB, db);
-                    newDB = syncTable("expenseItems", newDB, db);
-                    newDB = syncTable("expenses", newDB, db);
-                    newDB = syncTable("income", newDB, db);
-                    newDB = syncTable("balance", newDB, db);
+                    //newDB = syncTable("localChanges", newDB, db);
+                    //newDB = syncTable("expenseItems", newDB, db);
+                    newDB = syncTable2("expenseItems", newDB, db);
+                    newDB = syncTable2("expenses", newDB, db);
+                    newDB = syncTable2("income", newDB, db);
+                    newDB = syncTable2("balance", newDB, db);
                     //newDB = syncTable("authToken", newDB, db);
                     
                     db.initFromObj(newDB.getDBObj());
@@ -241,7 +267,9 @@ angular.module('budget.services').service('dataService', function ($http) {
             })
             .error(function(data, status, headers, config) {
                 if (status == 404){
+                    console.log("db [" + dbName + "] not found");
                     uploadDB();
+                    console.log("uploaded");
                 }
                 else 
                     errorHandler(data, status, headers, config); 
@@ -275,6 +303,11 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
     
     var init = function() {
+        dbName = localStorage["dbName"];
+        if (!dbName){
+            dbName = prompt("please enter new db name", "newDatabase");
+            localStorage["dbName"] = dbName;
+        } 
         db = new localStorageDB(dbName, localStorage);
              
         if(db.isNew()) {
@@ -309,7 +342,8 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
     
     var expenseItems = []; 
-    var dbName = "budget2015";
+    var dbName = "";
+    
     var auth = { code: "", token: "" }; 
      
     var overviewMessages = [];

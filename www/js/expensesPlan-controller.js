@@ -1,7 +1,8 @@
 angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($scope, $http, dataService, $filter) {
     $scope.debugText = "";
 
-    $scope.activeMonth = 0; 
+    $scope.activeMonth = 0;
+    $scope.isForecastVisible = false; 
     $scope.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     $scope.expensesPlanTable = {"8":{"3":{"actual":15345,"forecast":40000}}}; 
     

@@ -2,38 +2,63 @@
         <h1>Expenses</h1>
         <div>
             <!-- ng-controller="ExpensesCtrl" [ <a href="" ng-click="init()">Init</a> ] -->
-            [ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
+            <!--[ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
 
             <br/>
             month: <input type="text" ng-model="month" size="3">
             <br/><br/>
             Debug: <span>{{debugText}}</span>
-            <br/>
+            <br/>-->
             
             
             <div>
-                <input class="btn-primary" type="button" ng-click="addAllExpenses()" value="Добавить все из списка"> <span><b>Итого: {{ getTotalAmountToSubmit(); }} </b></span><br/>
+                <div class="form-group">
+                    <input class="btn btn-default" type="button" ng-click="addAllExpenses()" value="Добавить все из списка"> <span><b>Итого: {{ getTotalAmountToSubmit(); }} </b></span><br/>
+                </div>
+                
                 
                 <div ng-repeat="e in expenses">
-                    <!--("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment"])-->
+                    <form class="form-inline" role="form">
+                      <div class="form-group">
+                          <input type="date" class="form-control" ng-model="e.date"  size="5" placeholder="date"/>
+                      </div>
+                      <div class="form-group">          
+                            <select ng-model="e.expenseItemId" class="form-control">
+                                <option  data-ng-repeat="ei in expenseItems" value="{{ei.ID}}" ng-selected="ei.ID == e.expenseItemId" >{{ei.name}}</option>
+                            </select>
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control" ng-model="e.amount" size="5" placeholder="amount" ng-keydown="keyHandle($event)" auto-focus >
+                      </div>
+                      <div class="form-group">
+                          <input type="text" class="form-control" ng-model="e.comment" size="10" placeholder="comment" ng-keypress="keyHandle($event)">
+                      </div>
+                      <!--div class="checkbox">
+                        <label><input type="checkbox" ng-model="e.isActive">isActive</label>
+                      </div-->
+                      <div class="form-group">
+                          <input type="text" class="form-control" ng-model="e.changeDate" size="15">
+                      </div>
+                      <div class="form-group">
+                          <input class="btn btn-default" type="button" value="-" ng-click="deleteRow(e)" >
+                      </div>
+                      
+                    </form>
                     
-                    <input type="date" ng-model="e.date"  size="5" placeholder="date"/>
-                    <select ng-model="e.expenseItemId" style="width:150px">
-                        <option  data-ng-repeat="ei in expenseItems" value="{{ei.ID}}" ng-selected="ei.ID == e.expenseItemId" }}
-                             >{{ei.name}}</option>
-                    </select>
-
-                    <input type="text" ng-model="e.amount" size="5" placeholder="amount" ng-keydown="keyHandle($event)" auto-focus >
-                    <input type="text" ng-model="e.comment" size="10" placeholder="comment" ng-keypress="keyHandle($event)">
-                    <input class="btn-primary" type="button" value="-" ng-click="deleteRow(e)" >
-                    <br/>
+                        
                 </div>
-                <input class="btn-primary" type="button" value="+" ng-click="addAnotherExpense()" >
+                
+                <div class="form-group">    
+                    <input class="btn btn-default" type="button" value="+" ng-click="addAnotherExpense()" >
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-default" type="button" ng-click="listExpensesByDay(21)" value="Редактировать"> 
+                </div>
             </div>
             
             
 
-            <input class="btn-primary" type="button" value="Update table" ng-click="updateExpensesTable()" >
+            <!--input class="btn-primary" type="button" value="Update table" ng-click="updateExpensesTable()" >
            
             <table width="100%" class="responstable">  
                <tr>
@@ -107,7 +132,7 @@
                    <td align=right>{{ getTableValueByDay(e.ID, 31) }}</td>
 
                </tr>
-            </table>
+            </table> -->
             
             <br/>
             
