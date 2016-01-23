@@ -1,6 +1,15 @@
 <div>
     <h1>Overview</h1>
     
+    <ul ng-repeat="d in latestExpenses.days">
+        <li>
+            {{latestExpenses[d].date}} (total: {{latestExpenses[d].totalAmount}})
+            <ul ng-repeat="e in latestExpenses[d].expenses">
+                <li>{{e.expenseItemName}} {{e.amount}} {{e.comment}} </li>
+            </ul>
+        </li>
+    </ul>
+
     <div><span><b>Init:</b></span> 
         <ul class="unstyled">
             <li ng-repeat="m in overviewMessages track by $index">
