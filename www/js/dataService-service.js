@@ -302,6 +302,35 @@ angular.module('budget.services').service('dataService', function ($http) {
         }
     }
     
+    function initListOfDatabases() {
+        $http({
+            method: "GET",
+            url: "https://cloud-api.yandex.net/v1/data/app/databases/",  
+            headers: { "Authorization": auth.token }
+        }).success(function(response) {
+            var list = response;
+            //overviewMessages.push(list); 
+            response["items"].forEach(function(item){
+                databases.push(item.database_id); 
+            });
+            
+            //overviewMessages.push(databases);
+        }).error(errorHandler);
+    }
+    
+    function deleteDatabase(dbToDelete) {
+        $http({
+            method: "DELETE",
+            url: "https://cloud-api.yandex.net/v1/data/<context>/databases/" + dbToDelete,  
+            headers: { "Authorization": auth.token }
+        }).success(function(response) {
+            overviewMessages.push("database [" + dbToDelete + "] has been deleted");
+        }).error(errorHandler);
+        
+
+    }
+
+    
     var init = function() {
         dbName = localStorage["dbName"];
         if (!dbName){
@@ -316,7 +345,9 @@ angular.module('budget.services').service('dataService', function ($http) {
         
         //overviewMessages.push("localStorage: " + dumpDB(db)); 
         
-        auth.token = localStorage["authToken"]; 
+        auth.token = localStorage["authToken"];
+        
+        initListOfDatabases(); 
                 
         syncStatus.status = 0;
         syncFromWeb();
@@ -330,6 +361,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         };
     }
     
+    
     function getSyncStatus(){
         if (syncStatus.status != 1){
             if (webDBhash != hashCode(db.serialize()))
@@ -339,6 +371,10 @@ angular.module('budget.services').service('dataService', function ($http) {
         } 
             
         return syncStatus; 
+    }
+    
+    function getListOfDatabases(){
+        return databases; 
     }
     
     var expenseItems = []; 
@@ -360,6 +396,8 @@ angular.module('budget.services').service('dataService', function ($http) {
             return t;  
         }
     } 
+    var databases = [];
+     
     
     var activeExpenseItem = { };
     
@@ -375,7 +413,10 @@ angular.module('budget.services').service('dataService', function ($http) {
         init: init, 
         sync: syncFromWeb, 
         getAuthToken: getAuthToken,
-        getSyncStatus: getSyncStatus 
+        getSyncStatus: getSyncStatus,
+        
+        getListOfDatabases: getListOfDatabases, 
+        deleteDatabase: deleteDatabase
     } 
      
         

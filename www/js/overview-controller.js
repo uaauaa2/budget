@@ -99,7 +99,7 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         expenses = $scope.db.queryAll("expenses", {
             query: function (row) {
                 var d = new Date(row.date);
-                if (d >= dateFrom)
+                if (d >= dateFrom && row.isActive)
                     return true;
                 else
                     return false;
@@ -120,7 +120,30 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
 
     $scope.latestExpenses = $scope.initLatestExpenses();
 
+    $scope.currentDbName = localStorage["dbName"];
+    $scope.selectedDb = { name: $scope.currentDbName };   
+    $scope.databases = dataService.getListOfDatabases(); 
+    $scope.switchDatabase = function(){
+        localStorage["dbName"] = $scope.selectedDb.name;
+        alert("Please reload the page"); 
+    }
     
+    $scope.deleteDatabase = function(){
+        if (confirm("Are you sure you want to delete the database [" + $scope.currentDbName + "]?")) {
+            alert("delete!")
+            //dataService.deleteDatabase($scope.currentDbName);
+            alert("Please reload the page");
+        } else {
+            // Do nothing!
+        }
+        
+    }
+    
+    $scope.createNewDatabase = function(){
+        $scope.currentDbName = prompt("please enter new db name", "newDatabase");
+        localStorage["dbName"] = $scope.currentDbName;
+        alert("Please reload the page");
+    }
  
   
 });
