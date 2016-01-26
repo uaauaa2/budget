@@ -303,31 +303,34 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
     
     function initListOfDatabases() {
-        $http({
+        var promise = $http({
             method: "GET",
             url: "https://cloud-api.yandex.net/v1/data/app/databases/",  
             headers: { "Authorization": auth.token }
         }).success(function(response) {
-            var list = response;
-            //overviewMessages.push(list); 
+            //var list = response;
+            //overviewMessages.push(list);
+            databases.length = 0; 
             response["items"].forEach(function(item){
                 databases.push(item.database_id); 
             });
             
             //overviewMessages.push(databases);
         }).error(errorHandler);
+        
+        return promise; 
     }
     
     function deleteDatabase(dbToDelete) {
-        $http({
-            method: "DELETE",
-            url: "https://cloud-api.yandex.net/v1/data/<context>/databases/" + dbToDelete,  
-            headers: { "Authorization": auth.token }
-        }).success(function(response) {
-            overviewMessages.push("database [" + dbToDelete + "] has been deleted");
-        }).error(errorHandler);
-        
-
+        var promise = 
+            $http({
+                method: "DELETE",
+                url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbToDelete,  
+                headers: { "Authorization": auth.token }
+            }).success(function(response) {
+                overviewMessages.push("database [" + dbToDelete + "] has been deleted");
+            }).error(errorHandler);
+        return promise; 
     }
 
     
@@ -415,6 +418,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         getAuthToken: getAuthToken,
         getSyncStatus: getSyncStatus,
         
+        initListOfDatabases: initListOfDatabases,
         getListOfDatabases: getListOfDatabases, 
         deleteDatabase: deleteDatabase
     } 

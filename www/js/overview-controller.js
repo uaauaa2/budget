@@ -120,19 +120,33 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
 
     $scope.latestExpenses = $scope.initLatestExpenses();
 
-    $scope.currentDbName = localStorage["dbName"];
-    $scope.selectedDb = { name: $scope.currentDbName };   
+    
+    $scope.currentDb = { name: localStorage["dbName"] };   
     $scope.databases = dataService.getListOfDatabases(); 
+    
     $scope.switchDatabase = function(){
-        localStorage["dbName"] = $scope.selectedDb.name;
-        alert("Please reload the page"); 
+        localStorage["dbName"] = $scope.currentDb.name;
+        dataService.init(); 
     }
     
     $scope.deleteDatabase = function(){
-        if (confirm("Are you sure you want to delete the database [" + $scope.currentDbName + "]?")) {
-            alert("delete!")
-            //dataService.deleteDatabase($scope.currentDbName);
-            alert("Please reload the page");
+        if (confirm("Are you sure you want to delete the database [" + $scope.currentDb.name + "]?")) {
+            //alert("delete!")
+            dataService.deleteDatabase($scope.currentDb.name)
+                .then(
+                    function(){
+                        dataService.initListOfDatabases().then( 
+                            function () {
+                                $scope.databases = dataService.getListOfDatabases();
+                                if ($scope.databases.length > 0){
+                                    $scope.currentDb.name = $scope.databases[0];  
+                                    $scope.switchDatabase(); 
+                                }
+                            }
+                        )
+                        
+                    }
+            );
         } else {
             // Do nothing!
         }
@@ -140,9 +154,8 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     }
     
     $scope.createNewDatabase = function(){
-        $scope.currentDbName = prompt("please enter new db name", "newDatabase");
-        localStorage["dbName"] = $scope.currentDbName;
-        alert("Please reload the page");
+        $scope.currentDb.name = prompt("please enter new db name", "newDatabase");
+        $scope.switchDatabase();
     }
  
   
