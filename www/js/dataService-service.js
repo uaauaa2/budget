@@ -1,5 +1,25 @@
 /* global localStorageDB */
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
+
+Date.prototype.yyyy_mm_dd = function() {
+   var yyyy = this.getFullYear().toString();
+   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+};
+
+Date.prototype.formatFull = function() {
+   var yyyy = this.getFullYear().toString();
+   var MM = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   var HH  = this.getHours().toString();
+   var mm  = this.getMinutes().toString();
+   
+   return yyyy + "-" + (MM[1]?MM:"0"+MM[0]) + "-" + (dd[1]?dd:"0"+dd[0])
+   		+ " " + (HH[1]?HH:"0"+HH[0]) + ":" + (mm[1]?mm:"0"+mm[0]); // padding
+};
+
+
 angular.module('budget.services').service('dataService', function ($http) {
     
     function errorHandler(data, status, headers, config) {
@@ -21,7 +41,13 @@ angular.module('budget.services').service('dataService', function ($http) {
         db.createTable("balance", ["date", "totalAvailableToDate", "changeDate", "isActive"]);
         //db.createTable("localChanges", ["tableName", "action", "rowId"]);
         //db.createTable("authToken", ["token"]);
-            
+        
+        newId = $scope.db.insert("expenseItems", { levelNum: 1, 
+                                                               title: "Expenses", 
+                                                               name: "expenses", 
+                                                               changeDate: (new Date()).formatFull(), 
+                                                               isActive: true });
+        
         db.commit();
         console.log("new empty tables have been created");
         overviewMessages.push("new empty tables have been created");

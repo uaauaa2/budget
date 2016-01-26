@@ -1,22 +1,3 @@
-Date.prototype.yyyy_mm_dd = function() {
-   var yyyy = this.getFullYear().toString();
-   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-   var dd  = this.getDate().toString();
-   return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
-};
-
-Date.prototype.formatFull = function() {
-   var yyyy = this.getFullYear().toString();
-   var MM = (this.getMonth()+1).toString(); // getMonth() is zero-based
-   var dd  = this.getDate().toString();
-   var HH  = this.getHours().toString();
-   var mm  = this.getMinutes().toString();
-   
-   return yyyy + "-" + (MM[1]?MM:"0"+MM[0]) + "-" + (dd[1]?dd:"0"+dd[0])
-   		+ " " + (HH[1]?HH:"0"+HH[0]) + ":" + (mm[1]?mm:"0"+mm[0]); // padding
-};
-  
-
 angular.module('budget.controllers').controller("ExpensesCtrl", function($scope, $http, dataService, $filter, $timeout) {
     $scope.debugText = "";
 
@@ -49,7 +30,8 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         var result = $scope.db.queryAll("expenses", { 
             query: function(row) {
                 if (row.isPlan == false && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0 
-                    && row.date.indexOf("-" + monthString +  "-" + dayString) >= 0) {
+                    && row.date.indexOf("-" + monthString +  "-" + dayString) >= 0
+                    && row.isActive == true) {
                     return true;
                 } else {
                     return false;

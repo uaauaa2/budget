@@ -107,7 +107,7 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
         return res; 
     }
     
-    $scope.save = function(){
+    $scope.save1 = function(){
         var operationDate = (new Date()).formatFull(); 
         var isListOK = $scope.verify();
         console.log("is list ok: " + isListOK);
@@ -116,10 +116,12 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
             var oldExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
             var oldl = oldExpenseItems.length;
 
-            // updating orderNum and idsForTotal --------------
-            //var idListForTotal;
-            for (index = 0; index < newl; index++ ){
-                $scope.newExpenseItems[index].orderNum = index + 1; 
+            
+            for (var index = 0; index < newl; index++ ){
+                // updating orderNum 
+                $scope.newExpenseItems[index].orderNum = index + 1;
+                 
+                // updating idsForTotal 
                 var idListForTotal = [];
                 if ($scope.newExpenseItems[index].name)
                     idListForTotal.push($scope.newExpenseItems[index].ID); 
@@ -133,8 +135,7 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
                         break; 
                 }
                 $scope.newExpenseItems[index].idListForTotal = idListForTotal; 
-            }
-            // ------------------------------------------
+            } 
             
             // deleting -------------------------
             var exists; 
@@ -188,9 +189,11 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
                 if (changedItems[index].hasOwnProperty('ID') && changedItems[index].ID != null){
                     $scope.db.insertOrUpdate("expenseItems", { ID: changedItems[index].ID }, 
                         { 
+                           orderNum: changedItems[index].orderNum, 
                            levelNum: changedItems[index].levelNum, 
                            title: changedItems[index].title, 
                            name: changedItems[index].name,
+                           idListForTotal: changedItems[index].idListForTotal,
                            changeDate: operationDate, 
                            isActive: true
                         }
@@ -199,9 +202,12 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
                     console.log("updated [" + changedItems[index].title + "]"); 
                 }
                 else {
-                    newId = $scope.db.insert("expenseItems", { levelNum: changedItems[index].levelNum, 
+                    newId = $scope.db.insert("expenseItems", { 
+                                                               orderNum: changedItems[index].orderNum,
+                                                               levelNum: changedItems[index].levelNum, 
                                                                title: changedItems[index].title, 
-                                                               name: changedItems[index].name, 
+                                                               name: changedItems[index].name,
+                                                               idListForTotal: changedItems[index].idListForTotal, 
                                                                changeDate: operationDate, 
                                                                isActive: true });
                     changedItems[index].ID = newId;
@@ -213,6 +219,11 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
             console.log("done");
         }
         
+    }
+    
+    $scope.save = function(){
+        $scope.save1(); 
+        $scope.save1(); // call the same second time to update idListForTotal 
     }
     
     $scope.getTotalByExpenseItem = function(expenseItem){
