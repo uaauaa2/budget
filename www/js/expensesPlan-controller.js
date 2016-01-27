@@ -14,6 +14,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
                             query: function(row) {
                                 var d = new Date(row.date); 
                                 if (row.isPlan == isPlan 
+                                    && row.isActive == true
                                     && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0
                                     && d.getMonth() == month-1) {
                                     return true;
@@ -56,16 +57,8 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
     $scope.init(); 
     
     $scope.saveExpensesPlanTable = function(){
-        var list = $scope.db.queryAll("expenses", { query: {isPlan: true }});
-        for (var key in list)
-            $scope.db.insert("localChanges", { tableName: "expenses", action: "delete", rowId: list[key].ID });
-                
-        var l = $scope.db.deleteRows("expenses", { isPlan: true } );
-        
-                
-        console.log("expensesPlan: deleted rows: " + l);  
-            
-        l = 0; 
+        var l = 0; 
+        var operationDate = (new Date()).formatFull();
         for (var month = 1; month <= 12; ++month){ //$scope.expensesPlanTable.forEach(function(monthObj)
             var monthString = "" + month;
             if (monthString.length == 1)
@@ -80,13 +73,22 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
                     var nm = r[0].name;
                     // insert to db
                     if (nm){ // it means that the expenseItem is not for summarizing only 
-                        $scope.db.insert("expenses", {
-                            isPlan: true, 
-                            date: dateString,
-                            expenseItemId: expenseItemId, 
-                            amount: a, 
-                            comment: "" 
-                        });
+                        $scope.db.insertOrUpdate("expenses", 
+                            { // search criteria
+                                isPlan: true, 
+                                date: dateString,
+                                expenseItemId: expenseItemId
+                            }, 
+                            { // data to insert
+                                isPlan: true, 
+                                date: dateString,
+                                expenseItemId: expenseItemId,
+                                amount: a, 
+                                comment: "",
+                                changeDate: operationDate,  
+                                isActive: true
+                            } 
+                        );
                         l++; 
                     }
                 }
