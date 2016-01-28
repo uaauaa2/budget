@@ -2,9 +2,10 @@
      <ion-content>
             <ion-list>
                 <ion-item ng-repeat="ei in expenseItems" class="item" ng-class="{selectable: ei.name}" 
-                    style="padding: 0px; margin: 0px; font-size: 10pt; padding-left: {{ (ei.levelNum-1)*20 }}px;" ng-click="selectItem(ei)">
+                    style="padding-left: {{ (ei.levelNum-1)*20 }}px;" 
+                    ng-click="selectItem(ei)">
                      {{ ei.title }} 
-                </ion-item>
+                </ion-item> <!-- padding: 0px; margin: 0px; font-size: 10pt; -->
                 
             </ion-list>
         </ion-content>

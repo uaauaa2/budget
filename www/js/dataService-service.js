@@ -54,7 +54,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         //db.createTable("localChanges", ["tableName", "action", "rowId"]);
         //db.createTable("authToken", ["token"]);
         
-        db.insert("expenseItems", { levelNum: 1, title: "Expenses", name: "expenses", changeDate: (new Date()).formatFull(), isActive: true });
+        // causing problems when syncing db.insert("expenseItems", { levelNum: 1, title: "Expenses", name: "expenses", changeDate: (new Date()).formatFull(), isActive: true });
         
         db.commit();
         console.log("new empty tables have been created");
@@ -397,7 +397,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         
         initListOfDatabases();
         
-        expenseItems = db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
+        expenseItems = db.queryAll("expenseItems", {query: { isActive: true },  sort: [["orderNum", "ASC"]] });
         for (var i = 0; i < expenseItems.length; i++) {
             if (expenseItems[i].name){
                 setActiveExpenseItem(expenseItems[i]);

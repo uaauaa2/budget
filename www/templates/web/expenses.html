@@ -58,83 +58,21 @@
             
             
 
-            <input class="btn-primary" type="button" value="Update table" ng-click="updateExpensesTable()" >
+            <input class="btn btn-default" type="button" value="Обновить таблицу" ng-click="updateExpensesTable()" >
            
             <table class="table table-bordered table-condensed">
             <thead>
                 <tr>
                    <th>title</th>
                    <th>total spent</th>
-                   <th><input class="form-control" type="button" value="1" ng-click="listExpensesByDay(1)" ></th>
-                   <th><input class="form-control" type="button" value="2" ng-click="listExpensesByDay(2)" ></th>
-                   <th><input class="form-control" type="button" value="3" ng-click="listExpensesByDay(3)" ></th>
-                   <th><input class="form-control" type="button" value="4" ng-click="listExpensesByDay(4)" ></th>
-                   <th><input class="form-control" type="button" value="5" ng-click="listExpensesByDay(5)" ></th>
-                   <th><input class="form-control" type="button" value="6" ng-click="listExpensesByDay(6)" ></th>
-                   <th><input class="form-control" type="button" value="7" ng-click="listExpensesByDay(7)" ></th>
-                   <th><input class="form-control" type="button" value="8" ng-click="listExpensesByDay(8)" ></th>
-                   <th><input class="form-control" type="button" value="9" ng-click="listExpensesByDay(9)" ></th>
-                   <th><input class="form-control" type="button" value="10" ng-click="listExpensesByDay(10)" ></th>
-                   <th><input class="form-control" type="button" value="11" ng-click="listExpensesByDay(11)" ></th>
-                   <th><input class="form-control" type="button" value="12" ng-click="listExpensesByDay(12)" ></th>
-                   <th><input class="form-control" type="button" value="13" ng-click="listExpensesByDay(13)" ></th>
-                   <th><input class="form-control" type="button" value="14" ng-click="listExpensesByDay(14)" ></th>
-                   <th><input class="form-control" type="button" value="15" ng-click="listExpensesByDay(15)" ></th>
-                   <th><input class="form-control" type="button" value="16" ng-click="listExpensesByDay(16)" ></th>
-                   <th><input class="form-control" type="button" value="17" ng-click="listExpensesByDay(17)" ></th>
-                   <th><input class="form-control" type="button" value="18" ng-click="listExpensesByDay(18)" ></th>
-                   <th><input class="form-control" type="button" value="19" ng-click="listExpensesByDay(19)" ></th>
-                   <th><input class="form-control" type="button" value="20" ng-click="listExpensesByDay(20)" ></th>
-                   <th><input class="form-control" type="button" value="21" ng-click="listExpensesByDay(21)" ></th>
-                   <th><input class="form-control" type="button" value="22" ng-click="listExpensesByDay(22)" ></th>
-                   <th><input class="form-control" type="button" value="23" ng-click="listExpensesByDay(23)" ></th>
-                   <th><input class="form-control" type="button" value="24" ng-click="listExpensesByDay(24)" ></th>
-                   <th><input class="form-control" type="button" value="25" ng-click="listExpensesByDay(25)" ></th>
-                   <th><input class="form-control" type="button" value="26" ng-click="listExpensesByDay(26)" ></th>
-                   <th><input class="form-control" type="button" value="27" ng-click="listExpensesByDay(27)" ></th>
-                   <th><input class="form-control" type="button" value="28" ng-click="listExpensesByDay(28)" ></th>
-                   <th><input class="form-control" type="button" value="29" ng-click="listExpensesByDay(29)" ></th>
-                   <th><input class="form-control" type="button" value="30" ng-click="listExpensesByDay(30)" ></th>
-                   <th><input class="form-control" type="button" value="31" ng-click="listExpensesByDay(31)" ></th>
+                   <th ng-repeat="d in days"><input class="form-control" type="button" value="{{d}}" ng-click="listExpensesByDay(d)" > </th>
                </tr>
            </thead> 
            <tbody>
                <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" > <!-- ng-class="{trEditable: e.name}" -->
-                   <!--td class="td{{e.levelNum}}">{{e.title}}</td--> 
-                   <td><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" value="{{e.title}}"></td>
-                   <td align=right>{{ getTableValueTotal(e.ID) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 1) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 2) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 3) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 4) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 5) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 6) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 7) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 8) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 9) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 10) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 11) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 12) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 13) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 14) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 15) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 16) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 17) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 18) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 19) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 20) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 21) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 22) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 23) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 24) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 25) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 26) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 27) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 28) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 29) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 30) }}</td>
-                   <td align=right>{{ getTableValueByDay(e.ID, 31) }}</td>
-
+                   <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" value="{{e.title}}"></td>
+                   <td ><input class="form-control" type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByDay(d)" > </td>
+                   <td ng-repeat="d in days"><input class="form-control" type="button" value="{{ getTableValueByDay(e.ID, d) }}" ng-click="listExpensesByDay(d)" > </td>
                </tr>
             </tbody>
             </table> 

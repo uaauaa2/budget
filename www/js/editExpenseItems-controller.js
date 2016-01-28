@@ -229,7 +229,7 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
     $scope.getTotalByExpenseItem = function(expenseItem){
         var result = $scope.db.queryAll("expenses", { 
             query: function(row) {
-                if (expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0) {
+                if (expenseItem.idListForTotal && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0) {
                     return true;
                 } else {
                     return false;
