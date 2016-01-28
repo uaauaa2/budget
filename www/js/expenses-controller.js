@@ -110,11 +110,14 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
             }, 
             sort: [["orderNum", "ASC"]]
         });
-        $scope.defaultExpenseItemId = $scope.expenseItems[0].ID;   
-        $scope.expenses = [{ date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" }]; //, amount: 0,
-        $scope.newExpenses = [];
-        $scope.newExpense = { date: new Date(), expenseItemId: dataService.getActiveExpenseItem().ID, comment: "" };
-        $scope.activeExpenseItem = dataService.getActiveExpenseItem();    
+        
+        if ($scope.expenseItems.length > 0){
+            $scope.defaultExpenseItemId = $scope.expenseItems[0].ID;   
+            $scope.expenses = [{ date: new Date(), expenseItemId: $scope.defaultExpenseItemId, comment: "" }]; //, amount: 0,
+            $scope.newExpenses = [];
+            $scope.newExpense = { date: new Date(), expenseItemId: dataService.getActiveExpenseItem().ID, comment: "" };
+            $scope.activeExpenseItem = dataService.getActiveExpenseItem();
+        }    
     };
     
     $scope.init(); 
@@ -339,10 +342,11 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.addRow = function() {
         if ($scope.newExpense.amount){
             var o = { date: $scope.newExpense.date, expenseItemId: $scope.newExpense.expenseItemId, comment: "" };   
-            $scope.newExpenses.push($scope.newExpense);
+            $scope.newExpenses.unshift($scope.newExpense);
             $scope.newExpense = o;
             
             $timeout(function(){
+                if (document.getElementById("amountElement"))
                         document.getElementById("amountElement").focus();
                     }, 0);
         }
@@ -385,7 +389,43 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.do1 = function(){
         console.log("do1");
     }
-  
+    
+    $scope.keypad = function(cmd){
+        if (!$scope.newExpense.amount)
+                $scope.newExpense.amount = "";
+        var d; 
+        if (cmd >=0 || cmd < 0){ // cmd is a number
+            $scope.newExpense.amount += cmd;
+        } 
+        else {
+            if (cmd == "<-")
+                $scope.newExpense.amount = $scope.newExpense.amount.substring(0, $scope.newExpense.amount.length - 1);
+            else if (cmd == "C")
+                $scope.newExpense.amount = "";
+            else if (cmd == "<"){
+                d = new Date(); 
+                d.setDate($scope.newExpense.date.getDate() - 1);
+                $scope.newExpense.date = d;
+            }
+            else if (cmd == ">"){
+                d = new Date(); 
+                d.setDate($scope.newExpense.date.getDate() + 1);
+                $scope.newExpense.date = d;
+            } 
+        }
+    }
+    
+    $scope.sync = function(){
+        dataService.sync();
+    }
+    
+    $scope.syncStatus = dataService.getSyncStatus();
+    
+    $scope.syncTimer = $timeout(function tick(){
+        $scope.syncStatus = dataService.getSyncStatus();
+
+        $scope.syncTimer = $timeout(tick, 3000); 
+    }, 3000);
   
     
   
