@@ -42,11 +42,7 @@ angular.module('budget.services').service('dataService', function ($http) {
         //db.createTable("localChanges", ["tableName", "action", "rowId"]);
         //db.createTable("authToken", ["token"]);
         
-        newId = $scope.db.insert("expenseItems", { levelNum: 1, 
-                                                               title: "Expenses", 
-                                                               name: "expenses", 
-                                                               changeDate: (new Date()).formatFull(), 
-                                                               isActive: true });
+        db.insert("expenseItems", { levelNum: 1, title: "Expenses", name: "expenses", changeDate: (new Date()).formatFull(), isActive: true });
         
         db.commit();
         console.log("new empty tables have been created");
@@ -254,6 +250,7 @@ angular.module('budget.services').service('dataService', function ($http) {
     } 
     
     function syncFromWeb(){
+        // TODO: to return promise
         if (auth.token != ""){
             $http({
                 method: "GET",
@@ -354,6 +351,10 @@ angular.module('budget.services').service('dataService', function ($http) {
                 url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbToDelete,  
                 headers: { "Authorization": auth.token }
             }).success(function(response) {
+                db.drop();
+                var webDB = new localStorageDB("web_" + dbName, localStorage);
+                webDB.drop(); 
+                
                 overviewMessages.push("database [" + dbToDelete + "] has been deleted");
             }).error(errorHandler);
         return promise; 
@@ -361,6 +362,7 @@ angular.module('budget.services').service('dataService', function ($http) {
 
     
     var init = function() {
+        
         dbName = localStorage["dbName"];
         if (!dbName){
             dbName = prompt("please enter new db name", "newDatabase");
@@ -375,11 +377,10 @@ angular.module('budget.services').service('dataService', function ($http) {
         //overviewMessages.push("localStorage: " + dumpDB(db)); 
         
         auth.token = localStorage["authToken"];
-        
-        initListOfDatabases(); 
-                
         syncStatus.status = 0;
         syncFromWeb();
+        
+        initListOfDatabases();
         
         expenseItems = db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
         for (var i = 0; i < expenseItems.length; i++) {

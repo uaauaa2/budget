@@ -6,8 +6,10 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
 
             .when('/', {
                 //templateUrl : 'budget/www/templates/web/overview.html', // for github
-                templateUrl : 'www/templates/web/overview.html', // for localhost
-                controller  : 'OverviewCtrl'
+                /*templateUrl : 'www/templates/web/overview.html', // for localhost
+                controller  : 'OverviewCtrl'*/
+                templateUrl : 'www/templates/web/expenses.html',
+                controller  : 'ExpensesCtrl'
             })
             
             .when('/budget/', {

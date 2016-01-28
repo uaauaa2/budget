@@ -29,7 +29,8 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
              
         var result = $scope.db.queryAll("expenses", { 
             query: function(row) {
-                if (row.isPlan == false && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0 
+                if (row.isPlan == false && row.isActive && expenseItem.idListForTotal
+                    && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0 
                     && row.date.indexOf("-" + monthString +  "-" + dayString) >= 0
                     && row.isActive == true) {
                     return true;
@@ -59,7 +60,8 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
              
         var result = $scope.db.queryAll("expenses", { 
                             query: function(row) {
-                                if (row.isPlan == false 
+                                if (row.isPlan == false && row.isActive
+                                    && expenseItem.idListForTotal
                                     && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0 
                                     && row.date.indexOf("-" + monthString + "-") >= 0) {
                                     return true;

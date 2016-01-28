@@ -1,9 +1,10 @@
 <div>
         <h1>Expenses Plan</h1>
         <div>
-            <!-- [ <a href="" ng-click="init()">Init</a> ] -->
-            [ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
+            <!-- [ <a href="" ng-click="init()">Init</a> ] 
+            [ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]-->
 
+            <input type="text" ng-model="year" size="3">
             <br/><br/>   
             <input type="checkbox" ng-model="isForecastVisible"> To Show Forecast
             <br/>
@@ -24,7 +25,7 @@
                 </tr> 
                 <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}"> <!--  ng-class="{trEditable: e.name}" -->
                     <!--td class="td{{e.levelNum}} tr{{e.levelNum}}">{{e.title}}</td-->
-                    <td><input type="text" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" ng-model="e.title"></td>
+                    <td><input type="text" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" ng-model="e.title" readonly="readonly"></td>
                     
                     <td align=right ng-if="isForecastVisible" ng-repeat-start="m in months"> 
                         <input ng-if="e.name && m == activeMonth" type="text" class="form-control"   ng-model="expensesPlanTable[m][e.ID].forecast" > <!--style="width: 4em; height: 1.4em; text-align:right; padding: 0px;"--> 

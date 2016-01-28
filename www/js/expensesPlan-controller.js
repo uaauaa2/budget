@@ -2,6 +2,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
     $scope.debugText = "";
 
     $scope.activeMonth = 0;
+    $scope.year = (new Date()).getFullYear(); 
     $scope.isForecastVisible = false; 
     $scope.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     $scope.expensesPlanTable = {"8":{"3":{"actual":15345,"forecast":40000}}}; 
@@ -16,7 +17,8 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
                                 if (row.isPlan == isPlan 
                                     && row.isActive == true
                                     && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0
-                                    && d.getMonth() == month-1) {
+                                    && d.getMonth() == month-1
+                                    && d.getFullYear() == $scope.year) {
                                     return true;
                                 } else {
                                     return false;
@@ -63,7 +65,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
             var monthString = "" + month;
             if (monthString.length == 1)
                 monthString = "0" + monthString;
-            var dateString = "2015-" + monthString + "-01"; 
+            var dateString = $scope.year + "-" + monthString + "-01"; 
             
             var monthObj = $scope.expensesPlanTable[month]; 
             for (var expenseItemId in monthObj){ //monthObj.forEach(function(expenseItemObj)

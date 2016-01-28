@@ -93,8 +93,10 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]], distinct: ["date"] });
         
         var dateFrom = new Date();
-        if (expenses[9])
+        if (expenses.length > 10)
              dateFrom = new Date(expenses[9].date);
+        else if (expenses.length > 0)
+            dateFrom = new Date(expenses[expenses.length - 1].date);
 
         expenses = $scope.db.queryAll("expenses", {
             query: function (row) {
@@ -126,7 +128,8 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     
     $scope.switchDatabase = function(){
         localStorage["dbName"] = $scope.currentDb.name;
-        dataService.init(); 
+        dataService.init();
+        //TODO: to rewrite with promise, .then updateListOfDatabases;   
     }
     
     $scope.deleteDatabase = function(){
@@ -154,7 +157,10 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     }
     
     $scope.createNewDatabase = function(){
-        $scope.currentDb.name = prompt("please enter new db name", "newDatabase");
+        var newdb = prompt("please enter new db name", "newDatabase");
+        $scope.databases.push(newdb);
+        $scope.currentDb.name = newdb;
+        
         $scope.switchDatabase();
     }
  
