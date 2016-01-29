@@ -45,6 +45,12 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
                 controller  : 'BalanceCtrl'
             })
 
+			.when('/budget/editExpenseItems', {
+                templateUrl : 'budget/www/templates/web/editExpenseItems.html',
+                //templateUrl : 'www/templates/web/editExpenseItems.html',
+                controller  : 'EditExpenseItemsCtrl'
+            })
+			
             .when('/budget/plan', {
                 templateUrl : 'budget/www/templates/web/plan.html',
                 //templateUrl : 'www/templates/web/plan.html',
@@ -65,7 +71,8 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
         };
     })
     .run(function (dataService) {
-        dataService.init(); 
+        var isAutosync = true; 
+        dataService.init(isAutosync); 
     })
     
     ;

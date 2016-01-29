@@ -30,7 +30,7 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
     }
     
     $scope.init = function(){
-        $scope.allBalances = $scope.db.queryAll("balance");
+        $scope.allBalances = $scope.db.queryAll("balance", { query: { isActive: true } });
         //alert($scope.allBalances.length);
         var i = 0; 
         for (i = 0; i < $scope.allBalances.length; i++){
@@ -72,10 +72,13 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
               diff: d
             }
         );  
-                
+        
+        var operationDate = (new Date()).formatFull();
         $scope.db.insert("balance", {
                 date: $scope.balanceDate.yyyy_mm_dd(),
-                totalAvailableToDate: a
+                totalAvailableToDate: a,
+                changeDate: operationDate,  
+                isActive: true
             }
         );
         $scope.db.commit();
@@ -84,8 +87,14 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
     $scope.del = function(b) {
         var i = $scope.allBalances.indexOf(b);
         $scope.allBalances.splice(i, 1);
-        $scope.db.deleteRows("balance", { ID: b.ID } );
-        $scope.db.insert("localChanges", { tableName: "balance", action: "delete", rowId: b.ID });
+        var operationDate = (new Date()).formatFull();
+        $scope.db.update("balance", {ID: b.ID}, 
+                    function(row) {
+                        row.isActive = false;
+                        row.changeDate = operationDate;
+                        return row;
+                    }
+                );
         $scope.db.commit(); 
     };
     

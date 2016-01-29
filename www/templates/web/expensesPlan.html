@@ -1,34 +1,40 @@
 <div>
         <h1>Expenses Plan</h1>
         <div>
-            <!-- [ <a href="" ng-click="init()">Init</a> ] -->
-            [ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
+            <!-- [ <a href="" ng-click="init()">Init</a> ] 
+            [ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]-->
 
+            <input type="text" ng-model="year" size="3">
+            <br/><br/>   
+            <input type="checkbox" ng-model="isForecastVisible"> To Show Forecast
             <br/>
             type month number to edit: <input type="text" ng-model="activeMonth" size="3">
             <br/><br/>
+            
             <!--Debug: <span>{{debugText}}</span>
             <br/-->
             
             <input class="btn-primary" type="button" value="Reload table" ng-click="updateExpensesPlanTable()" >
             <input class="btn-primary" type="button" value="Save table to db" ng-click="saveExpensesPlanTable()" >
            
-            <table class="responstable">  
+            <table class="table table-bordered table-condensed table-nonfluid">  
                 <tr>
-                   <th>title</th>
-                   <th ng-repeat-start="m in months">F {{m}}</th>
+                   <th style="width: 40%;">title</th>
+                   <th ng-if="isForecastVisible" ng-repeat-start="m in months">F {{m}}</th>
                    <th ng-repeat-end="">A {{m}}</th>
                 </tr> 
-                <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" ng-class="{trEditable: e.name}">
-                    <td class="td{{e.levelNum}}">{{e.title}}</td>
+                <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}"> <!--  ng-class="{trEditable: e.name}" -->
+                    <!--td class="td{{e.levelNum}} tr{{e.levelNum}}">{{e.title}}</td-->
+                    <td><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}} text-left" value="{{e.title}}"></td>
                     
-                    <td align=right ng-repeat-start="m in months"> 
-                        <input ng-if="e.name && m == activeMonth" type="text" style="width: 4em; height: 1.4em; text-align:right; padding: 0px;"  ng-model="expensesPlanTable[m][e.ID].forecast" > 
+                    <td align=right ng-if="isForecastVisible" ng-repeat-start="m in months"> 
+                        <input ng-if="e.name && m == activeMonth" type="text" class="form-control"   ng-model="expensesPlanTable[m][e.ID].forecast" > <!--style="width: 4em; height: 1.4em; text-align:right; padding: 0px;"--> 
                         <span ng-if="!e.name || m != activeMonth" style="padding: 2px;"> {{ getTotalForChildren(e.idListForTotal, m) }} </span>
                     </td>
                     <td ng-repeat-end="" align=right>{{ expensesPlanTable[m][e.ID].actual }}</td>
+                    <!--td ng-repeat-end="" align=right><input type="text" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" ng-model="expensesPlanTable[m][e.ID].actual"></td-->
                     
-                </tr>
+                </tr-->
             </table>
             
             <br/>

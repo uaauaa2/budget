@@ -1,25 +1,62 @@
+/*.btn {
+    padding-top: 0px; 
+    padding-bottom: 0px;
+    font-size: 12px;
+}
+
+.form-control {
+    height: auto; 
+    font-size: 12px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px 
+}
+
+.tr {
+    padding-top: 0px; 
+    padding-bottom: 0px;
+}*/
+
 .tr1 {
-    background-color: #888;
+    /*background-color: #8e244d;
+    color: #ffffff;*/
+    border-color: #8e244d;
 }
 
 .tr2 {
-	background-color: #bbb;
+    border-color: #1a9cb0;
+	/*background-color: #1a9cb0;
+    color: #ffffff;*/
 }
 
 .tr3 {
-	background-color: #ccc; 
+    border-color: #a3c644; 
+	/*background-color: #a3c644; 
+    color: #ffffff;*/
 }
 
 .tr4 {
-	background-color: #fff;
+    border-color: #e3471c;
+	/*background-color: #e3471c;
+    color: #ffffff;*/
+}
+
+.trTotal {
+	color: #8e244d;
 }
 
 .trEditable {
-	background-color: #fff;
+	color: #000000;
 }
 
-.tdNotEditable {
-	 
+.trNotEditable {
+	 color: #aaaaaa;
+}
+
+.width-half{
+    width: calc(50% - 3px);
+    white-space: nowrap;
 }
 
 .notInSync {
@@ -31,20 +68,32 @@
 }
 
 .td1 {
-    padding-left: 0px;
+    margin-left: 0px;
+    width: 100%;
 } 
 
 .td2 {
-    padding-left: 20px;
+    margin-left: 20px;
+    width: calc(100% - 20px);
 } 
 
 .td3 {
-    padding-left: 40px;
+    margin-left: 40px;
+    width: calc(100% - 40px);
 } 
 
 .td4 {
-    padding-left: 60px;
+    margin-left: 60px;
+    width: calc(100% - 60px);
 } 
+
+.table-nonfluid {
+   width: auto !important;
+}
+
+.table-title {
+    font-weight: bold; 
+}
 
 .responstable {
   margin: 1em 0;
@@ -88,6 +137,10 @@ td {
 
 .selectable {
     color: blue;
+}
+
+.keysbutton {
+    font-size: 24pt; 
 }
 
 /*input, textarea, select, button {

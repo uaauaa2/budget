@@ -1,7 +1,9 @@
 angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($scope, $http, dataService, $filter) {
     $scope.debugText = "";
 
-    $scope.activeMonth = 0; 
+    $scope.activeMonth = 0;
+    $scope.year = (new Date()).getFullYear(); 
+    $scope.isForecastVisible = false; 
     $scope.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     $scope.expensesPlanTable = {"8":{"3":{"actual":15345,"forecast":40000}}}; 
     
@@ -13,8 +15,11 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
                             query: function(row) {
                                 var d = new Date(row.date); 
                                 if (row.isPlan == isPlan 
+                                    && row.isActive == true
+                                    && expenseItem.idListForTotal
                                     && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0
-                                    && d.getMonth() == month-1) {
+                                    && d.getMonth() == month-1
+                                    && d.getFullYear() == $scope.year) {
                                     return true;
                                 } else {
                                     return false;
@@ -48,28 +53,20 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
     };
 
     $scope.init = function() {
-        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
+        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { query: { isActive: true }, sort: [["orderNum", "ASC"]] });
         $scope.updateExpensesPlanTable(); 
     };
     
     $scope.init(); 
     
     $scope.saveExpensesPlanTable = function(){
-        var list = $scope.db.queryAll("expenses", { query: {isPlan: true }});
-        for (var key in list)
-            $scope.db.insert("localChanges", { tableName: "expenses", action: "delete", rowId: list[key].ID });
-                
-        var l = $scope.db.deleteRows("expenses", { isPlan: true } );
-        
-                
-        console.log("expensesPlan: deleted rows: " + l);  
-            
-        l = 0; 
+        var l = 0; 
+        var operationDate = (new Date()).formatFull();
         for (var month = 1; month <= 12; ++month){ //$scope.expensesPlanTable.forEach(function(monthObj)
             var monthString = "" + month;
             if (monthString.length == 1)
                 monthString = "0" + monthString;
-            var dateString = "2015-" + monthString + "-01"; 
+            var dateString = $scope.year + "-" + monthString + "-01"; 
             
             var monthObj = $scope.expensesPlanTable[month]; 
             for (var expenseItemId in monthObj){ //monthObj.forEach(function(expenseItemObj)
@@ -79,13 +76,22 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
                     var nm = r[0].name;
                     // insert to db
                     if (nm){ // it means that the expenseItem is not for summarizing only 
-                        $scope.db.insert("expenses", {
-                            isPlan: true, 
-                            date: dateString,
-                            expenseItemId: expenseItemId, 
-                            amount: a, 
-                            comment: "" 
-                        });
+                        $scope.db.insertOrUpdate("expenses", 
+                            { // search criteria
+                                isPlan: true, 
+                                date: dateString,
+                                expenseItemId: expenseItemId
+                            }, 
+                            { // data to insert
+                                isPlan: true, 
+                                date: dateString,
+                                expenseItemId: expenseItemId,
+                                amount: a, 
+                                comment: "",
+                                changeDate: operationDate,  
+                                isActive: true
+                            } 
+                        );
                         l++; 
                     }
                 }

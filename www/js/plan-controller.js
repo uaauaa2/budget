@@ -31,7 +31,7 @@ angular.module('budget.controllers').controller("PlanCtrl", function($scope, dat
     $scope.init = function() {
         $scope.planTable = {};
         var currentMonth = (new Date()).getMonth() + 1;
-        console.log("current: " + currentMonth);  
+        //console.log("current: " + currentMonth);  
         for (var monthIndex = 1; monthIndex <= 12; ++monthIndex){
             var isPlan = monthIndex >= currentMonth;
             var pr = 0; 
@@ -47,7 +47,7 @@ angular.module('budget.controllers').controller("PlanCtrl", function($scope, dat
                 isActual: !isPlan, 
                 remaining: r 
             };
-            console.log(monthIndex, isPlan, i, e, r); 
+            //console.log(monthIndex, isPlan, i, e, r); 
         }
  
     }

@@ -1,26 +1,61 @@
 /* global localStorageDB */
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
+
+Date.prototype.yyyy_mm_dd = function() {
+   var yyyy = this.getFullYear().toString();
+   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+};
+
+Date.prototype.formatFull = function() {
+   var yyyy = this.getFullYear().toString();
+   var MM = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   var HH  = this.getHours().toString();
+   var mm  = this.getMinutes().toString();
+   
+   return yyyy + "-" + (MM[1]?MM:"0"+MM[0]) + "-" + (dd[1]?dd:"0"+dd[0])
+   		+ " " + (HH[1]?HH:"0"+HH[0]) + ":" + (mm[1]?mm:"0"+mm[0]); // padding
+};
+
+
 angular.module('budget.services').service('dataService', function ($http) {
     
     function errorHandler(data, status, headers, config) {
-        overviewMessages.push("http error");
-        console.log("http error");
+        var l = 200;
+        var msg = ""; 
+        if (data && data.message){
+             msg = data.message.substring(0, l);
+        }
+        var s = "http error! " + 
+            ("data: " + JSON.stringify(data)).substring(0, l) + 
+            "; message: " + msg +
+            ("; status: " + JSON.stringify(status)).substring(0, l) +
+            ("; headers: " + JSON.stringify(headers)).substring(0, l) +
+            ("; config: " + JSON.stringify(config)).substring(0, l);
+            
+        overviewMessages.push(s);
+        console.log(s);
     }
     
     function hashCode(s){
-        var h = s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);  
-        //console.log("length: " + s.length + "; hash: " + h); 
+        //var h = s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);  
+        //console.log("length: " + s.length + "; hash: " + h);
+        var h = s.length;  
         return h;              
     }
 
     function createDatabase() {
-        db.createTable("expenseItems", ["orderNum", "levelNum", "title", "name", "idListForTotal"]);
-        db.createTable("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment"]);
-        db.createTable("income", ["isPlan", "date", "agent", "amount", "comment"]);
-        db.createTable("balance", ["date", "totalAvailableToDate"]);
-        db.createTable("localChanges", ["tableName", "action", "rowId"]);
-        db.createTable("authToken", ["token"]);
-            
+        db.createTable("expenseItems", ["orderNum", "levelNum", "title", "name", "idListForTotal", "changeDate", "isActive"]);
+        db.createTable("expenses", ["isPlan", "date", "expenseItemId", "amount", "comment", "changeDate", "isActive"]);
+        db.createTable("income", ["isPlan", "date", "agent", "amount", "comment", "changeDate", "isActive"]);
+        db.createTable("balance", ["date", "totalAvailableToDate", "changeDate", "isActive"]);
+        //db.createTable("localChanges", ["tableName", "action", "rowId"]);
+        //db.createTable("authToken", ["token"]);
+        
+        // causing problems when syncing db.insert("expenseItems", { levelNum: 1, title: "Expenses", name: "expenses", changeDate: (new Date()).formatFull(), isActive: true });
+        
         db.commit();
         console.log("new empty tables have been created");
         overviewMessages.push("new empty tables have been created");
@@ -30,8 +65,8 @@ angular.module('budget.services').service('dataService', function ($http) {
         var res = ""; 
         
         try {
-            var expenseItems = db.queryAll("expenseItems");
-            res += "[expenseItems]: " + expenseItems.length + "; "; 
+            var expItems = db.queryAll("expenseItems");
+            res += "[expenseItems]: " + expItems.length + "; "; 
             
             var exList = db.queryAll("expenses");
             res += "[expenses]: " + exList.length + "; ";
@@ -105,7 +140,30 @@ angular.module('budget.services').service('dataService', function ($http) {
         localStorage["authToken"] = auth.token;  
     }
 
-    
+    function syncTable2(tableName, serverDB, localDB){
+        //overviewMessages.push("table [" + tableName + "] sync has started");
+        var resDB = serverDB;
+        var index = 0; 
+        
+        var localRows = localDB.queryAll(tableName);
+        
+        for (index = 0; index < localRows.length; ++index) {
+            var r = serverDB.queryAll(tableName, { query: { ID: localRows[index].ID }});      
+            if (r.length == 0){
+                resDB.insert(tableName, localRows[index]);
+            }
+            else if (localRows[index].changeDate > r[0].changeDate){
+                resDB.insertOrUpdate(tableName, { ID: localRows[index].ID }, localRows[index] );
+            }
+                
+        }
+        
+        overviewMessages.push("table [" + tableName + "] synced");
+        
+            
+        return resDB;
+    }
+        
     function syncTable(tableName, serverDB, localDB){
         //overviewMessages.push("table [" + tableName + "] sync has started");
         var resDB = serverDB;
@@ -143,6 +201,21 @@ angular.module('budget.services').service('dataService', function ($http) {
         if (d > 0) 
             overviewMessages.push("table [" + tableName + "] rows removed: " + d);
         
+        
+        // update server db rows, which were updated 
+        var updatedRows = localDB.queryAll("localChanges", { query: {tableName: tableName, action: "update"}});
+        var u = 0; 
+        for (index = 0; index < updatedRows.length; ++index){
+            var updatedRow = localDB.queryAll(tableName, { query: {ID: updatedRows[index].rowId}})[0];
+            if (updatedRows[index].rowId){
+                resDB.insertOrUpdate(tableName, {ID: updatedRows[index].rowId}, updatedRow);
+                u++; 
+            }
+        }
+        if (u > 0) 
+            overviewMessages.push("table [" + tableName + "] rows updated: " + u);
+        
+            
         return resDB;    
     } 
     
@@ -152,15 +225,17 @@ angular.module('budget.services').service('dataService', function ($http) {
         $http({
             method: 'PUT',
             url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName + "/",
+            cache: false, 
             headers: { "Authorization": auth.token }  
         }).success(function(response) {
             revision = response.revision;
+            overviewMessages.push(revision);
             var delta = {
                     "delta_id": "db update",
                     "changes": [{
                             "change_type": "set", 
                             "collection_id": "budget", 
-                            "record_id": "2015",  
+                            "record_id": "jsondb",  
                             "changes": [{
                                     "change_type": "set", 
                                     "field_id": "data", 
@@ -189,6 +264,7 @@ angular.module('budget.services').service('dataService', function ($http) {
     } 
     
     function syncFromWeb(){
+        // TODO: to return promise
         if (auth.token != ""){
             $http({
                 method: "GET",
@@ -196,6 +272,8 @@ angular.module('budget.services').service('dataService', function ($http) {
                 headers: { "Authorization": auth.token }
             }).success(function(response) {
                 var sWebDB = response.records.items[0].fields[0].value.string;
+                
+                //console.log("webdb: " + sWebDB);
                 var webDB = new localStorageDB("web_" + dbName, localStorage);
                 webDB.initFromObj(JSON.parse(sWebDB));
                 //overviewMessages.push("webDB: " + dumpDB(webDB));
@@ -203,11 +281,12 @@ angular.module('budget.services').service('dataService', function ($http) {
                 if (webDBhash != hashCode(db.serialize())){
                     syncStatus.status = 1; 
                     var newDB = webDB;
-                    newDB = syncTable("localChanges", newDB, db);
-                    newDB = syncTable("expenseItems", newDB, db);
-                    newDB = syncTable("expenses", newDB, db);
-                    newDB = syncTable("income", newDB, db);
-                    newDB = syncTable("balance", newDB, db);
+                    //newDB = syncTable("localChanges", newDB, db);
+                    //newDB = syncTable("expenseItems", newDB, db);
+                    newDB = syncTable2("expenseItems", newDB, db);
+                    newDB = syncTable2("expenses", newDB, db);
+                    newDB = syncTable2("income", newDB, db);
+                    newDB = syncTable2("balance", newDB, db);
                     //newDB = syncTable("authToken", newDB, db);
                     
                     db.initFromObj(newDB.getDBObj());
@@ -223,7 +302,15 @@ angular.module('budget.services').service('dataService', function ($http) {
                 }
                 
             })
-            .error(errorHandler)
+            .error(function(data, status, headers, config) {
+                if (status == 404){
+                    console.log("db [" + dbName + "] not found");
+                    uploadDB();
+                    console.log("uploaded");
+                }
+                else 
+                    errorHandler(data, status, headers, config); 
+            }); 
         }
     }
     
@@ -252,7 +339,48 @@ angular.module('budget.services').service('dataService', function ($http) {
         }
     }
     
-    var init = function() {
+    function initListOfDatabases() {
+        var promise = $http({
+            method: "GET",
+            url: "https://cloud-api.yandex.net/v1/data/app/databases/",  
+            headers: { "Authorization": auth.token }
+        }).success(function(response) {
+            //var list = response;
+            //overviewMessages.push(list);
+            databases.length = 0; 
+            response["items"].forEach(function(item){
+                databases.push(item.database_id); 
+            });
+            
+            //overviewMessages.push(databases);
+        }).error(errorHandler);
+        
+        return promise; 
+    }
+    
+    function deleteDatabase(dbToDelete) {
+        var promise = 
+            $http({
+                method: "DELETE",
+                url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbToDelete,  
+                headers: { "Authorization": auth.token }
+            }).success(function(response) {
+                db.drop();
+                var webDB = new localStorageDB("web_" + dbName, localStorage);
+                webDB.drop(); 
+                
+                overviewMessages.push("database [" + dbToDelete + "] has been deleted");
+            }).error(errorHandler);
+        return promise; 
+    }
+
+    
+    var init = function(isAutosync) {
+        dbName = localStorage["dbName"];
+        if (!dbName){
+            dbName = prompt("please enter new db name", "newDatabase");
+            localStorage["dbName"] = dbName;
+        } 
         db = new localStorageDB(dbName, localStorage);
              
         if(db.isNew()) {
@@ -261,12 +389,15 @@ angular.module('budget.services').service('dataService', function ($http) {
         
         //overviewMessages.push("localStorage: " + dumpDB(db)); 
         
-        auth.token = localStorage["authToken"]; 
-                
+        auth.token = localStorage["authToken"];
         syncStatus.status = 0;
-        syncFromWeb();
+        if (isAutosync)
+            syncFromWeb();
+        //setTimeout(syncFromWeb, 1000);
         
-        expenseItems = db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
+        initListOfDatabases();
+        
+        expenseItems = db.queryAll("expenseItems", {query: { isActive: true },  sort: [["orderNum", "ASC"]] });
         for (var i = 0; i < expenseItems.length; i++) {
             if (expenseItems[i].name){
                 setActiveExpenseItem(expenseItems[i]);
@@ -274,6 +405,7 @@ angular.module('budget.services').service('dataService', function ($http) {
             }
         };
     }
+    
     
     function getSyncStatus(){
         if (syncStatus.status != 1){
@@ -286,8 +418,13 @@ angular.module('budget.services').service('dataService', function ($http) {
         return syncStatus; 
     }
     
+    function getListOfDatabases(){
+        return databases; 
+    }
+    
     var expenseItems = []; 
-    var dbName = "budget2015";
+    var dbName = "";
+    
     var auth = { code: "", token: "" }; 
      
     var overviewMessages = [];
@@ -304,6 +441,8 @@ angular.module('budget.services').service('dataService', function ($http) {
             return t;  
         }
     } 
+    var databases = [];
+     
     
     var activeExpenseItem = { };
     
@@ -319,7 +458,11 @@ angular.module('budget.services').service('dataService', function ($http) {
         init: init, 
         sync: syncFromWeb, 
         getAuthToken: getAuthToken,
-        getSyncStatus: getSyncStatus 
+        getSyncStatus: getSyncStatus,
+        
+        initListOfDatabases: initListOfDatabases,
+        getListOfDatabases: getListOfDatabases, 
+        deleteDatabase: deleteDatabase
     } 
      
         

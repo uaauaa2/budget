@@ -93,13 +93,15 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]], distinct: ["date"] });
         
         var dateFrom = new Date();
-        if (expenses[9])
+        if (expenses.length > 10)
              dateFrom = new Date(expenses[9].date);
+        else if (expenses.length > 0)
+            dateFrom = new Date(expenses[expenses.length - 1].date);
 
         expenses = $scope.db.queryAll("expenses", {
             query: function (row) {
                 var d = new Date(row.date);
-                if (d >= dateFrom)
+                if (d >= dateFrom && row.isActive)
                     return true;
                 else
                     return false;
@@ -121,6 +123,46 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     $scope.latestExpenses = $scope.initLatestExpenses();
 
     
+    $scope.currentDb = { name: localStorage["dbName"] };   
+    $scope.databases = dataService.getListOfDatabases(); 
+    
+    $scope.switchDatabase = function(){
+        localStorage["dbName"] = $scope.currentDb.name;
+        dataService.init();
+        //TODO: to rewrite with promise, .then updateListOfDatabases;   
+    }
+    
+    $scope.deleteDatabase = function(){
+        if (confirm("Are you sure you want to delete the database [" + $scope.currentDb.name + "]?")) {
+            //alert("delete!")
+            dataService.deleteDatabase($scope.currentDb.name)
+                .then(
+                    function(){
+                        dataService.initListOfDatabases().then( 
+                            function () {
+                                $scope.databases = dataService.getListOfDatabases();
+                                if ($scope.databases.length > 0){
+                                    $scope.currentDb.name = $scope.databases[0];  
+                                    $scope.switchDatabase(); 
+                                }
+                            }
+                        )
+                        
+                    }
+            );
+        } else {
+            // Do nothing!
+        }
+        
+    }
+    
+    $scope.createNewDatabase = function(){
+        var newdb = prompt("please enter new db name", "newDatabase");
+        $scope.databases.push(newdb);
+        $scope.currentDb.name = newdb;
+        
+        $scope.switchDatabase();
+    }
  
   
 });

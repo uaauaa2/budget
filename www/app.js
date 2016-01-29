@@ -30,23 +30,45 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
   // Set up the various states which the app can be in.
   $stateProvider
 
+  /*.state('tab1', {
+    url: '/tab1',
+    abstract: true,
+    templateUrl: 'templates/mobile/expenses.html',  
+    controller: 'HeaderCtrl'
+  })*/
+    
+      
+      .state('home', {
+        url: '/home',
+        templateUrl: 'templates/mobile/home.html',
+        controller: 'ExpensesCtrl'
+      })
+      
+      .state('select2', {
+        url: '/select2',
+        templateUrl: 'templates/mobile/selectExpenseItem.html',
+        controller: 'SelectExpenseItemCtrl'
+      })
+      .state('overview2', {
+        cache: false,
+        url: '/overview2',
+        templateUrl: 'templates/mobile/overview.html',
+        controller: 'OverviewCtrl'
+      })
+    
+
   // setup an abstract state for the tabs directive
   .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/mobile/tabs.html',  
     controller: 'HeaderCtrl'
-    /*views: {
-      'tab-overview': {
-        templateUrl: 'templates/mobile/tabs.html',
-        controller: 'selectExpenseItemCtrl'
-      }
-    }*/
   })
 
   // Each tab has its own nav history stack:
 
   .state('tab.overview', {
+    cache: false,
     url: '/overview',
     views: {
       'tab-overview': {
@@ -70,14 +92,6 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
     url: '',
     templateUrl: 'templates/mobile/expenses.html',
     controller: 'ExpensesCtrl'
-    /*,
-    onEnter: function(dataService) { // 
-        //if ($scope.newExpense)
-        {
-            console.log("tada");
-            //$scope.newExpense.expenseItemId = dataService.getActiveExpenseItem().ID;
-        }
-     }*/
   })
   
   .state('tab.expenses.select', {
@@ -86,35 +100,15 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
     controller: 'SelectExpenseItemCtrl'
   })
   
-  /*.state('tab.expenses.selectExpenseItem', {
-    url: '/:selectExpenseItem',
-    views: {
-      'tab-selectExpenseItem': {
-        templateUrl: 'templates/mobile/selectExpenseItem.html',
-        controller: 'SelectExpenseItemCtrl'
-      }
-    }
-  })*/
-  
-  .state('tab.plan', {
-    url: '/plan',
-    views: {
-      'tab-plan': {
-        templateUrl: 'templates/mobile/plan.html',
-        controller: 'PlanCtrl'
-      }
-    }
-  })
-  
-  ;
+ ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/overview');
+  $urlRouterProvider.otherwise('/home');
 
 })
 
 .run(function (dataService) {
-        dataService.init(); 
+        dataService.init(); // init without autosync from web
 })
 
 
