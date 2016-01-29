@@ -73,7 +73,8 @@ angular.module('budget', ['ngRoute', 'budget.controllers', 'budget.services'])
         };
     })
     .run(function (dataService) {
-        dataService.init(); 
+        var isAutosync = true; 
+        dataService.init(isAutosync); 
     })
     
     ;

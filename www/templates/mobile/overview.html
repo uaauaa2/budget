@@ -18,7 +18,7 @@
         </ul>{{overviewString}}
     </div>
     
-    <div> <!-- ng-hide="authToken!=''" -->
+    <!--div> <!-- ng-hide="authToken!=''" -- >
         <div class="row" style="border: 1px solid black">
             <div class="col col-30">    
                 <a href="#" onclick="window.open('https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d', 
@@ -38,19 +38,47 @@
             </select>
         </div>
     </form>
+    < !-- --------------------------------------------- -->
+        <div class="row">
+            <div class="col col-33 bordered">
+                <input type="button" 
+                    class="button" 
+                    onclick="window.open('https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d', '_system');" 
+                    value="Get Auth Code" 
+                    style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "> 
+                                 
+            </div>    
+            <div class="col col-33 bordered">
+                <input type="text" ng-model="auth.code" placeholder="Enter your Yandex Auth code" 
+                    style="width: 100%; border: 1px solid #dddddd; "> 
+            </div>
+            <div class="col col-33 bordered">
+                <input type="button" 
+                    class="button" value="Get" ng-click="getAuthToken()" 
+                    style="min-height: 33px; padding: 0px; min-width: 0px; line-height: 24px; width: 100%; border: 1px solid #dddddd; "> 
+                                 
+            </div>
+        </div>
+        <div class="list">
+            <label class="item item-input item-select">
+            <div class="input-label">
+              Current Database:
+            </div>
+            <select ng-model="currentDb.name" ng-change="switchDatabase()" > 
+                    <option data-ng-repeat="d in databases" value="{{d}}" ng-selected="d == currentDb.name" >{{d}}</option>
+                </select>
+          </label>
+            <!--div class="col col-33 bordered">
+                Current Database: 
+            </div>    
+            <div class="col col-66 bordered item item-input item-select">
+                <select ng-model="currentDb.name" ng-change="switchDatabase()" > 
+                    <option data-ng-repeat="d in databases" value="{{d}}" ng-selected="d == currentDb.name" >{{d}}</option>
+                </select> 
+            </div-->
+        </div>     
 
-    <!--a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a><br/><br/><br/-->
-    <!--a href="" ng-click="syncFromWeb()">sync from web</a><br/><!--<input type="text" ng-model="stringdb" /-->
-    <!--br/><br/>
-    <a href="" ng-click="downloadDB()">Download db from Yandex.Disk</a><br/><!--<input type="text" ng-model="stringdb" /-->
-    <!--a href="" ng-click="commitdbfromeditbox()">commit</a><br/>
-    <!--a href="" ng-click="createIncomeTable()">createIncomeTable</a><br/>
-    <a href="" ng-click="importIncome()">importIncome</a><br/-->
-    <!--a href="" ng-click="createBalanceTable()">createBalanceTable</a><br/-->
-    <!--a href="" ng-click="fixExpenseIds()">fixExpenseIds</a><br/>
-    <a href="" ng-click="fixImported()">fixImported</a><br/-->
-    <!--br/><br/-->
-    
+
     
     </ion-content>
 </ion-view>

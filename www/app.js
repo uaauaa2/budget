@@ -108,7 +108,7 @@ angular.module('budget', ['ionic', 'budget.controllers', 'budget.services'])
 })
 
 .run(function (dataService) {
-        dataService.init(); 
+        dataService.init(); // init without autosync from web
 })
 
 

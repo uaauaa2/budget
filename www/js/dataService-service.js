@@ -375,8 +375,7 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
 
     
-    var init = function() {
-        
+    var init = function(isAutosync) {
         dbName = localStorage["dbName"];
         if (!dbName){
             dbName = prompt("please enter new db name", "newDatabase");
@@ -392,7 +391,8 @@ angular.module('budget.services').service('dataService', function ($http) {
         
         auth.token = localStorage["authToken"];
         syncStatus.status = 0;
-        syncFromWeb();
+        if (isAutosync)
+            syncFromWeb();
         //setTimeout(syncFromWeb, 1000);
         
         initListOfDatabases();
