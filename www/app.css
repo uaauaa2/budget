@@ -42,11 +42,15 @@
     color: #ffffff;*/
 }
 
+.trTotal {
+	color: #8e244d;
+}
+
 .trEditable {
 	color: #000000;
 }
 
-.tdNotEditable {
+.trNotEditable {
 	 color: #aaaaaa;
 }
 
@@ -85,6 +89,10 @@
 
 .table-nonfluid {
    width: auto !important;
+}
+
+.table-title {
+    font-weight: bold; 
 }
 
 .responstable {

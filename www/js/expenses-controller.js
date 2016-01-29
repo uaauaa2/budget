@@ -29,7 +29,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
             $scope.days.pop(); 
             $scope.days.unshift(first - 1); 
         }
-        console.log($scope.days);
+        //console.log($scope.days);
     }
     
     $scope.moveRight = function(){
@@ -39,7 +39,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
             $scope.days.shift(); 
             $scope.days.push(last + 1); 
         }
-        console.log($scope.days);
+        //console.log($scope.days);
     }
     
     $scope.getTotalByDay = function(expenseItem, month, day){
