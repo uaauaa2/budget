@@ -16,6 +16,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
                                 var d = new Date(row.date); 
                                 if (row.isPlan == isPlan 
                                     && row.isActive == true
+                                    && expenseItem.idListForTotal
                                     && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0
                                     && d.getMonth() == month-1
                                     && d.getFullYear() == $scope.year) {
@@ -52,7 +53,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
     };
 
     $scope.init = function() {
-        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
+        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { query: { isActive: true }, sort: [["orderNum", "ASC"]] });
         $scope.updateExpensesPlanTable(); 
     };
     

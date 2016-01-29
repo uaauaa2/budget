@@ -17,7 +17,7 @@
             <input class="btn-primary" type="button" value="Reload table" ng-click="updateExpensesPlanTable()" >
             <input class="btn-primary" type="button" value="Save table to db" ng-click="saveExpensesPlanTable()" >
            
-            <table class="table table-bordered table-condensed">  
+            <table class="table table-bordered table-condensed table-nonfluid">  
                 <tr>
                    <th style="width: 40%;">title</th>
                    <th ng-if="isForecastVisible" ng-repeat-start="m in months">F {{m}}</th>
@@ -25,7 +25,7 @@
                 </tr> 
                 <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}"> <!--  ng-class="{trEditable: e.name}" -->
                     <!--td class="td{{e.levelNum}} tr{{e.levelNum}}">{{e.title}}</td-->
-                    <td><input type="text" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" ng-model="e.title" readonly="readonly"></td>
+                    <td><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}} text-left" value="{{e.title}}"></td>
                     
                     <td align=right ng-if="isForecastVisible" ng-repeat-start="m in months"> 
                         <input ng-if="e.name && m == activeMonth" type="text" class="form-control"   ng-model="expensesPlanTable[m][e.ID].forecast" > <!--style="width: 4em; height: 1.4em; text-align:right; padding: 0px;"--> 

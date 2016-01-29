@@ -37,9 +37,9 @@
                       <!--div class="checkbox">
                         <label><input type="checkbox" ng-model="e.isActive">isActive</label>
                       </div-->
-                      <div class="form-group">
+                      <!--div class="form-group">
                           <input type="text" class="form-control" ng-model="e.changeDate" size="15">
-                      </div>
+                      </div-->
                       <div class="form-group">
                           <input class="btn btn-default" type="button" value="-" ng-click="deleteRow(e)" >
                       </div>
@@ -86,7 +86,7 @@
            </thead> 
            <tbody>
                <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" > 
-                   <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" value="{{e.title}}"></td>
+                   <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}} text-left" value="{{e.title}}"></td>
                    <td ><input class="form-control" type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByExpenseItemId(e.ID)" > </td>
                    <td ng-repeat="d in days">
                        <input class="form-control"

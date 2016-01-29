@@ -323,9 +323,9 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     }; 
     
     $scope.listExpensesByExpenseItemId = function(expenseItemId){
-        console.log(expenseItemId); 
+        //console.log(expenseItemId); 
         var fn = function(row) {
-            console.log(row.expenseItemId);   
+            //console.log(row.expenseItemId);   
             if (row.isPlan == false && row.isActive && row.expenseItemId == expenseItemId){
                 return true;
             } else {
