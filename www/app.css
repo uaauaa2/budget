@@ -43,13 +43,12 @@
 }
 
 .trEditable {
-	background-color: #333333;
-    color: #ffffff;
+	color: #000000;
 }
 
-/*.tdNotEditable {
-	 
-}*/
+.tdNotEditable {
+	 color: #aaaaaa;
+}
 
 .width-half{
     width: calc(50% - 3px);
@@ -83,6 +82,10 @@
     margin-left: 60px;
     width: calc(100% - 60px);
 } 
+
+.table-nonfluid {
+   width: auto !important;
+}
 
 .responstable {
   margin: 1em 0;

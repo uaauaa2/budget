@@ -4,9 +4,10 @@
             <!-- ng-controller="ExpensesCtrl" [ <a href="" ng-click="init()">Init</a> ] -->
             <!--[ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
 
-            <br/>
-            month: <input type="text" ng-model="month" size="3">
-            <br/><br/>
+            <br/-->
+            
+            
+            <!--br/>
             Debug: <span>{{debugText}}</span>
             <br/>-->
             
@@ -51,16 +52,31 @@
                 <div class="form-group">    
                     <input class="btn btn-default" type="button" value="+" ng-click="addAnotherExpense()" >
                 </div>
-                <div class="form-group">
+                <!--div class="form-group">
                     <input class="btn btn-default" type="button" ng-click="listExpensesByDay(21)" value="Редактировать"> 
-                </div>
+                </div-->
             </div>
             
             
-
-            <input class="btn btn-default" type="button" value="Обновить таблицу" ng-click="updateExpensesTable()" >
+            <form class="form-inline" role="form">
+                <div class="form-group">                    
+                    Месяц:
+                </div>
+                <div class="form-group">                    
+                    <input type="text" class="form-control" ng-model="month" size="3">
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-default" type="button" value="Обновить таблицу" ng-click="updateExpensesTable()" >
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-default" type="button" value="<<" ng-click="moveLeft()" >
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-default" type="button" value=">>" ng-click="moveRight()" >
+                </div>
+            </form>
            
-            <table class="table table-bordered table-condensed">
+            <table class="table table-bordered table-condensed table-nonfluid">
             <thead>
                 <tr>
                    <th>title</th>
@@ -69,10 +85,15 @@
                </tr>
            </thead> 
            <tbody>
-               <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" > <!-- ng-class="{trEditable: e.name}" -->
+               <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" > 
                    <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" value="{{e.title}}"></td>
-                   <td ><input class="form-control" type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByDay(d)" > </td>
-                   <td ng-repeat="d in days"><input class="form-control" type="button" value="{{ getTableValueByDay(e.ID, d) }}" ng-click="listExpensesByDay(d)" > </td>
+                   <td ><input class="form-control" type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByExpenseItemId(e.ID)" > </td>
+                   <td ng-repeat="d in days">
+                       <input class="form-control"
+                           ng-class="(e.name == null)? 'tdNotEditable' : 'trEditable'"
+                           type="button" value="{{ getTableValueByDay(e.ID, d) }}" 
+                           ng-click="listExpensesByExpenseItemIdAndDay(e.ID, d)" > 
+                   </td>
                </tr>
             </tbody>
             </table> 
