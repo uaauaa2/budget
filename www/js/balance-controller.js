@@ -12,7 +12,7 @@ angular.module('budget.controllers').controller('BalanceCtrl', function($scope, 
         var result = $scope.db.queryAll(tableName, { 
             query: function(row) {
                 var rowDate = new Date(row.date); 
-                if (rowDate <= balanceDate && row.isPlan == false) {
+                if (rowDate <= balanceDate && row.isPlan == false && row.isActive) {
                     return true;
                 } else {
                     return false;
