@@ -14,6 +14,7 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     };
     
     
+    
     $scope.getLevel = function(expenseItem){
         return expenseItem.levelNum; 
     };
@@ -163,6 +164,54 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         
         $scope.switchDatabase();
     }
+    
+     function uploadDB(){
+        
+   	
+        
+    } 
+    /*$scope.updateOldDb = function(){
+        if(! ($scope.db.columnExists("expenseItems", "changeDate") && $scope.db.columnExists("expenseItems", "isActive")) ) {
+            $scope.db.alterTable("expenseItems", ["changeDate", "isActive"]);
+        }
+        if(! ($scope.db.columnExists("expenses", "changeDate") && $scope.db.columnExists("expenses", "isActive")) ) {
+            $scope.db.alterTable("expenses", ["changeDate", "isActive"]);
+        }
+        if(! ($scope.db.columnExists("income", "changeDate") && $scope.db.columnExists("income", "isActive")) ) {
+            $scope.db.alterTable("income", ["changeDate", "isActive"]);
+        }
+        
+        $scope.db.commit();
+        
+        $scope.db.update("expenseItems", function(row) { return true; },            
+            function(row) { // update function
+                var opDate = new Date("2015-01-01");
+                row.changeDate = opDate.formatFull(); 
+                row.isActive = true; 
+                return row;
+            }
+        );
+        
+        $scope.db.update("expenses", function(row) { return true; },            
+            function(row) { // update function
+                var opDate = new Date(row.date);
+                row.changeDate = opDate.formatFull(); 
+                row.isActive = true; 
+                return row;
+            }
+        );
+        
+        $scope.db.update("income", function(row) { return true; },            
+            function(row) { // update function
+                var opDate = new Date(row.date);
+                row.changeDate = opDate.formatFull(); 
+                row.isActive = true; 
+                return row;
+            }
+        );
+        $scope.db.commit();
+        dataService.uploadDB1("budget2015_updated", $scope.db);
+    }*/
  
   
 });

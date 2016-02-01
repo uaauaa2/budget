@@ -1,7 +1,8 @@
 angular.module('budget.controllers').controller("ExpensesCtrl", function($scope, $http, dataService, $filter, $timeout) {
     $scope.debugText = "";
 
-    $scope.month = 1; 
+    $scope.month = (new Date()).getMonth() + 1;
+    $scope.year = (new Date()).getFullYear(); 
     $scope.days = [];
     var currentDay = new Date().getDate(); 
     for (var i = (currentDay - 7 > 0)? currentDay - 7 : 1; i <= ((currentDay < 31)? currentDay + 1 : currentDay); i++)
@@ -40,6 +41,13 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
             $scope.days.push(last + 1); 
         }
         //console.log($scope.days);
+    }
+    
+    $scope.addDay = function(){
+        var last = $scope.days[$scope.days.length - 1]; 
+        if (last < 31){
+            $scope.days.push(last + 1); 
+        }
     }
     
     $scope.getTotalByDay = function(expenseItem, month, day){
@@ -130,6 +138,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     };
     
     $scope.updateExpensesTable = function(){
+        console.log("update table, month: " + $scope.month); 
         $scope.expensesTable = []; 
         for (var expIndex in $scope.allExpenseItems){
             var e = $scope.allExpenseItems[expIndex]; 
@@ -412,7 +421,8 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     // ---------------------- below is the code for mobile version
     
     $scope.$watch('activeExpenseItem', function(newVal, oldVal){
-        $scope.newExpense.expenseItemId = $scope.activeExpenseItem.ID; 
+        if ($scope.activeExpenseItem)
+            $scope.newExpense.expenseItemId = $scope.activeExpenseItem.ID; 
     }, true);
   
     $scope.editItem = function(expense){
