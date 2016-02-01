@@ -54,8 +54,6 @@ angular.module('budget.services').service('dataService', function ($http) {
         //db.createTable("localChanges", ["tableName", "action", "rowId"]);
         //db.createTable("authToken", ["token"]);
         
-        // causing problems when syncing db.insert("expenseItems", { levelNum: 1, title: "Expenses", name: "expenses", changeDate: (new Date()).formatFull(), isActive: true });
-        
         db.commit();
         console.log("new empty tables have been created");
         overviewMessages.push("new empty tables have been created");
@@ -219,12 +217,12 @@ angular.module('budget.services').service('dataService', function ($http) {
         return resDB;    
     } 
     
-    function uploadDB(){
+    function uploadDB1(dbName1, db1){
         var revision = "0";  
         
         $http({
             method: 'PUT',
-            url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName + "/",
+            url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName1 + "/",
             cache: false, 
             headers: { "Authorization": auth.token }  
         }).success(function(response) {
@@ -241,7 +239,7 @@ angular.module('budget.services').service('dataService', function ($http) {
                                     "field_id": "data", 
                                     "value": {
                                         "type": "string",
-                                        "string": db.serialize(),
+                                        "string": db1.serialize(),
                                     }
                             }]
                     }] 
@@ -249,18 +247,22 @@ angular.module('budget.services').service('dataService', function ($http) {
  
             $http({
                 method: "POST",
-                url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName + "/deltas/",
+                url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName1 + "/deltas/",
                 data: delta,  
                 headers: { "Authorization": auth.token, "If-Match": revision }
             }).success(function(response) {
             	overviewMessages.push("uploaded");
                 syncStatus.status = 2; 
-                webDBhash = hashCode(db.serialize());
+                webDBhash = hashCode(db1.serialize());
             }).error(errorHandler);
              
         }).error(errorHandler);
    	
         
+    }
+    
+    function uploadDB(){
+        uploadDB1(dbName, db);
     } 
     
     function syncFromWeb(){
@@ -462,7 +464,9 @@ angular.module('budget.services').service('dataService', function ($http) {
         
         initListOfDatabases: initListOfDatabases,
         getListOfDatabases: getListOfDatabases, 
-        deleteDatabase: deleteDatabase
+        deleteDatabase: deleteDatabase,
+        uploadDB1: uploadDB1 
+        
     } 
      
         
