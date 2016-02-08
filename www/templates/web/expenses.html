@@ -100,8 +100,9 @@
                </tr>
            </thead> 
            <tbody>
-               <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" > 
-                   <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}} text-left" value="{{e.title}}"></td>
+               <tr ng-repeat="e in expensesTableExpenseItems" class="tr{{e.levelNum}}" > 
+                   <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}} text-left" 
+                       value="{{e.title}}" ng-click="expandCollapse(e)"></td>
                    <td ><input class="form-control" type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByExpenseItemId(e.ID)" > </td>
                    <td ng-repeat="d in days">
                        <input class="form-control"

@@ -8,7 +8,8 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     var currentDay = new Date().getDate(); 
     for (var i = (currentDay - 7 > 0)? currentDay - 7 : 1; i <= ((currentDay < 31)? currentDay + 1 : currentDay); i++)
         $scope.days.push(i); 
-    $scope.expensesTable = [];  
+    $scope.expensesTable = [];
+    $scope.expensesTableExpenseItems = [];   
     $scope.queryFn = null;
     $scope.newExpense = null; 
     
@@ -17,12 +18,69 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
       
     
     $scope.expenseItems = {};
-    $scope.allExpenseItems = {};
+    $scope.allExpenseItems = [];
     $scope.defaultExpenseItemId = null;
     $scope.expenses = [];  
     $scope.newExpenses = []; // for mobile version
     $scope.activeExpenseItem = null; 
     $scope.listToEdit = []; 
+
+    $scope.findChildren = function(expenseItem){
+        var result = []; 
+        var found = false;
+        
+        for (var j = 0; j < $scope.allExpenseItems.length; j++) {
+            if (!found && expenseItem.ID == $scope.allExpenseItems[j].ID){
+                found = true;
+                continue;
+            }
+            if (found){    
+                if ($scope.allExpenseItems[j].levelNum > expenseItem.levelNum){
+                    var o = JSON.parse(JSON.stringify($scope.allExpenseItems[j]));
+                    result.push(o);
+                }
+                else 
+                    break;
+            }
+            
+        }
+
+        return result; 
+    }
+    
+    $scope.expandCollapse = function(currentExpenseItem){
+        var i = $scope.expensesTableExpenseItems.indexOf(currentExpenseItem);
+        
+        if ($scope.expensesTableExpenseItems[i + 1] && $scope.expensesTableExpenseItems[i + 1].levelNum > $scope.expensesTableExpenseItems[i].levelNum){
+            // collapse
+            while ($scope.expensesTableExpenseItems[i + 1] 
+                && $scope.expensesTableExpenseItems[i + 1].levelNum > $scope.expensesTableExpenseItems[i].levelNum){
+                $scope.expensesTableExpenseItems.splice(i + 1, 1);
+            }
+            $scope.expensesTableExpenseItems[i].title = "+ " + $scope.expensesTableExpenseItems[i].title;
+        }
+        else {
+            if ($scope.expensesTableExpenseItems[i].idListForTotal.length > 1){ 
+                // expand
+                var children = $scope.findChildren(currentExpenseItem);
+                  
+                var k = i; 
+                children.forEach(function(element) {
+                    $scope.expensesTableExpenseItems.splice(++k, 0, element);
+                }, this);
+                
+                if ($scope.expensesTableExpenseItems[i].title.startsWith("+ "))
+                      $scope.expensesTableExpenseItems[i].title = $scope.expensesTableExpenseItems[i].title.substring(2);  
+            }
+        }
+        
+        
+
+              
+        /*var o = { levelNum: e.levelNum, title: "", name: ""}; 
+        $scope.newExpenseItems.splice(i + 1, 0, o);*/
+        
+    }
 
     $scope.moveLeft = function(){
         var first = $scope.days[0];
@@ -158,6 +216,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.init = function() {
         //$scope.db = dataService.getDB();
         $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { query: { isActive: true }, sort: [["orderNum", "ASC"]] });
+        $scope.expensesTableExpenseItems = $scope.db.queryAll("expenseItems", { query: { isActive: true }, sort: [["orderNum", "ASC"]] });
         $scope.expenseItems = $scope.db.queryAll("expenseItems", { 
             query: function(row) {
                 var res = false;
