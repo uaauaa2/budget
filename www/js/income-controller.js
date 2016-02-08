@@ -17,6 +17,12 @@ angular.module('budget.controllers').controller('IncomeCtrl', function($scope, d
     
     $scope.add = function() {
         var operationDate = (new Date()).formatFull();
+        
+        if ($scope.incomeIsPlan === "true")
+            $scope.incomeIsPlan = true;
+        if ($scope.incomeIsPlan === "false")
+            $scope.incomeIsPlan = false;    
+        
         $scope.allIncome.push( {
               isPlan: $scope.incomeIsPlan,
               date: $scope.incomeDate.yyyy_mm_dd(), 

@@ -1,33 +1,33 @@
 <div>
-    <h1>Edit Expense Items</h1>
+    <h1>Редактировать статьи расхода</h1>
     <ul class="unstyled">
         <li ng-repeat="m in errorList track by $index">
             <span>{{m}}</span> 
         </li>
     </ul>
-    <input type="button" class="btn btn-default" ng-click="save()" value="Save">
+    <input type="button" class="btn btn-default" ng-click="save()" value="Сохранить">
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>left - right</th>
-                <th style="width: 40%;">title</th>
-                <th style="width: 30%;">name</th>
-                <th>up - down</th>
-                <th>add - del</th>
+                <th>влево - вправо</th>
+                <th style="width: 40%;">Заголовок</th>
+                <th style="width: 30%;">Название</th>
+                <th>вверх - вниз</th>
+                <th>добавить - удалить</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="e in newExpenseItems">
                 <td>
                     <!--button type="button" class="btn btn-default width-half" ng-click="moveLeft(e)">left</button-->
-                    <input type="button" class="btn btn-default width-half" ng-click="moveLeft(e)" value="left">
-                    <input type="button" class="btn btn-default width-half" ng-click="moveRight(e)" value="right">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveLeft(e)" value="влево">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveRight(e)" value="вправо">
                 </td>
                 <td><input type="text" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" ng-model="e.title"></td>
                 <td><input type="text" class="form-control" ng-model="e.name"></td>
                 <td>
-                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, true)" value="up">
-                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, false)" value="down">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, true)" value="вверх">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, false)" value="вниз">
                 </td>
                 <td>
                     <input type="button" class="btn btn-default width-half" ng-click="add(e)" value="+">

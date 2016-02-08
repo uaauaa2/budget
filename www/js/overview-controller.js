@@ -102,7 +102,7 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
         expenses = $scope.db.queryAll("expenses", {
             query: function (row) {
                 var d = new Date(row.date);
-                if (d >= dateFrom && row.isActive)
+                if (d >= dateFrom && row.isActive && !row.isPlan)
                     return true;
                 else
                     return false;

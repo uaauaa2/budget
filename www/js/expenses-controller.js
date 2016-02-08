@@ -4,6 +4,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
     $scope.month = (new Date()).getMonth() + 1;
     $scope.year = (new Date()).getFullYear(); 
     $scope.days = [];
+    $scope.total = ""; 
     var currentDay = new Date().getDate(); 
     for (var i = (currentDay - 7 > 0)? currentDay - 7 : 1; i <= ((currentDay < 31)? currentDay + 1 : currentDay); i++)
         $scope.days.push(i); 

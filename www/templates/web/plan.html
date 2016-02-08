@@ -1,14 +1,19 @@
 <div>
-        <h1> Plan</h1>
+        <h1>План</h1>
         <div>
-            <input class="btn-primary" type="button" value="Recalculate" ng-click="recalculate()" >
-            <table class="responstable">  
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <input class="form-control" type="button" value="Пересчитать" ng-click="recalculate()" >
+                </div>
+            </form>
+            
+            <table class="table table-bordered table-condensed table-nonfluid">  
                 <tr>
-                   <th>month</th>
-                   <th>actual</th>
-                   <th>income</th>
-                   <th>expenses</th>
-                   <th>remaining</th>
+                   <th>Месяц</th>
+                   <th>Факт</th>
+                   <th>Доход</th>
+                   <th>Расход</th>
+                   <th>Остаток</th>
                 </tr> 
                 <tr ng-repeat="m in months">
                     <td>{{planTable[m].month}}</td>

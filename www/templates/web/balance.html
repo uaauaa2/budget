@@ -1,15 +1,48 @@
 <div>
-    <h1>Balance</h1>
+    <h1>Баланс</h1>
     
     
-    <div>
-        <span>Date: </spa><input type="date" ng-model="balanceDate" > <br/>
-        <span>Total available to date: </span><input type="text" ng-model="totalAvailableToDate" ><br/>
-        <span>Total income to date: {{getTotalIncomeToDate()}} </span><br/>
-        <span>Total spent to date: {{getTotalSpentToDate()}} </span><br/>
-        <span>Diff: {{getDiff()}} </span><br/>
-        <input type="button" value="add" ng-click="add()">
-    <div>
+    <form class="form-inline" role="form">
+        <div class="form-group">
+            <span size="3">Дата: </span>
+            <input type="date" ng-model="balanceDate" size="3" class="form-control">
+        </div>
+        <div class="form-group">
+            <span>Доступно, всего по факту на дату:</span>
+            <input type="text" ng-model="totalAvailableToDate" size="3" class="form-control">
+        </div>
+    </form>
+    <div class="form-inline">
+        <div class="form-group">
+            <span size="3">Доход, всего на дату: </span>
+        </div>
+        <div class="form-group">
+            <b>{{getTotalIncomeToDate()}}</b>
+        </div>
+     </div>
+     <div class="form-inline">
+        <div class="form-group">
+            <span size="3">Расход, всего на дату:</span>
+        </div>
+        <div class="form-group">
+            <b>{{getTotalSpentToDate()}}</b>
+        </div>
+     </div>
+     <div class="form-inline">
+        <div class="form-group">
+            <span size="3">Разница между учетом и фактом:</span>
+        </div>
+        <div class="form-group">
+            <b>{{getDiff()}}</b>
+        </div>
+     </div>
+
+    
+    <form class="form-inline" role="form">
+        <div class="form-group">
+            <input type="button" value="Добавить" ng-click="add()" class="form-control">
+        </div>
+    </form>
         
     <!--form class="form-inline" role="form">
         <div class="form-group">
@@ -27,17 +60,17 @@
     
     
     
-    <br/>
+    <!--br/>
     <h2>Previous</h2>
-    <a href="" ng-click="init()">Init</a>
-    <table width="100%" class="responstable">
+    <a href="" ng-click="init()">Init</a-->
+    <table class="table table-bordered table-condensed table-nonfluid" style="white-space: nowrap">
         <tr>
-           <th>date</th>
-           <th>total available</th>
-           <th>total income</th>
-           <th>total spent</th>
-           <th>diff</th>
-           <th>del</th>
+           <th>Дата</th>
+           <th>Всего доступно</th>
+           <th>Доход</th>
+           <th>Расход</th>
+           <th>Разница</th>
+           <th>Удалить</th>
         </tr>
         <tr ng-repeat="b in allBalances">
            <td>{{b.date}}</td>
