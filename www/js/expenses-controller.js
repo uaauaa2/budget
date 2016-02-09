@@ -489,6 +489,10 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         return res; 
     };
     
+    /*$scope.loadTableTimer = $timeout(function tick(){
+        $scope.updateExpensesTable(); 
+    }, 100);*/
+
     // ---------------------- below is the code for mobile version
     
     $scope.$watch('activeExpenseItem', function(newVal, oldVal){
@@ -598,6 +602,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
 
         $scope.syncTimer = $timeout(tick, 3000); 
     }, 3000);
+    
   
     
   

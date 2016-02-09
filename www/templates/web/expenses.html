@@ -106,7 +106,7 @@
                        value="{{e.title}}" ng-click="expandCollapse(e)"></td>
                    <td ><input class="form-control" type="button" value="{{ getTableValueTotalPlan(e.ID) }}" > </td>
                    <td ><input class="form-control" 
-                       ng-class="(getTableValueTotal(e.ID) > getTableValueTotalPlan(e.ID))? 'btn-danger':'btn-success'" 
+                       ng-class="(getTableValueTotal(e.ID) > getTableValueTotalPlan(e.ID))? 'tr4':'tr3'" 
                        type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByExpenseItemId(e.ID)" > </td>
                    <td ng-repeat="d in days">
                        <input class="form-control"
