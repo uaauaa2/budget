@@ -168,7 +168,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         return (sum == 0)? "" : sum.toString(); 
     }
     
-    $scope.getTotalByMonth = function(expenseItem, month){
+    $scope.getTotalByMonth = function(expenseItem, month, isPlan){
         //var title = $scope.getTitle(expenseItem); 
                 
         var monthString = "" + month;
@@ -177,7 +177,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
              
         var result = $scope.db.queryAll("expenses", { 
                             query: function(row) {
-                                if (row.isPlan == false && row.isActive
+                                if (row.isPlan == isPlan && row.isActive
                                     && expenseItem.idListForTotal
                                     && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0 
                                     && row.date.indexOf("-" + monthString + "-") >= 0) {
@@ -206,7 +206,9 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
                 oByDay[i] = $scope.getTotalByDay(e, $scope.month, i); //$scope.getValue(e, $scope.month, i); 
             }
             
-            var o = {expenseItemId:  e.ID, values: {totalSpent: $scope.getTotalByMonth(e, $scope.month), spentByDay: oByDay} }; 
+            var o = {expenseItemId:  e.ID, values: {totalPlan: $scope.getTotalByMonth(e, $scope.month, true), 
+                                                    totalSpent: $scope.getTotalByMonth(e, $scope.month, false), 
+                                                    spentByDay: oByDay} }; 
             $scope.expensesTable.push(o); 
         }
     };
@@ -468,6 +470,15 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         }
         return res; 
     }; 
+    $scope.getTableValueTotalPlan = function(expenseId){
+        var res = "";
+        var found = ($filter('filter')($scope.expensesTable, {expenseItemId: expenseId}, true));
+        
+        if (found.length){
+            res = found[0].values.totalPlan; 
+        }
+        return res; 
+    };
     $scope.getTableValueByDay = function(expenseId, day){
         var res = "";
         var found = ($filter('filter')($scope.expensesTable, {expenseItemId: expenseId}, true));

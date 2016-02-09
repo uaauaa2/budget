@@ -95,7 +95,8 @@
             <thead>
                 <tr>
                    <th><span>Статья расходов</span></th>
-                   <th><span>Всего потрачено</span></th>
+                   <th><span>План</span></th>
+                   <th><span>Факт</span></th>
                    <th ng-repeat="d in days"><input class="form-control table-title" type="button" value="{{d}}" ng-click="listExpensesByDay(d)" > </th>
                </tr>
            </thead> 
@@ -103,7 +104,10 @@
                <tr ng-repeat="e in expensesTableExpenseItems" class="tr{{e.levelNum}}" > 
                    <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}} text-left" 
                        value="{{e.title}}" ng-click="expandCollapse(e)"></td>
-                   <td ><input class="form-control" type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByExpenseItemId(e.ID)" > </td>
+                   <td ><input class="form-control" type="button" value="{{ getTableValueTotalPlan(e.ID) }}" > </td>
+                   <td ><input class="form-control" 
+                       ng-class="(getTableValueTotal(e.ID) > getTableValueTotalPlan(e.ID))? 'btn-danger':'btn-success'" 
+                       type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByExpenseItemId(e.ID)" > </td>
                    <td ng-repeat="d in days">
                        <input class="form-control"
                            ng-class="(e.name == null)? ((e.levelNum == 1)? 'trTotal' : 'trNotEditable') : 'trEditable'"
