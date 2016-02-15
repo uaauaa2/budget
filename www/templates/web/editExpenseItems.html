@@ -9,25 +9,25 @@
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <th>влево - вправо</th>
+                <th>Уровень</th>
                 <th style="width: 40%;">Заголовок</th>
                 <th style="width: 30%;">Название</th>
-                <th>вверх - вниз</th>
-                <th>добавить - удалить</th>
+                <th>Переместить</th>
+                <th>+/-</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="e in newExpenseItems">
                 <td>
                     <!--button type="button" class="btn btn-default width-half" ng-click="moveLeft(e)">left</button-->
-                    <input type="button" class="btn btn-default width-half" ng-click="moveLeft(e)" value="влево">
-                    <input type="button" class="btn btn-default width-half" ng-click="moveRight(e)" value="вправо">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveLeft(e)" value="←">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveRight(e)" value="→">
                 </td>
                 <td><input type="text" class="form-control td{{e.levelNum}} tr{{e.levelNum}}" ng-model="e.title"></td>
                 <td><input type="text" class="form-control" ng-model="e.name"></td>
                 <td>
-                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, true)" value="вверх">
-                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, false)" value="вниз">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, true)" value="↑">
+                    <input type="button" class="btn btn-default width-half" ng-click="moveVertically(e, false)" value="↓">
                 </td>
                 <td>
                     <input type="button" class="btn btn-default width-half" ng-click="add(e)" value="+">

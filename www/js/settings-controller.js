@@ -1,4 +1,4 @@
-angular.module('budget.controllers').controller('OverviewCtrl', function($scope, $http, dataService) {
+angular.module('budget.controllers').controller('SettingsCtrl', function($scope, $http, dataService) {
     $scope.allExpenseItems = [];
     $scope.expItems = {};
 
@@ -54,74 +54,7 @@ angular.module('budget.controllers').controller('OverviewCtrl', function($scope,
     }
 
     
-    $scope.initLatestExpenses = function () {
-        var result = {};
-        var add = function (expense) {
-            var dateElementTo = result[expense.date];
 
-            if (!dateElementTo) {
-                dateElementTo = { date: expense.date, totalAmount: 0, expenses: {} };
-                result[expense.date] = dateElementTo;
-            }
-            dateElementTo.totalAmount += expense.amount;
-
-            var expenseItemElementTo = dateElementTo.expenses[expense.expenseItemId];
-
-            if (!expenseItemElementTo) {
-                expenseItemElementTo = {
-                    expenseItemId: expense.expenseItemId,
-                    expenseItemName: $scope.expItems[expense.expenseItemId].name,
-                    amount: expense.amount,
-                    comment: expense.comment
-                }
-                dateElementTo.expenses[expense.expenseItemId] = expenseItemElementTo;
-            }
-            else {
-                expenseItemElementTo.amount += expense.amount;
-                if (expenseItemElementTo.comment)
-                    expenseItemElementTo.comment += "; " + expense.comment;
-            }
-        }
-
-
-        $scope.db = dataService.getDB();
-
-        $scope.allExpenseItems = $scope.db.queryAll("expenseItems", { sort: [["orderNum", "ASC"]] });
-        $scope.allExpenseItems.forEach(function (element) {
-            $scope.expItems[element.ID] = element;
-        }, this);
-
-        var expenses = $scope.db.queryAll("expenses", { sort: [["date", "DESC"]], distinct: ["date"] });
-        
-        var dateFrom = new Date();
-        if (expenses.length > 10)
-             dateFrom = new Date(expenses[9].date);
-        else if (expenses.length > 0)
-            dateFrom = new Date(expenses[expenses.length - 1].date);
-
-        expenses = $scope.db.queryAll("expenses", {
-            query: function (row) {
-                var d = new Date(row.date);
-                if (d >= dateFrom && row.isActive && !row.isPlan)
-                    return true;
-                else
-                    return false;
-            }
-        });
-
-
-        for (var k = 0; k < expenses.length; k++) {
-            add(expenses[k]);
-        }
-
-        result.days = Object.keys(result);
-        result.days.sort();
-        result.days.reverse();
-
-        return result;
-    }
-
-    $scope.latestExpenses = $scope.initLatestExpenses();
 
     
     $scope.currentDb = { name: localStorage["dbName"] };   
