@@ -1,110 +1,89 @@
 <div>
-        <h1>Expenses</h1>
+        <h1>Расходы</h1>
         <div>
-            <!-- ng-controller="ExpensesCtrl" [ <a href="" ng-click="init()">Init</a> ] -->
-            <!--[ <a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a></li> ]
-
-            <br/-->
-            
-            
-            <!--br/>
-            Debug: <span>{{debugText}}</span>
-            <br/>-->
-            
-            
-            <div>
-                <div class="form-group">
-                    <input class="btn btn-default" type="button" ng-click="addAllExpenses()" value="Добавить все из списка"> <span><b>Итого: {{ getTotalAmountToSubmit(); }} </b></span><br/>
-                </div>
-                
-                
-                <div ng-repeat="e in expenses">
-                    <form class="form-inline" role="form">
-                      <div class="form-group">
-                          <input type="date" class="form-control" ng-model="e.date"  size="5" placeholder="date"/>
-                      </div>
-                      <div class="form-group">          
-                            <select ng-model="e.expenseItemId" class="form-control">
-                                <option  data-ng-repeat="ei in expenseItems" value="{{ei.ID}}" ng-selected="ei.ID == e.expenseItemId" >{{ei.name}}</option>
-                            </select>
-                      </div>
-                      <div class="form-group">
-                          <input type="text" class="form-control" ng-model="e.amount" size="5" placeholder="amount" ng-keydown="keyHandle($event)" auto-focus >
-                      </div>
-                      <div class="form-group">
-                          <input type="text" class="form-control" ng-model="e.comment" size="10" placeholder="comment" ng-keypress="keyHandle($event)">
-                      </div>
-                      <!--div class="checkbox">
-                        <label><input type="checkbox" ng-model="e.isActive">isActive</label>
-                      </div-->
-                      <!--div class="form-group">
-                          <input type="text" class="form-control" ng-model="e.changeDate" size="15">
-                      </div-->
-                      <div class="form-group">
-                          <input class="btn btn-default" type="button" value="-" ng-click="deleteRow(e)" >
-                      </div>
-                      
-                    </form>
-                    
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <form class="form-inline" role="form">
+                            <div class="form-group">
+                                <input class="btn btn-default" type="button" ng-click="addAllExpenses()" value="Добавить все из списка"> <span><b>Итого: {{ getTotalAmountToSubmit(); }} </b></span><br/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" ng-model="total" size="5" placeholder="Итого должно получиться"> 
+                            </div>
+                            <div class="form-group">
+                                <span><b>Разница: {{ total - getTotalAmountToSubmit(); }} </b></span>
+                            </div>
+                        </form>
                         
-                </div>
+                        <div class="panel-body">
+                            <div ng-repeat="e in expenses" class="form-inline">
+                                <!--form class="form-inline" role="form"-->
+                                  <div class="form-group">
+                                      <input type="date" class="form-control" ng-model="e.date"  size="5" placeholder="дата"/>
+                                  </div>
+                                  <div class="form-group">          
+                                        <select ng-model="e.expenseItemId" class="form-control">
+                                            <option  data-ng-repeat="ei in expenseItems" value="{{ei.ID}}" ng-selected="ei.ID == e.expenseItemId" >{{ei.name}}</option>
+                                        </select>
+                                  </div>
+                                  <div class="form-group">
+                                      <input type="text" class="form-control" ng-model="e.amount" size="5" placeholder="сумма" ng-keydown="keyHandle($event)" auto-focus >
+                                  </div>
+                                  <div class="form-group">
+                                      <input type="text" class="form-control" ng-model="e.comment" size="10" placeholder="комментарий" ng-keypress="keyHandle($event)">
+                                  </div>
+                                  <!--div class="checkbox">
+                                    <label><input type="checkbox" ng-model="e.isActive">isActive</label>
+                                  </div-->
+                                  <!--div class="form-group">
+                                      <input type="text" class="form-control" ng-model="e.changeDate" size="15">
+                                  </div-->
+                                  
+                                  <div class="form-group">
+                                      <input class="btn btn-default" type="button" value="-" ng-click="deleteRow(e)" >
+                                  </div>
+                                   
+                                <!--/form-->
+                            </div>
+                            <div class="form-group">    
+                                <input class="btn btn-default" type="button" value="+" ng-click="addAnotherExpense()" >
+                            </div>
+                        </div>
                 
-                <div class="form-group">    
-                    <input class="btn btn-default" type="button" value="+" ng-click="addAnotherExpense()" >
-                </div>
-                <!--div class="form-group">
-                    <input class="btn btn-default" type="button" ng-click="listExpensesByDay(21)" value="Редактировать"> 
-                </div-->
-            </div>
+                        <!--div class="form-group">
+                            <input class="btn btn-default" type="button" ng-click="listExpensesByDay(21)" value="Редактировать"> 
+                        </div-->
+                    </div>
+                 </div>
+                 <div class="col-md-4">
             
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h3>Последние расходы</h3>
+                            <div class="list-group"> 
+                                <div ng-repeat="d in latestExpenses.days" class="list-group-item">
+                                    <span class="list-group-item active">
+                                        <b>{{latestExpenses[d].date}}</b>
+                                        <input class="btn btn-xs btn-default pull-right" type="button" 
+                                            value="{{latestExpenses[d].totalAmount}}" 
+                                            ng-click="listExpensesByDateString(d)" />
+                                    </span>
+                                    
+                                    <span class="list-group-item" ng-repeat="e in latestExpenses[d].expenses">
+                                        {{e.expenseItemName}}  <!--span class="badge">{{e.amount}}</span-->
+                                        <input class="btn btn-xs btn-default pull-right" type="button" 
+                                            value="{{e.amount}}" 
+                                            ng-click="listExpensesByExpenseItemIdAndDateString(e.expenseItemId, d)" />
+                                    </span>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+             </div>
             
-            <form class="form-inline" role="form">
-                <div class="form-group">                    
-                    Месяц:
-                </div>
-                <div class="form-group">                    
-                    <input type="text" class="form-control" ng-model="month" size="3">
-                </div>
-                <div class="form-group">                    
-                    <input type="text" class="form-control" ng-model="year" size="3">
-                </div>
-                <div class="form-group">
-                    <input class="btn btn-default" type="button" value="Обновить таблицу" ng-click="updateExpensesTable()" >
-                </div>
-                <div class="form-group">
-                    <input class="btn btn-default" type="button" value="<<" ng-click="moveLeft()" >
-                </div>
-                <div class="form-group">
-                    <input class="btn btn-default" type="button" value=">>" ng-click="moveRight()" >
-                </div>
-                <div class="form-group">
-                    <input class="btn btn-default" type="button" value="+" ng-click="addDay()" >
-                </div>
-            </form>
-           
-            <table class="table table-bordered table-condensed table-nonfluid">
-            <thead>
-                <tr>
-                   <th><span>Статья расходов</span></th>
-                   <th><span>Всего потрачено</span></th>
-                   <th ng-repeat="d in days"><input class="form-control table-title" type="button" value="{{d}}" ng-click="listExpensesByDay(d)" > </th>
-               </tr>
-           </thead> 
-           <tbody>
-               <tr ng-repeat="e in allExpenseItems" class="tr{{e.levelNum}}" > 
-                   <td ><input type="button" class="form-control td{{e.levelNum}} tr{{e.levelNum}} text-left" value="{{e.title}}"></td>
-                   <td ><input class="form-control" type="button" value="{{ getTableValueTotal(e.ID) }}" ng-click="listExpensesByExpenseItemId(e.ID)" > </td>
-                   <td ng-repeat="d in days">
-                       <input class="form-control"
-                           ng-class="(e.name == null)? ((e.levelNum == 1)? 'trTotal' : 'trNotEditable') : 'trEditable'"
-                           type="button" value="{{ getTableValueByDay(e.ID, d) }}" 
-                           ng-click="listExpensesByExpenseItemIdAndDay(e.ID, d)" > 
-                   </td>
-               </tr>
-            </tbody>
-            </table> 
-            
-            <br/>
             
         </div>
 </div>

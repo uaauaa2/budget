@@ -40,9 +40,9 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
     
     function hashCode(s){
-        //var h = s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);  
+        var h = s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);  
         //console.log("length: " + s.length + "; hash: " + h);
-        var h = s.length;  
+        //var h = s.length;  
         return h;              
     }
 

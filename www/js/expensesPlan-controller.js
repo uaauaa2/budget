@@ -4,7 +4,9 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
     $scope.activeMonth = 0;
     $scope.year = (new Date()).getFullYear(); 
     $scope.isForecastVisible = false; 
-    $scope.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    $scope.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+    //$scope.months = [1, 2, 3, 4];//, 5, 6, 7, 8, 9, 10, 11, 12];
+    $scope.monthTitles = { 1:'Январь', 2:'Февраль', 3:'Март', 4:'Апрель', 5:'Май', 6:'Июнь', 7:'Июль', 8:'Август', 9:'Сентябрь', 10:'Октябрь', 11:'Ноябрь', 12:'Декабрь', 13:'Итого' }; 
     $scope.expensesPlanTable = {"8":{"3":{"actual":15345,"forecast":40000}}}; 
     
     $scope.allExpenseItems = {};
@@ -18,7 +20,7 @@ angular.module('budget.controllers').controller("ExpensesPlanCtrl", function($sc
                                     && row.isActive == true
                                     && expenseItem.idListForTotal
                                     && expenseItem.idListForTotal.indexOf(row.expenseItemId) >= 0
-                                    && d.getMonth() == month-1
+                                    && (month == 13 || d.getMonth() == month-1)
                                     && d.getFullYear() == $scope.year) {
                                     return true;
                                 } else {

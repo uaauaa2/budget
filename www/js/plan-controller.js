@@ -6,23 +6,34 @@ angular.module('budget.controllers').controller("PlanCtrl", function($scope, dat
     $scope.db = dataService.getDB();
 
     $scope.getTotal = function(tableName, month, isPlan){
+        /*console.log("------------");
+        if (tableName === "income") 
+                console.log("month: " + month, isPlan); // 
+                ////*/
         var result = $scope.db.queryAll(tableName, { 
-                            query: function(row) {
-                                var d = new Date(row.date); 
-                                if (row.isPlan == isPlan 
-                                    && d.getMonth() == month-1) {
-                                    return true;
-                                } else {
-                                    return false;
+                            query: function(row1) {
+                                var d = new Date(row1.date);
+                                /*if (tableName === "income") console.log(row1);*/
+                                
+                                if ((row1.isPlan == isPlan) && (row1.isActive) && d.getMonth() == (month-1)) {
+                                        /*if (tableName === "income") 
+                                            console.log("found");*/ 
+                                        return true;
                                 }
+                                    
+                                return false;
                             }
                      });
         
+        /*if (tableName === "income") 
+                console.log("result.length: " + result.length);*/
         var index;
         var sum = 0; 
-        for (index = 0; index < result.length; ++index) {
+        for (index = 0; index < result.length; index++) {
             sum += result[index].amount;
         }
+        /*if (tableName === "income") 
+                console.log(month + " " + sum);*/
         return sum; 
     };
 

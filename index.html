@@ -2,15 +2,19 @@
     <html ng-app="budget">
     <head>
       <link rel="stylesheet" href="www/lib/web/css/bootstrap.min.css" />
+      <script src="www/lib/web/css/jquery-2.2.0.min.js"></script>
+      <script src="www/lib/web/css/bootstrap.min.js"></script> 
       <link rel="stylesheet" href="www/app.css" />
-      <script src="www/lib/web/angular/1.3.13/angular.min.js"></script>
+      <script src="www/lib/web/angular/1.3.13/angular.min.js"></script> 
+      <script src="www/lib/web/angular/1.3.13/angular-ui-router.min.js"></script>
       <script src="www/lib/web/angular/1.3.13/angular-route.js"></script>
       <script src="www/js/localstoragedb.js"></script>
       <script src="www/web_app.js"></script>
       <script src="www/js/dataService-service.js"></script>
       <script src="www/js/header-controller.js"></script>
-      <script src="www/js/overview-controller.js"></script>
+      <script src="www/js/settings-controller.js"></script>
       <script src="www/js/expenses-controller.js"></script>
+      <script src="www/js/expensesTable-controller.js"></script>
       <script src="www/js/expensesPlan-controller.js"></script>
       <script src="www/js/income-controller.js"></script>
       <script src="www/js/balance-controller.js"></script>
@@ -20,37 +24,53 @@
     </head>
      <body> 
 
-        <header ng-controller="HeaderCtrl">
-            <nav class="navbar navbar-default">
-                <div class="container">
+        <div ng-controller="HeaderCtrl">
+            <nav class="navbar navbar-default" role="navigation">
+                
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="/budget/">Budget github</a> 
-                        <a class="navbar-brand" href="/">Budget local</a>
+                        <a class="navbar-brand" ui-sref="index">Бюджет</a> <!--a class="navbar-brand" href="/budget/">Budget github</a-->
                     </div>
     
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="budget/overview"><i class="fa fa-home"></i> Overview</a></li>
-                        <li><a href="budget/expenses"><i class="fa fa-shield"></i> Expenses</a></li>
-                        <li><a href="budget/income"><i class="fa fa-shield"></i> Income</a></li>
-                        <li><a href="budget/expensesPlan"><i class="fa fa-shield"></i> Expenses Plan</a></li>
-                        <li><a href="budget/balance"><i class="fa fa-comment"></i> Balance</a></li>
-                        <li><a href="budget/plan"><i class="fa fa-comment"></i> Plan</a></li>
-                        <li><a href="budget/editExpenseItems"><i class="fa fa-comment"></i> Edit Expense Items</a></li>
+                        
+                        <li><a ui-sref="expenses" href="">Расходы</a></li> <!--i class="fa fa-shield"></i-->
+                        <li><a ui-sref="income" href="">Доходы</a></li>
+                        
                         <li><a href="" ng-click="sync()" 
                                 class="notInSync" ng-class="{inSync: syncStatus.status}">
                                 {{ syncStatus.statusText() }}
                             </a>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" 
+                                role="button" aria-haspopup="true" aria-expanded="false">
+                                Ещё...
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a ui-sref="expensesTable"><i class="fa fa-home"></i>Расходы за месяц</a></li>
+                                <li><a ui-sref="expensesPlan"><i class="fa fa-shield"></i>План расходов по месяцам</a></li>
+                                <li><a ui-sref="balance"><i class="fa fa-comment"></i>Баланс</a></li>
+                                <li><a ui-sref="plan"><i class="fa fa-comment"></i>План</a></li>
+                                <li><a ui-sref="editExpenseItems"><i class="fa fa-comment"></i>Редактировать статьи расходов</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a ui-sref="settings"><i class="fa fa-home"></i>Настройки</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a ui-sref="about">О сайте</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     
                     
-                </div>
+                
             </nav>
-            <base href="/">
-        </header>
+            
+            <!--base href="/"-->
+        </div>
 
-        <div id="main">
-            <div ng-view></div>
+        
+        <div class="container" id="main">
+            <div ui-view></div>
         </div>
 
     </body>
