@@ -282,12 +282,7 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
         };        
     };
 
-    $scope.listExpensesByDay = function(day){
-        var queryDate = new Date();
-        queryDate.setMonth($scope.month - 1); 
-        queryDate.setDate(day); 
-        var queryDateString = queryDate.yyyy_mm_dd(); 
-       
+    $scope.listExpensesByDateString = function(queryDateString){
         var fn = function(row) {
             if (row.isPlan == false && row.isActive && row.date == queryDateString){  
                 return true;
@@ -295,15 +290,20 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
                 return false;
             }
         }
-        $scope.listExpensesBy(fn); 
-    };
-    
-    $scope.listExpensesByExpenseItemIdAndDay = function(expenseItemId, day){
+        $scope.listExpensesBy(fn);
+    }
+
+    $scope.listExpensesByDay = function(day){
+        alert(day);
         var queryDate = new Date();
         queryDate.setMonth($scope.month - 1); 
-        queryDate.setDate(day); 
+        queryDate.setDate(day);
         var queryDateString = queryDate.yyyy_mm_dd(); 
-       
+        
+        $scope.listExpensesByDateString(queryDateString); 
+    };
+    
+    $scope.listExpensesByExpenseItemIdAndDateString = function(expenseItemId, queryDateString){
         var fn = function(row) {
             if (row.isPlan == false && row.isActive 
                 && row.date == queryDateString 
@@ -314,6 +314,13 @@ angular.module('budget.controllers').controller("ExpensesCtrl", function($scope,
             }
         }
         $scope.listExpensesBy(fn); 
+    };
+    $scope.listExpensesByExpenseItemIdAndDay = function(expenseItemId, day){
+        var queryDate = new Date();
+        queryDate.setMonth($scope.month - 1); 
+        queryDate.setDate(day); 
+        var queryDateString = queryDate.yyyy_mm_dd(); 
+        $scope.listExpensesByExpenseItemIdAndDateString(expenseItemId, queryDateString);
     };
     
     

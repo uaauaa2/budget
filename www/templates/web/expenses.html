@@ -59,16 +59,26 @@
                  <div class="col-md-4">
             
                     <div class="panel panel-default">
-                        <h3>Последние расходы</h3>
                         <div class="panel-body">
-                            <ul ng-repeat="d in latestExpenses.days">
-                                <li>
-                                    {{latestExpenses[d].date}} (всего: {{latestExpenses[d].totalAmount}})
-                                    <ul ng-repeat="e in latestExpenses[d].expenses">
-                                        <li>{{e.expenseItemName}} {{e.amount}} {{e.comment}} </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                            <h3>Последние расходы</h3>
+                            <div class="list-group"> 
+                                <div ng-repeat="d in latestExpenses.days" class="list-group-item">
+                                    <span class="list-group-item active">
+                                        <b>{{latestExpenses[d].date}}</b>
+                                        <input class="btn btn-xs btn-default pull-right" type="button" 
+                                            value="{{latestExpenses[d].totalAmount}}" 
+                                            ng-click="listExpensesByDateString(d)" />
+                                    </span>
+                                    
+                                    <span class="list-group-item" ng-repeat="e in latestExpenses[d].expenses">
+                                        {{e.expenseItemName}}  <!--span class="badge">{{e.amount}}</span-->
+                                        <input class="btn btn-xs btn-default pull-right" type="button" 
+                                            value="{{e.amount}}" 
+                                            ng-click="listExpensesByExpenseItemIdAndDateString(e.expenseItemId, d)" />
+                                    </span>
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                  </div>
