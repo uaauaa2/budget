@@ -1,67 +1,12 @@
 <div>
-    <h1>Overview</h1>
+    <h1>Последние расходы</h1>
     
     <ul ng-repeat="d in latestExpenses.days">
         <li>
-            {{latestExpenses[d].date}} (total: {{latestExpenses[d].totalAmount}})
+            {{latestExpenses[d].date}} (всего: {{latestExpenses[d].totalAmount}})
             <ul ng-repeat="e in latestExpenses[d].expenses">
                 <li>{{e.expenseItemName}} {{e.amount}} {{e.comment}} </li>
             </ul>
         </li>
     </ul>
-
-    <div><span><b>Init:</b></span> 
-        <ul class="unstyled">
-            <li ng-repeat="m in overviewMessages track by $index">
-                <span>{{m}}</span> 
-            </li>
-        </ul>{{overviewString}}
-    <div>
-    
-    <div ng-hide="auth.token!=''">    
-        <a href="https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d" target="_blank">
-                    Get Yandex Auth code</a> 
-        <input type="text" ng-model="auth.code" size="10" placeholder="Enter your Yandex Auth code">
-        <a href="" ng-click="getAuthToken()">Get User token</a>
-        <br/>
-        <!--input type="text" ng-model="authToken" size="30" placeholder="Yandex Auth token">
-        <a href="" ng-click="saveToken()">Save token</a-->
-        <br/>
-    </div>
-    
-    <form class="form-group" role="form">
-        
-        <div class="form-group">
-            <label>Current database: </label>          
-            <select ng-model="currentDb.name" ng-change="switchDatabase()" class="form-control"> 
-                <option data-ng-repeat="d in databases" value="{{d}}" ng-selected="d == currentDb.name" >{{d}}</option>
-            </select>
-            <input class="btn btn-default" type="button" value="Delete database" ng-click="deleteDatabase()" >
-            <input class="btn btn-default" type="button" value="Create new database" ng-click="createNewDatabase()">
-            <!--input class="btn btn-default" type="button" value="update old database" ng-click="updateOldDb()"-->
-        </div>
-        <!--div class="form-group">
-            <input class="btn btn-default" type="button" value="Switch to" ng-click="switchDatabase()" >
-        </div-->
-        <div class="form-group">
-            
-        </div>
-        <div class="form-group">
-            
-        </div>
-    </form>
-    
-    <!--a href="" ng-click="syncFromWeb()">Sync</a><br/><br/><br/>
-    <!--a href="" ng-click="uploadDB()">Upload db to Yandex.Disk</a><br/><br/><br/>
-    <a href="" ng-click="downloadDB()">Download db from Yandex.Disk</a><br/><!--<input type="text" ng-model="stringdb" /-->
-    <!--a href="" ng-click="commitdbfromeditbox()">commit</a><br/-->
-    <!--a href="" ng-click="createIncomeTable()">createIncomeTable</a><br/>
-    <a href="" ng-click="importIncome()">importIncome</a><br/-->
-    <!--a href="" ng-click="createBalanceTable()">createBalanceTable</a><br/-->
-    <!--a href="" ng-click="fixExpenseIds()">fixExpenseIds</a><br/>
-    <a href="" ng-click="fixImported()">fixImported</a><br/-- >
-    <a href="" ng-click="createChangesTable()">createChangesTable</a><br/-->
-    <br/><br/>
-    
-    
 </div>
