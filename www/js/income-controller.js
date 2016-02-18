@@ -1,12 +1,11 @@
 angular.module('budget.controllers').controller('IncomeCtrl', function($scope, dataService, $http) {
     $scope.incomeIsPlan = false; 
     $scope.incomeDate = new Date();
-    $scope.incomeAgent = "Костя"; 
+    $scope.incomeAgent = "Я"; 
     $scope.incomeAmount = null; 
     $scope.incomeComment = "";
     $scope.db = dataService.getDB(); 
      
-    //$scope.allIncome = [{isPlan: false, date: "2015-07-01", agent: "Костя", amount: 100000, comment: ""}];
     
     $scope.init = function(){
         $scope.allIncome = $scope.db.queryAll("income", { query: { isActive: true } });

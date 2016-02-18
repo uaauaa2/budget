@@ -267,7 +267,7 @@ angular.module('budget.services').service('dataService', function ($http) {
     
     function syncFromWeb(){
         // TODO: to return promise
-        if (auth.token != ""){
+        if (auth.token && auth.token != ""){
             $http({
                 method: "GET",
                 url: "https://cloud-api.yandex.net/v1/data/app/databases/" + dbName + "/snapshot/",  
@@ -313,6 +313,10 @@ angular.module('budget.services').service('dataService', function ($http) {
                 else 
                     errorHandler(data, status, headers, config); 
             }); 
+        }
+        else {
+             syncStatus.status = 0;
+             overviewMessages.push("Чтобы синхронизировать БД, необходимо сначала авторизовать приложение в хранилище Яндекс");
         }
     }
     
@@ -377,35 +381,44 @@ angular.module('budget.services').service('dataService', function ($http) {
     }
 
     
+    
+    
     var init = function(isAutosync) {
         dbName = localStorage["dbName"];
         if (!dbName){
-            dbName = prompt("please enter new db name", "newDatabase");
+            dbName = "myBudgetDatabase"; //prompt("please enter new db name", "newDatabase");
             localStorage["dbName"] = dbName;
         } 
+        
+        
         db = new localStorageDB(dbName, localStorage);
-             
-        if(db.isNew()) {
-            createDatabase();
-        }
         
-        //overviewMessages.push("localStorage: " + dumpDB(db)); 
-        
-        auth.token = localStorage["authToken"];
-        syncStatus.status = 0;
-        if (isAutosync)
-            syncFromWeb();
-        //setTimeout(syncFromWeb, 1000);
-        
-        initListOfDatabases();
-        
-        expenseItems = db.queryAll("expenseItems", {query: { isActive: true },  sort: [["orderNum", "ASC"]] });
-        for (var i = 0; i < expenseItems.length; i++) {
-            if (expenseItems[i].name){
-                setActiveExpenseItem(expenseItems[i]);
-                break; 
+        $http.get('www/js/myBudgetDatabase.json').success(function(data) {
+            console.log("isNewDb: " + db.isNew());
+            if (db.isNew()) {
+                console.log("db has been loaded from template");
+                db.initFromObj(data);
+                db.commit();
             }
-        };
+            
+            auth.token = localStorage["authToken"];
+            syncStatus.status = 0;
+            if (isAutosync)
+                syncFromWeb();
+            
+            initListOfDatabases();
+            
+            expenseItems = db.queryAll("expenseItems", {query: { isActive: true },  sort: [["orderNum", "ASC"]] });
+            for (var i = 0; i < expenseItems.length; i++) {
+                if (expenseItems[i].name){
+                    setActiveExpenseItem(expenseItems[i]);
+                    break; 
+                }
+            }; 
+        });
+              
+
+        
     }
     
     
@@ -443,7 +456,7 @@ angular.module('budget.services').service('dataService', function ($http) {
             return t;  
         }
     } 
-    var databases = [];
+    var databases = ["myBudgetDatabase"];
      
     
     var activeExpenseItem = { };
