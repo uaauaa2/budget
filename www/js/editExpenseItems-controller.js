@@ -40,8 +40,10 @@ angular.module('budget.controllers').controller("EditExpenseItemsCtrl", function
     }
     
     $scope.del = function(e){
-        var i = $scope.newExpenseItems.indexOf(e);
-        $scope.newExpenseItems.splice(i, 1);
+        if ($scope.newExpenseItems.length > 1){
+            var i = $scope.newExpenseItems.indexOf(e);
+            $scope.newExpenseItems.splice(i, 1);
+        }
     }
     
     

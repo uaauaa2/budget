@@ -9,6 +9,11 @@
         </ul>{{overviewString}}
     <div>
     
+    <div>
+        Для того, чтобы иметь возможность хранить базу данных на сервере, в хранилище данных Яндекса для приложений, необходимо авторизовать это приложение. 
+        Нажмите "Get Yandex Auth code", авторизуйтесь в Яндексе, после этого Вам будет показана страница с одноразовым кодом, введите этот код в поле для 
+        ввода и нажмите "Get User token". 
+    </div>
     <div ng-hide="auth.token!=''">    
         <a href="https://oauth.yandex.ru/authorize?response_type=code&client_id=6afb425aacb947d3b832f580335ecb4d" target="_blank">
                     Get Yandex Auth code</a> 
