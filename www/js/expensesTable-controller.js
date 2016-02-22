@@ -469,10 +469,15 @@ angular.module('budget.controllers').controller("ExpensesTableCtrl", function($s
     }; 
     
     $scope.listExpensesByExpenseItemId = function(expenseItemId){
+        var monthString = "" + $scope.month;
+        if (monthString.length == 1)
+            monthString = "0" + monthString; 
+             
         //console.log(expenseItemId); 
         var fn = function(row) {
             //console.log(row.expenseItemId);   
-            if (row.isPlan == false && row.isActive && row.expenseItemId == expenseItemId){
+            if (row.isPlan == false && row.isActive && row.expenseItemId == expenseItemId
+                && row.date.indexOf("-" + monthString + "-") >= 0 ){
                 return true;
             } else {
                 return false;
